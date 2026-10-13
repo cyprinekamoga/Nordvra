@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Nordvra design tokens (Tailwind CSS v4, CSS-first).
+ * The colour values are mirrored in lib/design/tokens.ts; lib/__tests__/contrast.test.ts checks
+ * that both match and that every text/background pair meets WCAG 2.1 AA.
+ *
+ * Usage: bg-canvas, bg-surface, bg-surface-muted, text-ink, text-muted, bg-brand text-on-brand,
+ * hover:bg-brand-strong, bg-brand-soft, border-border (decorative), border-control (inputs,
+ * chips, tiles), bg-rut-soft text-rut, bg-rot-soft text-rot, bg-info-soft text-info,
+ * bg-warning-soft text-warning border-warning-border, bg-danger-soft text-danger,
+ * bg-success-soft text-success, bg-legal-soft text-legal.
+ *
+ * 1rem = 18px (html font-size 112.5%). Tailwind spacing therefore scales with it:
+ * min-h-12 = 54px, size-12 = 54px – both above the 48px tap-target minimum.
+ */
+
+@theme {
+  --color-canvas: #FAF7F2;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #F2EDE4;
+  --color-ink: #1A2420;
+  --color-muted: #4D5853;
+  --color-brand: #0B5D4B;
+  --color-brand-strong: #084536;
+  --color-brand-soft: #E1EFE9;
+  --color-on-brand: #FFFFFF;
+  --color-border: #DDD5C8;
+  --color-control: #6F7A74;
+  --color-disabled: #8C9590;
+  --color-rut: #0E5A5E;
+  --color-rut-soft: #DCEFEF;
+  --color-rot: #9C4221;
+  --color-rot-strong: #7F3418;
+  --color-rot-soft: #FBE9DD;
+  --color-info: #1D4F7C;
+  --color-info-soft: #E6F0F9;
+  --color-warning: #7A4A00;
+  --color-warning-soft: #FCF1D8;
+  --color-warning-border: #B7791F;
+  --color-danger: #A3232A;
+  --color-danger-soft: #FCEBEC;
+  --color-success: #1D6B3B;
+  --color-success-soft: #E3F3E8;
+  --color-legal: #4A3F6B;
+  --color-legal-soft: #EFEDF6;
+  --color-focus: #1A2420;
+  --color-focus-halo: #FFFFFF;
+
+  --radius-control: 0.75rem;
+  --radius-card: 1rem;
+
+  --shadow-card: 0 1px 2px rgb(26 36 32 / 0.06), 0 4px 12px rgb(26 36 32 / 0.05);
+  --shadow-raised: 0 2px 4px rgb(26 36 32 / 0.08), 0 12px 32px rgb(26 36 32 / 0.12);
+
+  /* max-w-page (site width), max-w-text (reading width), max-w-narrow (forms, booking flow). */
+  --container-page: 72rem;
+  --container-text: 42rem;
+  --container-narrow: 36rem;
 }
 
+/* Font comes from next/font (Atkinson Hyperlegible Next) as a CSS variable on <html>. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:
+    var(--font-atkinson), "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    font-size: 112.5%; /* 18px base */
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: 1rem;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.25;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+  }
+
+  button:not(:disabled):not([aria-disabled="true"]),
+  [role="button"]:not([aria-disabled="true"]),
+  label:has(> input:not(:disabled)) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-soft);
+    color: var(--color-ink);
+  }
+
+  /*
+   * Focus indicator: a dark 3px ring with a light halo between the element and the ring and
+   * around it. Visible on the light page, on white cards and on brand-green surfaces.
+   */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 7px var(--color-focus-halo);
+  }
+
+  /* The skip-link target receives programmatic focus; don't draw a ring around the whole page. */
+  main[tabindex="-1"]:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  @media (forced-colors: active) {
+    :focus-visible {
+      outline-color: Highlight;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Ring on a wrapper (chip/tile label) when the visually hidden input inside it has focus. */
+@utility focus-ring-within {
+  &:has(:focus-visible) {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 7px var(--color-focus-halo);
+  }
+}
+
+/* Inline text link (body copy, footers, legal text). */
+@utility link {
+  color: var(--color-brand);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  &:hover {
+    color: var(--color-brand-strong);
+    text-decoration-thickness: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

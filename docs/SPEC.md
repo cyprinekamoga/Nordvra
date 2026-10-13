@@ -277,6 +277,50 @@ Environment (`.env.local` exists locally, `.env.example` documents): `NEXT_PUBLI
   DENY, nosniff, Referrer-Policy strict-origin-when-cross-origin; `/offert/:path*` gets
   `Referrer-Policy: no-referrer` and `X-Robots-Tag: noindex`; `/admin/:path*` noindex).
 
+### 8a. Exact signatures (binding – build against these even if the file isn't written yet)
+
+ALREADY WRITTEN (do not rewrite): `lib/supabase/database.types.ts` (`Database`, `Tables<'bookings'>`,
+`Enums<'booking_status'>`, `Constants`), `lib/supabase/env.ts` (`supabaseEnv()`,
+`isSupabaseConfigured()`, `SupabaseNotConfiguredError`), `lib/supabase/anon.ts`
+(`createAnonClient(): TypedSupabaseClient`, `type TypedSupabaseClient`), `lib/supabase/server.ts`
+(`createServerSupabase(): Promise<TypedSupabaseClient>`), `lib/supabase/browser.ts`
+(`createBrowserSupabase()`).
+
+Written by the infra agent (same time as the feature agents – import them by these exact names):
+```ts
+// lib/catalog/load.ts
+export async function getCatalog(): Promise<Catalog>            // 'use cache', cacheTag('catalog')
+export const CATALOG_TAG = "catalog"
+// lib/auth/admin.ts  (server-only)
+export type AdminUser = { id: string; email: string }
+export async function getAdmin(): Promise<AdminUser | null>
+export async function requireAdmin(): Promise<AdminUser>        // redirect('/admin/login') if not admin
+// lib/settings.ts  (server-only; admin pages/actions)
+export type AppSettings = { quoteValidHours: number; pnrRetentionYears: number; pnrUnusedRetentionDays: number;
+  defaultCommissionPct: number; petsSurchargePct: number; extraFloorSurchargePct: number; notificationEmail: string }
+export async function getSettings(client: TypedSupabaseClient): Promise<AppSettings>  // falls back to defaults
+// lib/email/index.ts  (server-only)
+export type EmailMessage = { to: string; subject: string; text: string; html?: string }
+export interface EmailProvider { send(msg: EmailMessage): Promise<{ ok: boolean; id?: string; error?: string }> }
+export function getEmailProvider(): EmailProvider               // EMAIL_PROVIDER=console|resend
+export async function sendEmailSafe(msg: EmailMessage): Promise<boolean>  // never throws, logs without PII
+// lib/email/templates.ts – each returns { subject: string; text: string; html: string }
+requestReceived(p: { name: string; bookingNumber: string; serviceName: string; preferredDate: string })
+ownerNewRequest(p: { bookingNumber: string; serviceName: string; postcode: string; preferredDate: string; adminUrl: string })
+quoteSent(p: { name: string; bookingNumber: string; serviceName: string; link: string; expiresAt: string })
+bookingConfirmed(p: { name: string; bookingNumber: string; serviceName: string; scheduledDate: string | null; timeWindow: string | null })
+ownerQuoteAnswered(p: { bookingNumber: string; accepted: boolean; adminUrl: string })
+// lib/sms/index.ts  (server-only)
+export interface SmsProvider { send(msg: { to: string; text: string }): Promise<{ ok: boolean; error?: string }> }
+export function getSmsProvider(): SmsProvider
+export async function sendSmsSafe(msg: { to: string; text: string }): Promise<boolean>
+// lib/site.ts
+export function siteUrl(path?: string): string                  // NEXT_PUBLIC_SITE_URL, no trailing slash
+```
+`accept_quote` must not contain `DELETE` (the Supabase connector asks for human confirmation on
+destructive statements). The admin "Skicka offert" action deletes old `booking_buyers` rows for the
+booking (via the RLS server client) before sending a new quote.
+
 ## 9. Shared UI contracts (built in phase 1 by the UI agent, `components/ui/*`, `components/layout/*`)
 
 Design: deep green `#0B5D4B` (brand) on warm off-white `#FAF7F2`, ink `#1A2420`, text logo "Nordvra"

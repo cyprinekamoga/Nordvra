@@ -235,7 +235,7 @@ $$;
 
 -- Customer accepts the quote: stores buyers (encrypted personnummer), ROT property details and
 -- the consents, and turns the request into a binding booking.
-create function public.accept_quote(
+create or replace function public.accept_quote(
   p_token_hash text,
   p_buyers jsonb,
   p_rot_property jsonb,
@@ -250,6 +250,9 @@ declare
   v_count int;
   v_today date := (now() at time zone 'Europe/Stockholm')::date;
 begin
+  if p_token_hash is null or p_token_hash !~ '^[0-9a-f]{64}$' then
+    raise exception 'quote_not_found' using errcode = 'P0001';
+  end if;
   select * into b from public.bookings where quote_token_hash = p_token_hash for update;
   if not found then
     raise exception 'quote_not_found' using errcode = 'P0001';
@@ -262,11 +265,21 @@ begin
     raise exception 'quote_expired' using errcode = 'P0001';
   end if;
 
+  if p_buyers is null or jsonb_typeof(p_buyers) <> 'array' then
+    raise exception 'invalid_buyers' using errcode = 'P0001';
+  end if;
   v_count := jsonb_array_length(p_buyers);
   if v_count < 1 or v_count > 4 then
     raise exception 'invalid_buyers' using errcode = 'P0001';
   end if;
   for v_buyer in select * from jsonb_array_elements(p_buyers) loop
+    if jsonb_typeof(v_buyer) <> 'object'
+       or coalesce(trim(v_buyer ->> 'full_name'), '') = ''
+       or coalesce(v_buyer ->> 'pnr_encrypted', '') = ''
+       or coalesce(v_buyer ->> 'pnr_masked', '') = ''
+       or coalesce(v_buyer ->> 'share_pct', '') !~ '^[0-9]+(\.[0-9]+)?$' then
+      raise exception 'invalid_buyers' using errcode = 'P0001';
+    end if;
     v_share_sum := v_share_sum + (v_buyer ->> 'share_pct')::numeric;
   end loop;
   if abs(v_share_sum - 100) > 0.01 then
@@ -283,24 +296,35 @@ begin
   end if;
 
   if b.deduction_type = 'rot' and coalesce((b.eligibility ->> 'eligible')::boolean, true) then
-    if b.housing_type in ('villa', 'fritidshus') and coalesce(p_rot_property ->> 'fastighetsbeteckning', '') = '' then
+    if b.housing_type in ('villa', 'fritidshus') and coalesce(trim(p_rot_property ->> 'fastighetsbeteckning'), '') = '' then
       raise exception 'missing_property' using errcode = 'P0001';
     end if;
     if b.housing_type = 'bostadsratt' and (
-      coalesce(p_rot_property ->> 'brf_org_nr', '') = '' or coalesce(p_rot_property ->> 'lagenhetsnummer', '') = ''
+      coalesce(trim(p_rot_property ->> 'brf_org_nr'), '') = '' or coalesce(trim(p_rot_property ->> 'lagenhetsnummer'), '') = ''
     ) then
       raise exception 'missing_property' using errcode = 'P0001';
     end if;
   end if;
 
-  delete from public.booking_buyers where booking_id = b.id;
+  -- No DELETE here: the admin "Skicka offert" action clears old buyers before re-sending a quote.
+  -- Leftover buyers beyond the new count would make the share total wrong, so refuse.
+  if exists (select 1 from public.booking_buyers where booking_id = b.id and position > v_count) then
+    raise exception 'buyers_exist' using errcode = 'P0001';
+  end if;
+
   for v_buyer in select * from jsonb_array_elements(p_buyers) loop
     v_pos := v_pos + 1;
     insert into public.booking_buyers (booking_id, position, full_name, pnr_encrypted, pnr_masked, share_pct)
     values (
       b.id, v_pos, trim(v_buyer ->> 'full_name'), v_buyer ->> 'pnr_encrypted',
       v_buyer ->> 'pnr_masked', (v_buyer ->> 'share_pct')::numeric
-    );
+    )
+    on conflict (booking_id, position) do update set
+      full_name = excluded.full_name,
+      pnr_encrypted = excluded.pnr_encrypted,
+      pnr_masked = excluded.pnr_masked,
+      share_pct = excluded.share_pct,
+      anonymised_at = null;
   end loop;
 
   update public.bookings set

@@ -48,7 +48,10 @@ export function Tile({
       )}
       {...rest}
     >
-      <span className="flex w-full items-start justify-between gap-3">
+      {/* Title first in the DOM so the accessible name starts with it; the icon/badge row is shown above via `order-first`. */}
+      <span className="text-lg leading-snug font-bold">{title}</span>
+      {description ? <span className="text-base text-muted">{description}</span> : null}
+      <span className="order-first flex w-full items-start justify-between gap-3">
         {icon ? (
           <span className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand group-aria-pressed:bg-brand group-aria-pressed:text-on-brand">
             <Icon name={icon} size={26} />
@@ -70,8 +73,6 @@ export function Tile({
           </span>
         ) : null}
       </span>
-      <span className="text-lg leading-snug font-bold">{title}</span>
-      {description ? <span className="text-base text-muted">{description}</span> : null}
     </button>
   );
 }

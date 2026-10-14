@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nordvra
 
-## Getting Started
+Mobile-first booking concierge ("vi bokar åt dig") for RUT and ROT services, run by
+**TO Städ och Flytt** (Eskilstuna) and covering all of Sweden through vetted partner companies.
+All customer-facing text is Swedish.
 
-First, run the development server:
+Customers click through a short request flow, see an indicative price before and after the
+deduction, and send a **request (förfrågan)**. The owner finds a provider, enters the real price in
+the admin and sends a **quote link**. The customer approves it on the quote page (adding personnummer
+and property details) and only then is it a binding booking. There is no booking fee.
+
+The full product and legal specification is in [`docs/SPEC.md`](docs/SPEC.md).
+
+## Tech stack
+
+- **Next.js 16.4** (App Router, Cache Components, Partial Prefetching, Turbopack) + TypeScript + Tailwind CSS v4
+- **Supabase** (Postgres, Auth for admins, Row Level Security, pg_cron), project in eu-north-1 (Stockholm)
+- zod for validation, Vitest for unit tests, Playwright + axe for end-to-end and accessibility tests
+
+> Next.js 16 differs from older versions. Version-matched docs are in `node_modules/next/dist/docs/` (see `AGENTS.md`).
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local     # fill in the values, see below
+npm run dev                    # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without Supabase variables the public site still works with the built-in seed catalogue, but
+requests can't be sent and the admin is disabled.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Where | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | public | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | public | Supabase publishable key (`sb_publishable_…`). No service-role key is used anywhere. |
+| `PII_ENCRYPTION_KEY` | **server secret** | 32 random bytes, base64 (`openssl rand -base64 32`). Encrypts personnummer (AES-256-GCM). **Back it up** – losing it makes stored personnummer unreadable. Don't rotate without a migration. |
+| `NEXT_PUBLIC_SITE_URL` | public | Public site URL without trailing slash; used in quote links in emails/SMS |
+| `EMAIL_PROVIDER` | server | `console` (default, sends nothing) or `resend` |
+| `RESEND_API_KEY`, `EMAIL_FROM` | server secret | Only for `EMAIL_PROVIDER=resend` (untested – enable deliberately after verifying the domain) |
+| `SMS_PROVIDER` | server | `console` (default). `46elks` is a stub, not implemented yet |
+| `SMS_API_USER`, `SMS_API_PASSWORD` | server secret | For the future SMS provider |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | What it does |
+|---|---|
+| `npm run dev` / `npm run build` / `npm start` | Next.js |
+| `npm test` | Unit tests (Vitest): pricing and deduction maths, eligibility, personnummer/org.nr validation, encryption, catalogue, admin helpers, CSV export … |
+| `npm run test:e2e` | Playwright at 375 px with axe accessibility checks (builds must exist: `npm run build` first). In containers without a Playwright browser set `PLAYWRIGHT_CHROMIUM_PATH`. |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run db:seed:generate` | Regenerates `supabase/seed.sql` from `lib/catalog/seed.ts` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database (Supabase)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Migrations are in `supabase/migrations/`, seed data in `supabase/seed.sql`. The live project
+`umyrteczoeecnrrpqnix` (eu-north-1) already has everything applied: tables, RLS on every table,
+the public RPCs, cron jobs, the service catalogue and the admin allow-list.
 
-## Deploy on Vercel
+- **Customers never touch tables.** Public actions go through `SECURITY DEFINER` functions:
+  `submit_request`, `get_quote`, `accept_quote`, `decline_quote`, `public_config`.
+- **Admins** are confirmed Supabase Auth users whose email is in `admin_users` (`is_admin()`).
+- **Partners without verified F-skatt can't be assigned** (database trigger).
+- **Cron:** quotes expire hourly (`expire_quotes`); personnummer are anonymised daily
+  (`anonymise_expired_pnr`) – 7 years after the RUT/ROT claim is settled for our own jobs
+  (TODO: confirm with the accountant), 90 days for cancelled/declined/partner jobs. Both periods are editable in the admin.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+For a new project: run the migrations in order, then `supabase/seed.sql`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### One-time Supabase dashboard settings (needed for admin login emails)
+
+In Supabase → **Authentication → URL Configuration**:
+
+- **Site URL:** your production URL (e.g. `https://nordvra.se` or the Netlify URL)
+- **Redirect URLs:** add `https://<your-domain>/admin/auth/confirm` (and `http://localhost:3000/admin/auth/confirm` for local dev)
+
+Then open `/admin/login`, choose **"Skapa konto första gången"** with `cyprinekamoga@gmail.com`,
+confirm via the email, and log in. More admins can be added under **Inställningar**.
+
+## Updating the tax rules each year
+
+All RUT/ROT numbers live in **`lib/taxRules.ts`** (one entry per year; 2026: RUT 50 %, ROT 30 %,
+max 75 000 kr per person and year combined, of which max 50 000 kr ROT).
+
+1. When the budget bill for the next year is decided (usually announced September–November), copy the
+   latest entry in `TAX_RULES`, change `year` and any changed values, and update `source`.
+2. Run `npm test`. The 2026 values are pinned by tests in `lib/pricing/__tests__/`; add tests for the new year.
+3. Deploy.
+
+Until then the app uses the latest known year's rules and the admin shows a warning. For an urgent
+change without a deploy, the admin can override a year under **Inställningar → Skatteregler**
+(values that differ from the file are flagged).
+
+The year that applies is the year the customer **pays**; the app approximates it with the job date.
+
+## Project structure
+
+```
+app/                     routes (public pages, /boka, /offert/[token], /admin/**)
+components/ui/           design system (buttons, chips, calendar, info boxes …)
+components/booking/      request flow steps
+components/quote/        quote approval
+components/admin/        admin screens
+lib/taxRules.ts          RUT/ROT rules per year
+lib/pricing/             price and deduction maths (pure, tested)
+lib/eligibility.ts       eligibility questions and evaluation
+lib/catalog/             service catalogue types, seed, loader
+lib/crypto/pii.ts        personnummer encryption, quote tokens
+lib/email, lib/sms       provider interfaces (console placeholders)
+lib/payments             payment interface (manual placeholder; Swish/card TODO)
+lib/i18n/sv/             Swedish strings (add `en/` later)
+supabase/                migrations and seed
+docs/SPEC.md             product, legal and data specification
+```
+
+## Not done yet / before launch
+
+- **Legal review:** Villkor, Integritetspolicy and the RUT/ROT pages are drafts with a visible
+  "Ska granskas av jurist/skatterådgivare före lansering" banner.
+- **Company details:** org.nr and address are placeholders in `lib/company.ts`.
+- **Own-staff partner:** fill in org.nr and verify F-skatt for "TO Städ och Flytt (egen personal)" in the admin before assigning it.
+- **Email/SMS:** both run as console placeholders. Enable Resend (domain verification) and implement 46elks.
+- **Payments:** no live payments (manual placeholder). Payment must be electronic and made by the buyer.
+- **Skatteverket:** no automatic submission. Use **Admin → Export** (CSV) to file claims.
+- **Catalogue check:** confirm the service list and Skatteverket work types against Skatteverket's current lists.
+- Admin UI strings are written inline in Swedish (internal tool); customer-facing strings are in `lib/i18n`.

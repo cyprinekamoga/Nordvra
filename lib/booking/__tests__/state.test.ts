@@ -61,7 +61,7 @@ function flyttDraft(overrides: Partial<RequestDraft> = {}): RequestDraft {
     pets: false,
     preferredDate: "2026-10-20",
     timeWindow: "formiddag",
-    postcode: "63220",
+    postcode: "11453",
     eligibility: { age18: true, taxSweden: true, rutResidence: true, buyerCount: 1, usedThisYear: "nej" },
     ...overrides,
   };
@@ -72,8 +72,8 @@ const contact: Contact = {
   phone: "+46701234567",
   email: "anna@exempel.se",
   street: "Storgatan 1",
-  postcode: "63220",
-  city: "Eskilstuna",
+  postcode: "11453",
+  city: "Stockholm",
   note: "",
   acceptTerms: true,
 };
@@ -152,7 +152,7 @@ describe("reset rules", () => {
     expect(next.sizeBand).toBe("60-79");
     expect(next.floors).toBe(2);
     expect(next.preferredDate).toBe("2026-10-20");
-    expect(next.postcode).toBe("63220");
+    expect(next.postcode).toBe("11453");
     expect(next.contact).toEqual({ name: "Anna" });
     // Same deduction type: eligibility answers are kept.
     expect(next.eligibility.rutResidence).toBe(true);
@@ -204,7 +204,7 @@ describe("step completeness", () => {
     expect(maxReachableStep(flyttDraft({ serviceId: undefined }), catalog, TODAY)).toBe(2);
     expect(maxReachableStep(flyttDraft({ sizeBand: undefined }), catalog, TODAY)).toBe(3);
     expect(maxReachableStep(flyttDraft({ timeWindow: undefined }), catalog, TODAY)).toBe(4);
-    expect(maxReachableStep(flyttDraft({ postcode: "632" }), catalog, TODAY)).toBe(5);
+    expect(maxReachableStep(flyttDraft({ postcode: "114" }), catalog, TODAY)).toBe(5);
     expect(
       maxReachableStep(flyttDraft({ eligibility: { age18: true, taxSweden: true } }), catalog, TODAY),
     ).toBe(6);
@@ -318,9 +318,9 @@ describe("buildSubmitPayload", () => {
       time_window: "formiddag",
       flexible: true,
       inspection_date: null,
-      postcode: "63220",
+      postcode: "11453",
       street: "Storgatan 1",
-      city: "Eskilstuna",
+      city: "Stockholm",
       contact_name: "Anna Andersson",
       contact_phone: "+46701234567",
       contact_email: "anna@exempel.se",
@@ -376,10 +376,10 @@ describe("buildSubmitPayload", () => {
       postcode: "11122",
       eligibility: { age18: true, taxSweden: true, rutResidence: true, buyerCount: 2 as const, usedThisYear: "vet_inte" as const },
     };
-    const result = buildSubmitPayload({ draft, contact: { ...contact, postcode: "63220", note: "Hund hemma" }, catalog, today: TODAY });
+    const result = buildSubmitPayload({ draft, contact: { ...contact, postcode: "11453", note: "Hund hemma" }, catalog, today: TODAY });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.payload.postcode).toBe("63220");
+    expect(result.payload.postcode).toBe("11453");
     expect(result.payload.floors).toBe(2);
     expect(result.payload.pets).toBe(true);
     expect(result.payload.details.frequency).toBe("varannan_vecka");

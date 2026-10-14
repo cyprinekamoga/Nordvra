@@ -2,8 +2,8 @@
 -- Source: lib/catalog/seed.ts. Regenerate with: npm run db:seed:generate
 --
 -- Idempotent: re-running resets catalogue rows (categories, services, add-ons, price ranges)
--- to the seed values, and never deletes anything. The admin user, the settings row and the
--- own-staff partner are only inserted when missing.
+-- to the seed values, and never deletes anything. The admin user and the settings row are
+-- only inserted when missing.
 
 -- categories
 insert into public.categories (id, name, icon, deduction_type, sort, active) values
@@ -269,14 +269,3 @@ insert into public.settings (id) values (1) on conflict (id) do nothing;
 -- admin_users
 insert into public.admin_users (email, added_by) values ('cyprinekamoga@gmail.com', 'seed')
 on conflict (email) do nothing;
-
--- partners (own staff)
-insert into public.partners (
-  name, org_nr, is_own_company, f_skatt_verified, service_ids, regions, postcode_prefixes,
-  commission_pct, notes
-)
-select 'TO Städ och Flytt (egen personal)', 'TODO', true, false,
-  array['hemstadning', 'storstadning', 'flyttstadning', 'tvatt-strykning', 'fonsterputs', 'packning', 'bara-lasta', 'mobelmontering', 'upphangning', 'secondhand-transport', 'grasklippning', 'hackklippning', 'ograsrensning', 'krattning', 'beskarning', 'tradfallning', 'stubbfrasning', 'snoskottning', 'takskottning', 'it-installation', 'it-felsokning', 'vitvaror-reparation', 'barnpassning', 'personlig-omsorg', 'tillsyn']::text[],
-  array['Södermanlands län']::text[], array['63', '64']::text[],
-  0, 'Fyll i org.nr och verifiera F-skatt innan tilldelning.'
-where not exists (select 1 from public.partners where is_own_company);

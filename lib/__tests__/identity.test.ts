@@ -48,8 +48,8 @@ describe("other identifiers", () => {
   });
 
   it("checks the shape of a fastighetsbeteckning", () => {
-    expect(looksLikeFastighetsbeteckning("Eskilstuna Tunafors 1:23")).toBe(true);
-    expect(looksLikeFastighetsbeteckning("Tunafors")).toBe(false);
+    expect(looksLikeFastighetsbeteckning("Nacka Sicklaön 123:4")).toBe(true);
+    expect(looksLikeFastighetsbeteckning("Sicklaön")).toBe(false);
   });
 
   it("normalises Swedish phone numbers", () => {

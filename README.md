@@ -1,7 +1,7 @@
 # Nordvra
 
-Mobile-first booking concierge ("vi bokar åt dig") for RUT and ROT services, run by
-**TO Städ och Flytt** (Eskilstuna) and covering all of Sweden through vetted partner companies.
+Mobile-first booking concierge ("vi bokar åt dig") for RUT and ROT services. Nordvra is based in
+Stockholm and covers all of Sweden through vetted partner companies.
 All customer-facing text is Swedish.
 
 Customers click through a short request flow, see an indicative price before and after the
@@ -119,8 +119,8 @@ docs/SPEC.md             product, legal and data specification
 
 - **Legal review:** Villkor, Integritetspolicy and the RUT/ROT pages are drafts with a visible
   "Ska granskas av jurist/skatterådgivare före lansering" banner.
-- **Company details:** org.nr and address are placeholders in `lib/company.ts`.
-- **Own-staff partner:** fill in org.nr and verify F-skatt for "TO Städ och Flytt (egen personal)" in the admin before assigning it.
+- **Company details:** registered company name, org.nr and address are placeholders in `lib/company.ts`.
+- **Partners:** add partner companies under **Admin → Partners** (org.nr and verified F-skatt are required before one can be assigned).
 - **Email/SMS:** both run as console placeholders. Enable Resend (domain verification) and implement 46elks.
 - **Payments:** no live payments (manual placeholder). Payment must be electronic and made by the buyer.
 - **Skatteverket:** no automatic submission. Use **Admin → Export** (CSV) to file claims.

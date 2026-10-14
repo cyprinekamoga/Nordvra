@@ -84,7 +84,7 @@ export function termsOfService({
     title: "Villkor",
     version: company.termsVersion,
     intro: [
-      `De här villkoren gäller när du använder Nordvra för att skicka en förfrågan, få en offert och boka en tjänst. Nordvra drivs av ${us}.`,
+      `De här villkoren gäller när du använder Nordvra för att skicka en förfrågan, få en offert och boka en tjänst.`,
       "Vi har försökt skriva villkoren så enkelt som möjligt. Du har alltid de rättigheter som konsumentlagarna ger dig – inget i villkoren kan ta bort dem.",
     ],
     sections: [
@@ -92,7 +92,7 @@ export function termsOfService({
         id: "om-villkoren",
         title: "1. Vilka vi är",
         blocks: [
-          p(`Nordvra är en tjänst från ${companyLine()}. Vi har vår bas i ${company.hometown} och hjälper kunder i hela Sverige.`),
+          p(`Företaget bakom Nordvra är ${companyLine()}. Vi har vår bas i ${company.hometown} och hjälper kunder i hela Sverige.`),
           p(`Du når oss på telefon ${company.phoneDisplay} och på e-post ${company.email}.`),
           p(`${us} är godkänt för F-skatt och har ansvarsförsäkring hos ${company.insurance}.`),
         ],
@@ -133,12 +133,6 @@ export function termsOfService({
               p("Partnerföretaget lämnar offerten, utför arbetet, fakturerar dig, begär ROT-avdraget och ansvarar för arbetet. Partnerföretagets egna villkor kan också gälla – i så fall står det i offerten."),
               p("Vi får en ersättning från partnerföretaget för att vi förmedlar jobbet. Du betalar ingen avgift till oss."),
               p("Vi hjälper dig gärna om något inte fungerar med partnerföretaget."),
-            ],
-          },
-          {
-            title: "När vi själva gör jobbet",
-            blocks: [
-              p(`Ibland väljer vi att ${us} gör jobbet. Då berättar vi det i offerten, så att du vet att vi har valt oss själva. Vill du hellre ha ett annat företag ordnar vi det.`),
             ],
           },
         ],
@@ -281,8 +275,6 @@ export function privacyPolicy({
   unusedRetentionDays = DEFAULT_SETTINGS.pnrUnusedRetentionDays,
   quoteValidHours = DEFAULT_SETTINGS.quoteValidHours,
 }: LegalOptions = {}): LegalDocument {
-  const us = company.legalName;
-
   return {
     title: "Integritetspolicy",
     version: company.termsVersion,
@@ -295,7 +287,7 @@ export function privacyPolicy({
         id: "ansvarig",
         title: "1. Personuppgiftsansvarig",
         blocks: [
-          p(`Personuppgiftsansvarig är ${companyLine()}. ${us} driver Nordvra.`),
+          p(`Personuppgiftsansvarig är ${companyLine()}.`),
           p(`Har du frågor om dina personuppgifter? Ring ${company.phoneDisplay} eller mejla ${company.email}.`),
         ],
       },

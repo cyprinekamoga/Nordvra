@@ -13,7 +13,7 @@ export const TIME_WINDOWS = ["formiddag", "eftermiddag", "flexibel"] as const;
 export type TimeWindow = (typeof TIME_WINDOWS)[number];
 
 /**
- * seller = TO Städ och Flytt is the seller of record (invoices, applies for RUT, liable).
+ * seller = Nordvra is the seller of record (invoices, applies for RUT, liable).
  * agent  = a partner company quotes, invoices and applies for ROT; we only arrange the booking.
  */
 export type ServiceModel = "seller" | "agent";

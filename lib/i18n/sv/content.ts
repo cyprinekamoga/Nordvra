@@ -35,7 +35,7 @@ const content = {
     about: {
       title: "Om oss",
       description:
-        "Nordvra drivs av TO Städ och Flytt i Eskilstuna. Vi bokar städning och hantverkare åt dig i hela Sverige – med RUT- och ROT-avdrag.",
+        "Nordvra finns i Stockholm. Vi bokar städning och hantverkare åt dig i hela Sverige – med RUT- och ROT-avdrag.",
     },
     contact: {
       title: "Kontakt",
@@ -165,8 +165,8 @@ const content = {
       items: [
         {
           icon: "house",
-          title: "Drivs av TO Städ och Flytt",
-          body: "Ett städ- och flyttstädföretag från {hometown}. Vi vet hur ett bra jobb ska se ut.",
+          title: "Personlig service",
+          body: "Vi finns i {hometown} och tar hand om din bokning från förfrågan till färdigt jobb.",
         },
         {
           icon: "map-pin",
@@ -321,7 +321,7 @@ const content = {
 
   about: {
     title: "Om Nordvra",
-    lead: "Nordvra drivs av {legalName}, ett städ- och flyttstädföretag i {hometown}. Vi startade Nordvra för att det ska vara enkelt för alla att boka hjälp i hemmet – med RUT- och ROT-avdraget klart från början.",
+    lead: "Nordvra finns i {hometown}. Vi startade Nordvra för att det ska vara enkelt för alla att boka hjälp i hemmet – med RUT- och ROT-avdraget klart från början.",
     why: {
       title: "Därför finns Nordvra",
       body: [
@@ -335,7 +335,6 @@ const content = {
         "Vi väljer ett bra företag som kan göra jobbet när du vill – du slipper jämföra offerter.",
         "Vi kontrollerar att företaget är godkänt för F-skatt och har försäkring innan det får jobb av oss.",
         "Vi är tydliga med vem som är din avtalspart och vem som gör jobbet.",
-        "Om vi själva gör jobbet säger vi det – vill du hellre ha ett annat företag ordnar vi det.",
         "Det finns ingen bokningsavgift. Du betalar bara för jobbet.",
         "Du kan alltid ringa oss och prata med en människa.",
       ],

@@ -82,7 +82,6 @@ export interface QuoteData {
   hours: number | null;
   quoteMessage: string | null;
   quoteExpiresAt: string | null;
-  performedInHouse: boolean;
   partnerName: string | null;
   partnerOrgNr: string | null;
   approvedAt: string | null;
@@ -184,7 +183,6 @@ export function parseQuote(raw: unknown): QuoteData | null {
     hours: hours !== null && hours > 0 ? hours : null,
     quoteMessage: nullableStr(r.quote_message),
     quoteExpiresAt: timestamp(r.quote_expires_at),
-    performedInHouse: r.performed_in_house === true,
     partnerName: nullableStr(r.partner_name),
     partnerOrgNr: nullableStr(r.partner_org_nr),
     approvedAt: timestamp(r.approved_at),

@@ -8,8 +8,8 @@ export const TODO_VALUE = "TODO" as const;
 
 export const company = {
   brandName: "Nordvra",
-  operatedBy: "drivs av TO Städ och Flytt",
-  legalName: "TO Städ och Flytt",
+  // TODO(före lansering): bolagets registrerade namn, t.ex. "Nordvra AB".
+  legalName: "Nordvra",
   phoneDisplay: "076-113 43 84",
   phoneHref: "tel:+46761134384",
   email: "info@nordvra.se",
@@ -20,10 +20,10 @@ export const company = {
   hasFSkatt: true,
   /** Customer-facing F-skatt copy. */
   fSkattCopy: "Godkänd för F-skatt",
-  // TODO(före lansering): fyll i organisationsnummer och postadress för TO Städ och Flytt.
+  // TODO(före lansering): fyll i organisationsnummer och postadress.
   orgNr: TODO_VALUE as string,
   address: TODO_VALUE as string,
-  hometown: "Eskilstuna",
+  hometown: "Stockholm",
   coverage: "Hela Sverige",
   /** Version of Villkor/Integritetspolicy the customer accepts (stored with each request). */
   termsVersion: "2026-10-13",

@@ -6,7 +6,7 @@ import "server-only";
  * som ska få avdraget, gör att Skatteverket nekar avdraget. Därför stödjer vi bara elektroniska
  * betalsätt och sparar alltid betalsätt, belopp och datum på bokningen.
  *
- * Payments: only the seller model (TO Städ och Flytt invoices) takes payment through us; in the
+ * Payments: only the seller model (Nordvra invoices) takes payment through us; in the
  * agent model (ROT) the partner invoices the customer directly.
  */
 

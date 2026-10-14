@@ -10,7 +10,7 @@ const email = {
     greeting: "Hej {name}!",
     greetingNoName: "Hej!",
     signOff: "Vänliga hälsningar",
-    signature: "Nordvra – drivs av TO Städ och Flytt",
+    signature: "Nordvra",
     questions: "Har du frågor? Ring oss på {phone} eller mejla {email}. Vi hjälper dig gärna.",
     customerFooter: "Du får det här mejlet eftersom du har gjort en förfrågan hos Nordvra.",
     ownerFooter: "Internt mejl från Nordvra.",

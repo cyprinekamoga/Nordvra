@@ -34,8 +34,8 @@ function rawQuote(overrides: Record<string, unknown> = {}): Record<string, unkno
     scheduled_date: "2026-11-03",
     scheduled_time_window: "formiddag",
     street: "Storgatan 1",
-    postcode: "63220",
-    city: "Eskilstuna",
+    postcode: "11453",
+    city: "Stockholm",
     contact_name: "Anna Svensson",
     buyer_count: 1,
     eligibility: { answers: {}, eligible: true, reasons: [], warnings: [] },
@@ -45,7 +45,6 @@ function rawQuote(overrides: Record<string, unknown> = {}): Record<string, unkno
     hours: 6,
     quote_message: "Vi tar med allt material.",
     quote_expires_at: "2026-10-15T12:00:00+00:00",
-    performed_in_house: false,
     partner_name: "Städproffsen AB",
     partner_org_nr: "556036-0793",
     approved_at: null,
@@ -80,7 +79,6 @@ describe("parseQuote", () => {
       buyerCount: 1,
       hours: 6,
       partnerName: "Städproffsen AB",
-      performedInHouse: false,
     });
     expect(q.eligibility).toEqual({ eligible: true, reasons: [], warnings: [] });
   });

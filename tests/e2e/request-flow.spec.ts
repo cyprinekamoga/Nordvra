@@ -47,7 +47,7 @@ test("flyttstäd request: click-only flow shows the indicative price and keeps a
 
   // Step 5 – where (the only typing before the contact step).
   await expect(page.getByText(/Steg 5 av 8/)).toBeVisible();
-  await page.getByLabel(/Postnummer/i).fill("63220");
+  await page.getByLabel(/Postnummer/i).fill("11453");
   await next(page);
 
   // Step 6 – eligibility.

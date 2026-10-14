@@ -9,7 +9,6 @@
 const common = {
   brand: {
     name: "Nordvra",
-    operatedBy: "drivs av TO Städ och Flytt",
     tagline:
       "Vi hittar ett bra företag, du slipper jämföra offerter, och vi hjälper dig med RUT/ROT-avdraget.",
   },
@@ -44,8 +43,8 @@ const common = {
       cookies: "Cookies",
     },
     companyIntro:
-      "Nordvra drivs av {legalName} i {hometown}. Vi hjälper kunder i hela Sverige tillsammans med noga utvalda partnerföretag.",
-    /** "Eskilstuna – vi hjälper dig i hela Sverige" */
+      "Nordvra finns i {hometown}. Vi hjälper kunder i hela Sverige tillsammans med noga utvalda partnerföretag.",
+    /** "Stockholm – vi hjälper dig i hela Sverige" */
     location: "{hometown} – vi hjälper dig i hela Sverige",
     fSkatt: "Godkänd för F-skatt",
     insured: "Försäkrade hos If",
@@ -55,7 +54,7 @@ const common = {
     phone: "Telefon: {phone}",
     email: "E-post: {email}",
     pending: "(fylls i före lansering)",
-    copyright: "© TO Städ och Flytt",
+    copyright: "© Nordvra",
   },
 
   phone: {
@@ -197,11 +196,9 @@ const common = {
     },
     counterparty: {
       title: "Avtalspart och reklamation",
-      seller: "Avtalspart: TO Städ och Flytt",
-      agent: "Avtalspart: {partner} (org.nr {orgNr}), förmedlat av TO Städ och Flytt",
+      seller: "Avtalspart: {legalName}",
+      agent: "Avtalspart: {partner} (org.nr {orgNr}), förmedlat av Nordvra",
       complaint: "Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år.",
-      inHouse:
-        "Arbetet utförs av TO Städ och Flytt, som också driver Nordvra. Vi berättar det så att du vet att vi har valt oss själva – vill du hellre ha ett annat företag ordnar vi det.",
     },
     terms: {
       /** Checkbox label is built as: before + [termsLink] + and + [privacyLink] + after. */

@@ -13,20 +13,10 @@ import type { Category, PriceRangeRow, Service, ServiceAddon } from "@/lib/catal
  * Every statement is idempotent so the seed can be re-run:
  *  - catalogue rows use `on conflict … do update` (re-running resets them to the seed values),
  *  - the admin user and the settings row use `on conflict do nothing`,
- *  - our own-staff partner row is only inserted when no `is_own_company` row exists.
  * Nothing is ever deleted.
  */
 
 export const SEED_ADMIN_EMAIL = "cyprinekamoga@gmail.com";
-
-export const OWN_COMPANY_PARTNER = {
-  name: "TO Städ och Flytt (egen personal)",
-  orgNr: "TODO",
-  regions: ["Södermanlands län"],
-  postcodePrefixes: ["63", "64"],
-  commissionPct: 0,
-  notes: "Fyll i org.nr och verifiera F-skatt innan tilldelning.",
-} as const;
 
 export interface SeedData {
   categories: Category[];
@@ -253,24 +243,7 @@ export function buildSeedStatements(
       "on conflict (email) do nothing;",
   };
 
-  const rutServiceIds = data.services.filter((s) => s.deductionType === "rut").map((s) => s.id);
-  const p = OWN_COMPANY_PARTNER;
-  const partner: SeedStatement = {
-    label: "partners (own staff)",
-    rows: 0,
-    sql:
-      "insert into public.partners (\n" +
-      "  name, org_nr, is_own_company, f_skatt_verified, service_ids, regions, postcode_prefixes,\n" +
-      "  commission_pct, notes\n" +
-      ")\n" +
-      `select ${sqlText(p.name)}, ${sqlText(p.orgNr)}, true, false,\n` +
-      `  ${sqlTextArray(rutServiceIds)},\n` +
-      `  ${sqlTextArray(p.regions)}, ${sqlTextArray(p.postcodePrefixes)},\n` +
-      `  ${sqlNumeric(p.commissionPct)}, ${sqlText(p.notes)}\n` +
-      "where not exists (select 1 from public.partners where is_own_company);",
-  };
-
-  return [...categories, ...services, ...addons, ...ranges, settings, admin, partner];
+  return [...categories, ...services, ...addons, ...ranges, settings, admin];
 }
 
 export function buildSeedSql(data: SeedData = defaultSeedData): string {
@@ -279,8 +252,8 @@ export function buildSeedSql(data: SeedData = defaultSeedData): string {
     "-- Source: lib/catalog/seed.ts. Regenerate with: npm run db:seed:generate",
     "--",
     "-- Idempotent: re-running resets catalogue rows (categories, services, add-ons, price ranges)",
-    "-- to the seed values, and never deletes anything. The admin user, the settings row and the",
-    "-- own-staff partner are only inserted when missing.",
+    "-- to the seed values, and never deletes anything. The admin user and the settings row are",
+    "-- only inserted when missing.",
     "",
   ].join("\n");
   const body = buildSeedStatements(data)

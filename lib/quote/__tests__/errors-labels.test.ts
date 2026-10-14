@@ -50,28 +50,25 @@ describe("counterpartyText", () => {
     model: "seller" as const,
     partnerName: "Städproffsen AB",
     partnerOrgNr: "556036-0793",
-    performedInHouse: false,
     deductionType: "rut" as const,
     eligibility: { eligible: true, reasons: [], warnings: [] },
   };
 
-  it("seller model: TO Städ och Flytt is avtalspart, names the subcontractor, 3-year complaint right", () => {
+  it("seller model: Nordvra is avtalspart, names the subcontractor, 3-year complaint right", () => {
     const text = counterpartyText(base);
-    expect(text.headline).toBe("Avtalspart: TO Städ och Flytt");
+    expect(text.headline).toBe("Avtalspart: Nordvra");
     expect(text.lines[0]).toBe("Arbetet utförs av vår underleverantör Städproffsen AB.");
     expect(text.lines).toContain("Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år.");
-    expect(text.inHouse).toBe(false);
   });
 
-  it("seller model in-house: no subcontractor line, in-house notice", () => {
-    const text = counterpartyText({ ...base, performedInHouse: true, partnerName: "TO Städ och Flytt" });
+  it("seller model without an assigned partner: no subcontractor line", () => {
+    const text = counterpartyText({ ...base, partnerName: null });
     expect(text.lines.some((l) => l.includes("underleverantör"))).toBe(false);
-    expect(text.inHouse).toBe(true);
   });
 
-  it("agent model: the partner is avtalspart, förmedlat av TO Städ och Flytt, and applies for ROT", () => {
+  it("agent model: the partner is avtalspart, förmedlat av Nordvra, and applies for ROT", () => {
     const text = counterpartyText({ ...base, model: "agent", deductionType: "rot", partnerName: "Måleri AB" });
-    expect(text.headline).toBe("Avtalspart: Måleri AB (org.nr 556036-0793), förmedlat av TO Städ och Flytt");
+    expect(text.headline).toBe("Avtalspart: Måleri AB (org.nr 556036-0793), förmedlat av Nordvra");
     expect(text.lines[0]).toBe(
       "Måleri AB skickar fakturan, tar emot betalningen och ansöker om ROT-avdrag hos Skatteverket.",
     );
@@ -80,7 +77,7 @@ describe("counterpartyText", () => {
   it("agent model without org.nr or partner name still reads well", () => {
     const text = counterpartyText({ ...base, model: "agent", partnerName: null, partnerOrgNr: null });
     expect(text.headline).toBe(
-      "Avtalspart: partnerföretaget (org.nr uppges i bekräftelsen), förmedlat av TO Städ och Flytt",
+      "Avtalspart: partnerföretaget (org.nr uppges i bekräftelsen), förmedlat av Nordvra",
     );
     expect(text.lines[0].startsWith("Partnerföretaget skickar fakturan")).toBe(true);
   });

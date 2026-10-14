@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s – Nordvra",
   },
   description:
-    "Vi bokar städning, flytthjälp och hantverkare åt dig – med RUT- och ROT-avdrag. Se ungefärligt pris före och efter avdrag direkt. Ingen bokningsavgift. Drivs av TO Städ och Flytt.",
+    "Vi bokar städning, flytthjälp och hantverkare åt dig – med RUT- och ROT-avdrag. Se ungefärligt pris före och efter avdrag direkt. Ingen bokningsavgift.",
   applicationName: "Nordvra",
   robots: { index: true, follow: true },
   openGraph: {

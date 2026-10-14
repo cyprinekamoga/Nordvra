@@ -179,7 +179,7 @@ export default function HowItWorksPage() {
                 {s.paperwork.sellerTitle} <DeductionBadge type="rut" size="sm" />
               </h3>
               <p>{fmt(s.paperwork.sellerBody, { legalName: company.legalName })}</p>
-              <p className="font-semibold">{legal.counterparty.seller}</p>
+              <p className="font-semibold">{fmt(legal.counterparty.seller, { legalName: company.legalName })}</p>
               <p>{legal.counterparty.complaint}</p>
             </Card>
             <Card padding="md" className="space-y-2">

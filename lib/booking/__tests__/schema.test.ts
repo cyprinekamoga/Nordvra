@@ -14,8 +14,8 @@ const valid: ContactFormValues = {
   phone: "070-123 45 67",
   email: "  Anna.Andersson@Exempel.SE ",
   street: "Storgatan 1",
-  postcode: "632 20",
-  city: "Eskilstuna",
+  postcode: "114 53",
+  city: "Stockholm",
   note: "Portkod 1234",
   acceptTerms: true,
 };
@@ -27,7 +27,7 @@ describe("validateContact", () => {
     if (!result.ok) return;
     expect(result.data.phone).toBe("+46701234567");
     expect(result.data.email).toBe("anna.andersson@exempel.se");
-    expect(result.data.postcode).toBe("63220");
+    expect(result.data.postcode).toBe("11453");
     expect(result.data.note).toBe("Portkod 1234");
   });
 
@@ -43,7 +43,7 @@ describe("validateContact", () => {
       phone: "12",
       email: "anna@",
       street: "",
-      postcode: "6322",
+      postcode: "1145",
       city: "",
       note: "",
       acceptTerms: false,
@@ -130,7 +130,7 @@ describe("requestDraftSchema", () => {
     expect(requestDraftSchema.safeParse({ housingType: "slott" }).success).toBe(false);
     expect(requestDraftSchema.safeParse({ windows: 61 }).success).toBe(false);
     expect(requestDraftSchema.safeParse({ floors: 0 }).success).toBe(false);
-    expect(requestDraftSchema.safeParse({ postcode: "632 20" }).success).toBe(false);
+    expect(requestDraftSchema.safeParse({ postcode: "114 53" }).success).toBe(false);
     expect(requestDraftSchema.safeParse({ preferredDate: "20.10.2026" }).success).toBe(false);
   });
 

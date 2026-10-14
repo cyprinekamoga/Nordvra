@@ -73,8 +73,8 @@ const quote = {
   counterparty: {
     subcontractor: "Arbetet utförs av vår underleverantör {partner}.",
     sellerInvoice:
-      "TO Städ och Flytt skickar fakturan, tar emot betalningen och ansöker om {deduction} hos Skatteverket.",
-    sellerInvoiceNoDeduction: "TO Städ och Flytt skickar fakturan och tar emot betalningen.",
+      "Nordvra skickar fakturan, tar emot betalningen och ansöker om {deduction} hos Skatteverket.",
+    sellerInvoiceNoDeduction: "Nordvra skickar fakturan och tar emot betalningen.",
     agentInvoice:
       "{partner} skickar fakturan, tar emot betalningen och ansöker om {deduction} hos Skatteverket.",
     agentInvoiceNoDeduction: "{partner} skickar fakturan och tar emot betalningen.",
@@ -82,7 +82,6 @@ const quote = {
       "Har du klagomål på arbetet vänder du dig till {partner}. Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år, och vi hjälper dig gärna.",
     partnerFallback: "partnerföretaget",
     orgNrMissing: "uppges i bekräftelsen",
-    inHouseTitle: "Vi utför arbetet själva",
   },
 
   legal: {
@@ -127,7 +126,7 @@ const quote = {
       hint: "Skatteverket behöver de här uppgifterna för ROT-avdraget.",
       fastighetsbeteckning: "Fastighetsbeteckning",
       fastighetsbeteckningHint:
-        "Till exempel ”Eskilstuna Tunafors 1:23”. Den står på lagfartsbeviset och finns hos Lantmäteriet.",
+        "Till exempel ”Nacka Sicklaön 123:4”. Den står på lagfartsbeviset och finns hos Lantmäteriet.",
       brfOrgNr: "Bostadsrättsföreningens organisationsnummer",
       brfOrgNrHint: "10 siffror, NNNNNN-NNNN. Det står på avgiftsavin eller i föreningens årsredovisning.",
       lagenhetsnummer: "Lägenhetsnummer",
@@ -158,7 +157,7 @@ const quote = {
     buyersCount: "Ni kan vara mellan 1 och 4 köpare.",
     fastighetRequired: "Skriv fastighetsbeteckningen.",
     fastighetFormat:
-      "Skriv fastighetsbeteckningen som kommun, område och nummer, till exempel ”Eskilstuna Tunafors 1:23”.",
+      "Skriv fastighetsbeteckningen som kommun, område och nummer, till exempel ”Nacka Sicklaön 123:4”.",
     brfRequired: "Skriv föreningens organisationsnummer.",
     brfInvalid: "Organisationsnumret stämmer inte. Det ska vara 10 siffror: NNNNNN-NNNN.",
     lagenhetRequired: "Skriv lägenhetsnumret.",

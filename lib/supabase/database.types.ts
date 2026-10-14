@@ -195,7 +195,6 @@ export type Database = {
           paid_at: string | null
           partner_id: string | null
           payment_method: string | null
-          performed_in_house: boolean
           pets: boolean | null
           postcode: string
           preferred_date: string
@@ -263,7 +262,6 @@ export type Database = {
           paid_at?: string | null
           partner_id?: string | null
           payment_method?: string | null
-          performed_in_house?: boolean
           pets?: boolean | null
           postcode: string
           preferred_date: string
@@ -331,7 +329,6 @@ export type Database = {
           paid_at?: string | null
           partner_id?: string | null
           payment_method?: string | null
-          performed_in_house?: boolean
           pets?: boolean | null
           postcode?: string
           preferred_date?: string
@@ -415,7 +412,6 @@ export type Database = {
           insurance_company: string | null
           insurance_valid_to: string | null
           internal_price_notes: string | null
-          is_own_company: boolean
           name: string
           notes: string | null
           org_nr: string
@@ -440,7 +436,6 @@ export type Database = {
           insurance_company?: string | null
           insurance_valid_to?: string | null
           internal_price_notes?: string | null
-          is_own_company?: boolean
           name: string
           notes?: string | null
           org_nr: string
@@ -465,7 +460,6 @@ export type Database = {
           insurance_company?: string | null
           insurance_valid_to?: string | null
           internal_price_notes?: string | null
-          is_own_company?: boolean
           name?: string
           notes?: string | null
           org_nr?: string

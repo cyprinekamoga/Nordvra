@@ -28,15 +28,12 @@ export interface LogoProps {
   className?: string;
 }
 
-/** Text logo "Nordvra" with "drivs av TO Städ och Flytt" underneath. */
+/** Brand mark + text logo "Nordvra". */
 export function Logo({ link = true, compact = false, className }: LogoProps) {
   const content = (
     <>
       <BrandMark className={cx("size-10", compact && "hidden min-[420px]:block")} />
-      <span className="flex flex-col leading-tight">
-        <span className="text-2xl font-extrabold tracking-tight text-brand">{t.common.brand.name}</span>
-        <span className="text-xs font-semibold text-muted">{t.common.brand.operatedBy}</span>
-      </span>
+      <span className="text-2xl font-extrabold leading-tight tracking-tight text-brand">{t.common.brand.name}</span>
     </>
   );
   const classes = cx("inline-flex min-h-12 items-center gap-2 rounded-control", className);

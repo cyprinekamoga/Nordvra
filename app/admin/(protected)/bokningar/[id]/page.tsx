@@ -227,7 +227,6 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
             matches: r.matches,
             blockedReason: r.blockedReason,
             commissionPct: Number(r.partner.commission_pct),
-            isOwnCompany: r.partner.is_own_company,
           }))}
           initial={{
             labourKr: kr(b.labour_ore),

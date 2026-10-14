@@ -15,7 +15,6 @@ export interface PartnerChoice {
   matches: boolean;
   blockedReason: string | null;
   commissionPct: number;
-  isOwnCompany: boolean;
 }
 
 export interface QuoteEditorProps {
@@ -48,7 +47,6 @@ export function QuoteEditor(props: QuoteEditorProps) {
   const [v, setV] = useState(props.initial);
   const set = (key: keyof typeof v) => (e: { target: { value: string } }) => setV((s) => ({ ...s, [key]: e.target.value }));
 
-  const partner = props.partners.find((p) => p.id === v.partnerId);
   const preview = useMemo(() => {
     const labour = parseKrToOre(v.labourKr);
     if (labour === null) return null;
@@ -146,12 +144,6 @@ export function QuoteEditor(props: QuoteEditorProps) {
           />
         )}
       </fieldset>
-
-      {partner?.isOwnCompany && (
-        <InfoBox tone="warning" title="Ni utför jobbet själva">
-          Kunden får automatiskt information om att TO Städ och Flytt utför arbetet (intressekonflikt).
-        </InfoBox>
-      )}
 
       <TextArea
         label="Meddelande till kunden (valfritt)"

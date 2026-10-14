@@ -93,7 +93,7 @@ export function parseOrgNr(input: string): { ok: true; normalized: string } | { 
 }
 
 /**
- * Fastighetsbeteckning, e.g. "Eskilstuna Tunafors 1:23". We only check the shape
+ * Fastighetsbeteckning, e.g. "Nacka Sicklaön 123:4". We only check the shape
  * (name + block:unit); the exact designation is verified when the claim is filed.
  */
 export function looksLikeFastighetsbeteckning(input: string): boolean {

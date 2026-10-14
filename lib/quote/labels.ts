@@ -22,17 +22,15 @@ export interface CounterpartyText {
   headline: string;
   /** Who does the work / invoices / applies for the deduction, and where to complain. */
   lines: string[];
-  /** TO Städ och Flytt does the job itself (SPEC §2): show the in-house notice. */
-  inHouse: boolean;
 }
 
 /**
- * The "Avtalspart" block (SPEC §2, §5.8). Seller model: TO Städ och Flytt is the counterparty
+ * The "Avtalspart" block (SPEC §2, §5.8). Seller model: Nordvra is the counterparty
  * (+ the subcontractor's name when a partner does the job). Agent model: the partner is the
- * counterparty, "förmedlat av TO Städ och Flytt", and invoices and applies for the deduction.
+ * counterparty, "förmedlat av Nordvra", and invoices and applies for the deduction.
  */
 export function counterpartyText(
-  quote: Pick<QuoteData, "model" | "partnerName" | "partnerOrgNr" | "performedInHouse" | "deductionType" | "eligibility">,
+  quote: Pick<QuoteData, "model" | "partnerName" | "partnerOrgNr" | "deductionType" | "eligibility">,
 ): CounterpartyText {
   const c = t.quote.counterparty;
   const legal = t.common.legal.counterparty;
@@ -41,15 +39,13 @@ export function counterpartyText(
 
   if (quote.model === "seller") {
     const lines: string[] = [];
-    if (quote.partnerName && !quote.performedInHouse) lines.push(fmt(c.subcontractor, { partner: quote.partnerName }));
+    if (quote.partnerName) lines.push(fmt(c.subcontractor, { partner: quote.partnerName }));
     lines.push(withDeduction ? fmt(c.sellerInvoice, { deduction }) : c.sellerInvoiceNoDeduction);
     lines.push(legal.complaint);
-    return { headline: legal.seller, lines, inHouse: quote.performedInHouse };
+    return { headline: fmt(legal.seller, { legalName: company.legalName }), lines };
   }
 
-  const partner = quote.performedInHouse
-    ? (quote.partnerName ?? company.legalName)
-    : (quote.partnerName ?? c.partnerFallback);
+  const partner = quote.partnerName ?? c.partnerFallback;
   const orgNr = quote.partnerOrgNr ?? c.orgNrMissing;
   return {
     headline: fmt(legal.agent, { partner, orgNr }),
@@ -59,6 +55,5 @@ export function counterpartyText(
       ),
       fmt(c.agentComplaint, { partner }),
     ],
-    inHouse: quote.performedInHouse,
   };
 }

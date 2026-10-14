@@ -31,7 +31,6 @@ const partner = (over: Partial<PartnerRow>): PartnerRow => ({
   insurance_company: null,
   insurance_valid_to: null,
   internal_price_notes: null,
-  is_own_company: false,
   name: "A",
   notes: null,
   org_nr: "556036-0793",

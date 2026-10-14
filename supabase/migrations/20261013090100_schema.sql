@@ -135,7 +135,7 @@ create table public.partners (
   internal_price_notes text,
   subcontractor_agreement_signed boolean not null default false,
   commission_pct numeric(5, 2) not null default 12 check (commission_pct between 0 and 100),
-  -- TO Städ och Flytt's own staff. Assigning this "partner" triggers the conflict-of-interest notice.
+  -- Dropped in 20261014090000_remove_own_company.sql.
   is_own_company boolean not null default false,
   active boolean not null default true,
   notes text,

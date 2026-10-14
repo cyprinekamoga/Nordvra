@@ -91,17 +91,13 @@ describe("buildSeedStatements", () => {
     expect(() => buildSeedStatements(dup)).toThrow(/Duplicate price range/);
   });
 
-  it("seeds the admin, the settings row and one own-staff partner without F-skatt", () => {
+  it("seeds the admin and the settings row, and no partners", () => {
     const byLabel = new Map(buildSeedStatements().map((s) => [s.label, s.sql]));
     expect(byLabel.get("admin_users")).toContain(`'${SEED_ADMIN_EMAIL}'`);
     expect(byLabel.get("admin_users")).toContain("on conflict (email) do nothing");
     expect(byLabel.get("settings")).toContain("on conflict (id) do nothing");
-    const partner = byLabel.get("partners (own staff)") ?? "";
-    expect(partner).toContain("true, false");
-    expect(partner).toContain("where not exists (select 1 from public.partners where is_own_company)");
-    for (const s of services.filter((x) => x.deductionType === "rot")) {
-      expect(partner).not.toContain(`'${s.id}'`);
-    }
+    expect([...byLabel.keys()].some((label) => label.startsWith("partners"))).toBe(false);
+    expect(buildSeedSql()).not.toContain("public.partners");
   });
 });
 

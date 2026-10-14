@@ -182,10 +182,10 @@ describe("validateApproval", () => {
     expect(!wrong.ok && wrong.errors[FIELD.fastighetsbeteckning]).toBe(e.fastighetFormat);
 
     const ok = validateApproval(
-      input({ property: { fastighetsbeteckning: " Eskilstuna  Tunafors 1:23 ", brfOrgNr: "", lagenhetsnummer: "" } }),
+      input({ property: { fastighetsbeteckning: " Nacka  Sicklaön 123:4 ", brfOrgNr: "", lagenhetsnummer: "" } }),
       house,
     );
-    expect(ok.ok && ok.data.property).toEqual({ fastighetsbeteckning: "Eskilstuna Tunafors 1:23" });
+    expect(ok.ok && ok.data.property).toEqual({ fastighetsbeteckning: "Nacka Sicklaön 123:4" });
   });
 
   it("validates the association's org.nr and the lägenhetsnummer for bostadsrätt", () => {
@@ -230,12 +230,12 @@ describe("approvalInputFromFormData", () => {
     fd.set(FIELD.buyerName(2), "Ignoreras Utanför");
     fd.set(FIELD.consentDeduction, "on");
     fd.set(FIELD.consentTerms, "on");
-    fd.set(FIELD.fastighetsbeteckning, "Eskilstuna Tunafors 1:23");
+    fd.set(FIELD.fastighetsbeteckning, "Nacka Sicklaön 123:4");
     const parsed = approvalInputFromFormData(fd);
     expect(parsed.buyers).toHaveLength(2);
     expect(parsed.buyers[1]).toEqual({ name: "Bo Svensson", pnr: PNR_B, share: "50" });
     expect(parsed.consents).toEqual({ deduction: true, withdrawalWaiver: false, terms: true });
-    expect(parsed.property.fastighetsbeteckning).toBe("Eskilstuna Tunafors 1:23");
+    expect(parsed.property.fastighetsbeteckning).toBe("Nacka Sicklaön 123:4");
     expect(validateApproval(parsed, ctx()).ok).toBe(true);
   });
 
@@ -261,7 +261,7 @@ describe("buildAcceptPayload", () => {
           { name: "Bo Svensson", pnr: PNR_B, share: "66" },
         ],
         consents: { deduction: true, withdrawalWaiver: true, terms: true },
-        property: { fastighetsbeteckning: "Eskilstuna Tunafors 1:23", brfOrgNr: "", lagenhetsnummer: "" },
+        property: { fastighetsbeteckning: "Nacka Sicklaön 123:4", brfOrgNr: "", lagenhetsnummer: "" },
       }),
       ctx({ propertyKind: "fastighet", waiverRequired: true }),
     );
@@ -281,7 +281,7 @@ describe("buildAcceptPayload", () => {
     expect(json).not.toContain("1212-1212");
     expect(json).not.toContain("198112189876");
 
-    expect(payload.p_rot_property).toEqual({ fastighetsbeteckning: "Eskilstuna Tunafors 1:23" });
+    expect(payload.p_rot_property).toEqual({ fastighetsbeteckning: "Nacka Sicklaön 123:4" });
     expect(payload.p_consents).toEqual({ deduction: true, terms: true, withdrawal_waiver: true });
   });
 });

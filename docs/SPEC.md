@@ -1,9 +1,8 @@
 # Nordvra – build specification (single source for all contributors)
 
 Nordvra is a mobile-first, Swedish-language "vi bokar åt dig" concierge for services that qualify
-for RUT and ROT. Brand on the site: **Nordvra**, with **"drivs av TO Städ och Flytt"** underneath.
-TO Städ och Flytt is a cleaning and moving-cleaning company in Eskilstuna; we cover **all of Sweden**
-through partner companies (subcontractors).
+for RUT and ROT. Brand on the site: **Nordvra**. Nordvra is based in Stockholm, has no staff of its
+own doing jobs, and covers **all of Sweden** through partner companies (subcontractors).
 
 Value proposition (copy): "Vi hittar ett bra företag, du slipper jämföra offerter, och vi hjälper dig
 med RUT/ROT-avdraget." Never call ROT/RUT a "loophole", "trick" or "kryphål". It is a legal,
@@ -60,14 +59,13 @@ deduction shown up front, eligibility check built in, we choose and vet the comp
 
 ```
 brandName: "Nordvra"
-operatedBy: "drivs av TO Städ och Flytt"
-legalName: "TO Städ och Flytt"
+legalName: "Nordvra"  (TODO: registered company name, e.g. "Nordvra AB")
 phoneDisplay: "076-113 43 84", phoneHref: "tel:+46761134384"
 email: "info@nordvra.se"
 insurance: "If Skadeförsäkring"  (copy: "Försäkrade hos If")
 hasFSkatt: true (copy: "Godkänd för F-skatt")
 orgNr: "TODO" , address: "TODO"  → render as "Org.nr: (fylls i före lansering)" with a TODO comment
-hometown: "Eskilstuna", coverage: "Hela Sverige"
+hometown: "Stockholm", coverage: "Hela Sverige"
 termsVersion: "2026-10-13"
 ```
 "Hellre ringa? Ring oss på 076-113 43 84" must be visible on every customer page (header button +
@@ -76,22 +74,19 @@ in-flow card).
 ---------------------------------------------------------------------------------------------------
 ## 2. Business models (modelled in data and UI)
 
-1. **RUT – "seller" model** (cleaning, moving, garden, IT, care…): TO Städ och Flytt is the seller of
+1. **RUT – "seller" model** (cleaning, moving, garden, IT, care…): Nordvra is the seller of
    record: invoices the customer, receives payment, applies to Skatteverket, liable under
    konsumenttjänstlagen; may use vetted subcontractors. Our margin is built into the labour price.
    The customer only sees one price before and after RUT. Internally we store
    `subcontractor_cost_ore` to compute our margin (price − cost). Checkout shows
-   **"Avtalspart: TO Städ och Flytt"** and "Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år."
+   **"Avtalspart: Nordvra"** and "Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år."
 2. **ROT – "agent" model** (painting, bathroom, electrical, plumbing…): the partner quotes,
    invoices, receives payment and applies for ROT. We take **12 % commission on labour from the
    partner** (default, editable per partner and per booking). **Never shown to the customer.**
-   Checkout shows **"Avtalspart: [Partnerföretag] (org.nr …), förmedlat av TO Städ och Flytt"**.
+   Checkout shows **"Avtalspart: [Partnerföretag] (org.nr …), förmedlat av Nordvra"**.
 * **There is NO booking/service fee for customers.** No "Serviceavgift" line anywhere. Market
   **"Ingen bokningsavgift"**.
-* If TO Städ och Flytt does the job itself (partner row with `is_own_company = true`, sets
-  `bookings.performed_in_house`), the customer must be told: e.g. "Arbetet utförs av TO Städ och
-  Flytt, som också driver Nordvra. Vi berättar det så att du vet att vi har valt oss själva – vill
-  du hellre ha ett annat företag ordnar vi det."
+* Every job is done by a partner company; Nordvra has no own staff.
 
 ---------------------------------------------------------------------------------------------------
 ## 3. Request → quote → booking flow (IMPORTANT: no instant booking)
@@ -211,7 +206,7 @@ min+max, nullable `size_band`), `settings` (single row id=1: `quote_valid_hours`
 (per year, nullable columns), `partners` (name, org_nr, contact, f_skatt_verified +
 f_skatt_checked_at, employer_registered, insurance_company + insurance_valid_to, service_ids[],
 regions[], postcode_prefixes[], rating, internal_price_notes, subcontractor_agreement_signed,
-commission_pct (default 12), is_own_company, active, notes), `bookings` (snapshot of request,
+commission_pct (default 12), active, notes), `bookings` (snapshot of request,
 quote fields, approval/consent timestamps, `rot_property` jsonb, invoice/payment/claim fields),
 `booking_buyers` (full_name, `pnr_encrypted` "v1.…", `pnr_masked` "YYMMDD-XXXX", share_pct),
 `booking_events` (audit log; status changes logged by trigger), `booking_notes`.
@@ -323,8 +318,8 @@ booking (via the RLS server client) before sending a new quote.
 
 ## 9. Shared UI contracts (built in phase 1 by the UI agent, `components/ui/*`, `components/layout/*`)
 
-Design: deep green `#0B5D4B` (brand) on warm off-white `#FAF7F2`, ink `#1A2420`, text logo "Nordvra"
-+ "drivs av TO Städ och Flytt". Font: Atkinson Hyperlegible Next (`next/font/google`). Light theme.
+Design: deep green `#0B5D4B` (brand) on warm off-white `#FAF7F2`, ink `#1A2420`, text logo "Nordvra".
+Font: Atkinson Hyperlegible Next (`next/font/google`). Light theme.
 ROT accent: warm amber/terracotta with AA contrast. All tokens in `app/globals.css` `@theme`.
 Components (named exports, documented props, all keyboard-accessible, ≥48 px targets):
 `Button` (variants primary/secondary/ghost, `asChild`-free; `LinkButton` for links), `Tile`
@@ -403,7 +398,7 @@ minuter" (→ /boka) + "Ingen bokningsavgift" + phone. 3 steps: Välj tjänst �
 resten. "Visste du att…": RUT gives 50 % off labour on cleaning, moving, garden etc.; ROT gives 30 %
 off labour on repairs and renovation. Example: "Flyttstäd 60 m²: Pris före avdrag 8 400 kr → du
 betalar 4 200 kr." Comparison vs offer sites (click-only, price up front, eligibility check, we vet
-the company, phone support, no booking fee). Trust: TO Städ och Flytt, Eskilstuna, hela Sverige,
+the company, phone support, no booking fee). Trust: based in Stockholm, hela Sverige,
 F-skatt, Försäkrade hos If, phone, reviews placeholder ("Omdömen kommer snart"). FAQ preview (5
 questions from `lib/content/faq.ts`).
 

@@ -41,7 +41,6 @@ export default async function PartnersPage({ searchParams }: PageProps<"/admin/p
                     <Link href={`/admin/partners/${p.id}`} className="link font-bold">
                       {p.name}
                     </Link>
-                    {p.is_own_company && <div className="text-sm text-muted">Egen personal</div>}
                   </td>
                   <td className={`${tdClasses} whitespace-nowrap`}>{p.org_nr}</td>
                   <td className={tdClasses}>

@@ -28,7 +28,7 @@ export default async function ExportPage({ searchParams }: PageProps<"/admin/exp
       <PageHeader title="Export för RUT/ROT-ansökan" />
       <Card className="mb-6">
         <p className="mb-4 max-w-3xl">
-          Utförda jobb där TO Städ och Flytt är säljare (vi söker avdraget). Förmedlade ROT-jobb söker partnern själv och
+          Utförda jobb där Nordvra är säljare (vi söker avdraget). Förmedlade ROT-jobb söker partnern själv och
           finns inte med. Filen innehåller personnummer – spara den säkert och radera den när ansökan är gjord.
         </p>
         <form method="get" className="flex flex-wrap items-end gap-3">

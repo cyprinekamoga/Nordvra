@@ -346,8 +346,6 @@ const content = {
       coverage: "Vi hjälper kunder i",
       fSkatt: "F-skatt",
       insurance: "Försäkring",
-      orgNr: "Org.nr",
-      address: "Adress",
     },
     reviews: {
       title: "Omdömen",

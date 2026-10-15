@@ -1,4 +1,4 @@
-import { company, displayValue } from "@/lib/company";
+import { company } from "@/lib/company";
 import { capSentence, taxFacts } from "@/lib/content/facts";
 import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { CURRENT_RULES, type TaxYearRules } from "@/lib/taxRules";
@@ -65,10 +65,6 @@ const IMY_URL = "https://www.imy.se";
 const KONSUMENTVERKET_URL = "https://www.konsumentverket.se";
 const SKATTEVERKET_URL = "https://www.skatteverket.se";
 
-function companyLine(): string {
-  return `${company.legalName}, org.nr ${displayValue(company.orgNr)}, ${displayValue(company.address)}`;
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 // Villkor
 // ─────────────────────────────────────────────────────────────────────────────
@@ -92,7 +88,7 @@ export function termsOfService({
         id: "om-villkoren",
         title: "1. Vilka vi är",
         blocks: [
-          p(`Företaget bakom Nordvra är ${companyLine()}. Vi har vår bas i ${company.hometown} och hjälper kunder i hela Sverige.`),
+          p(`Nordvra har sin bas i ${company.hometown} och hjälper kunder i hela Sverige. Vi arbetar digitalt och har inget kontor som kunder besöker.`),
           p(`Du når oss på telefon ${company.phoneDisplay} och på e-post ${company.email}.`),
           p(`${us} är godkänt för F-skatt och har ansvarsförsäkring hos ${company.insurance}.`),
         ],
@@ -287,7 +283,7 @@ export function privacyPolicy({
         id: "ansvarig",
         title: "1. Personuppgiftsansvarig",
         blocks: [
-          p(`Personuppgiftsansvarig är ${companyLine()}.`),
+          p(`Personuppgiftsansvarig är ${company.legalName}.`),
           p(`Har du frågor om dina personuppgifter? Ring ${company.phoneDisplay} eller mejla ${company.email}.`),
         ],
       },

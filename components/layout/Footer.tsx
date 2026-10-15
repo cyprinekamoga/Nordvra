@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
-import { company, displayValue } from "@/lib/company";
+import { company } from "@/lib/company";
 import { fmt, t } from "@/lib/i18n";
 import { Logo } from "./Logo";
 import { footerLegal, footerPages, type NavItem } from "./nav";
@@ -60,9 +60,6 @@ export function Footer() {
               <Icon name="shield" className="mt-1 text-brand" />
               <span>{f.insured}</span>
             </li>
-            {/* TODO(före lansering): org.nr och adress fylls i i lib/company.ts. */}
-            <li>{fmt(f.orgNr, { orgNr: displayValue(company.orgNr) })}</li>
-            <li>{fmt(f.address, { address: displayValue(company.address) })}</li>
           </ul>
           <h2 className="mt-6 mb-2 text-lg font-bold text-ink">{f.contactHeading}</h2>
           <ul>

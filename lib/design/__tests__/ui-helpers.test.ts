@@ -3,7 +3,7 @@ import { isCurrentPath, footerLegal, footerPages, mainNav } from "@/components/l
 import { isAdminPath } from "@/components/layout/PublicOnly";
 import { deductionBadgeText } from "@/components/ui/DeductionBadge";
 import { yesNoToBoolean, booleanToYesNo } from "@/components/ui/YesNo";
-import { company, displayValue, isPending, orgNrLine, PENDING_VALUE_TEXT } from "@/lib/company";
+import { company } from "@/lib/company";
 import { getTaxRules } from "@/lib/taxRules";
 import { t } from "@/lib/i18n";
 import type { EligibilityWarning, IneligibleReason } from "@/lib/eligibility";
@@ -13,14 +13,7 @@ describe("company constants", () => {
     expect(company.phoneDisplay).toBe("076-113 43 84");
     expect(company.phoneHref).toBe("tel:+46761134384");
     expect(company.email).toBe("info@nordvra.se");
-    expect(company.termsVersion).toBe("2026-10-13");
-  });
-
-  it("renders TODO values as a launch placeholder", () => {
-    expect(isPending(company.orgNr)).toBe(true);
-    expect(displayValue(company.orgNr)).toBe(PENDING_VALUE_TEXT);
-    expect(orgNrLine()).toBe("Org.nr: (fylls i före lansering)");
-    expect(displayValue("559000-0000")).toBe("559000-0000");
+    expect(company.termsVersion).toBe("2026-10-15");
   });
 });
 

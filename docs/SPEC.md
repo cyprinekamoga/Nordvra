@@ -64,9 +64,9 @@ phoneDisplay: "076-113 43 84", phoneHref: "tel:+46761134384"
 email: "info@nordvra.se"
 insurance: "If Skadeförsäkring"  (copy: "Försäkrade hos If")
 hasFSkatt: true (copy: "Godkänd för F-skatt")
-orgNr: "TODO" , address: "TODO"  → render as "Org.nr: (fylls i före lansering)" with a TODO comment
+No org.nr and no postal address are shown (Nordvra works online).
 hometown: "Stockholm", coverage: "Hela Sverige"
-termsVersion: "2026-10-13"
+termsVersion: "2026-10-15"
 ```
 "Hellre ringa? Ring oss på 076-113 43 84" must be visible on every customer page (header button +
 in-flow card).

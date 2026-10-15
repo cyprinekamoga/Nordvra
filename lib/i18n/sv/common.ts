@@ -49,11 +49,8 @@ const common = {
     fSkatt: "Godkänd för F-skatt",
     insured: "Försäkrade hos If",
     noBookingFee: "Ingen bokningsavgift",
-    orgNr: "Org.nr: {orgNr}",
-    address: "Adress: {address}",
     phone: "Telefon: {phone}",
     email: "E-post: {email}",
-    pending: "(fylls i före lansering)",
     copyright: "© Nordvra",
   },
 
@@ -370,7 +367,6 @@ const common = {
     insured: "Försäkrade hos If",
     coverage: "Hela Sverige",
     based: "{legalName} i {hometown}",
-    pending: "(fylls i före lansering)",
   },
 
   errors: {

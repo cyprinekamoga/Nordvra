@@ -119,7 +119,6 @@ docs/SPEC.md             product, legal and data specification
 
 - **Legal review:** Villkor, Integritetspolicy and the RUT/ROT pages are drafts with a visible
   "Ska granskas av jurist/skatterådgivare före lansering" banner.
-- **Company details:** registered company name, org.nr and address are placeholders in `lib/company.ts`.
 - **Partners:** add partner companies under **Admin → Partners** (org.nr and verified F-skatt are required before one can be assigned).
 - **Email/SMS:** both run as console placeholders. Enable Resend (domain verification) and implement 46elks.
 - **Payments:** no live payments (manual placeholder). Payment must be electronic and made by the buyer.

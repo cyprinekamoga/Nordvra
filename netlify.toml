@@ -5,3 +5,8 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # These values are public by design (inlined into the browser bundle or plain settings), so the
+  # secrets scanner must not fail the build on them. PII_ENCRYPTION_KEY is still scanned.
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,NEXT_PUBLIC_SITE_URL,NODE_VERSION,EMAIL_PROVIDER,SMS_PROVIDER"
+  # The Supabase publishable key is meant to be public; keep smart detection from flagging it.
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "sb_publishable_BBT4MXgKRgS9NJBRPHv_JA_6i6ENxWb"

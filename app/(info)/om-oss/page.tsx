@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BookCta, CheckList, CompanyFacts, ContentSection, PageIntro } from "@/components/content";
+import { PhotoFrame } from "@/components/media";
 import { Card, Container, Icon } from "@/components/ui";
 import { company } from "@/lib/company";
 import { fmt, t } from "@/lib/i18n";
@@ -19,6 +20,15 @@ export default function AboutPage() {
       <PageIntro
         title={c.title}
         lead={fmt(c.lead, { legalName: company.legalName, hometown: company.hometown })}
+      />
+
+      <PhotoFrame
+        photo="stockholm"
+        shape="arch"
+        aspect="aspect-[3/2]"
+        sizes="(min-width: 768px) 42rem, 100vw"
+        eager
+        className="mb-12"
       />
 
       <div className="space-y-12">

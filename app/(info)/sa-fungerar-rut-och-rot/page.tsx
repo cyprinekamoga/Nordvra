@@ -8,6 +8,8 @@ import {
   TextLink,
 } from "@/components/content";
 import { LegalReviewBanner } from "@/components/layout";
+import { PhotoFrame } from "@/components/media";
+import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import {
   Card,
   Container,
@@ -20,6 +22,7 @@ import {
 import { categories } from "@/lib/catalog/seed";
 import { company } from "@/lib/company";
 import { capSentence, paintingExample, taxFactVars, taxFacts } from "@/lib/content/facts";
+import { formatKr } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
 import type { DeductionType } from "@/lib/taxRules";
 
@@ -72,6 +75,7 @@ export default function HowItWorksPage() {
         <ContentSection id="i-korthet" title={s.overview.title}>
           <div className="grid gap-4">
             <Card padding="md" className="space-y-3">
+              <PhotoFrame photo="cleaningSink" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
               <DeductionBadge type="rut" />
               <h3 className="text-xl text-ink">{fmt(s.overview.rutTitle, vars)}</h3>
               <p>{s.overview.rutBody}</p>
@@ -82,6 +86,7 @@ export default function HowItWorksPage() {
               </ul>
             </Card>
             <Card padding="md" className="space-y-3">
+              <PhotoFrame photo="redHouse" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
               <DeductionBadge type="rot" />
               <h3 className="text-xl text-ink">{fmt(s.overview.rotTitle, vars)}</h3>
               <p>{s.overview.rotBody}</p>
@@ -117,6 +122,14 @@ export default function HowItWorksPage() {
               <PriceLine label={s.labourOnly.youPay} ore={b.toPay} emphasis="total" />
             </PriceList>
           </Card>
+          <DeductionCalculator
+            defaultType={example.type}
+            defaultLabourKr={b.lines.labour / 100}
+            startHint={fmt(t.content.home.didYouKnow.calculator.startHint, {
+              label: example.label,
+              price: formatKr(b.lines.labour),
+            })}
+          />
         </ContentSection>
 
         <ContentSection id="tak" title={s.cap.title}>

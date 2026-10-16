@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import { BookCta, CheckList, FaqList, JsonLd } from "@/components/content";
+import { BookCta, FaqList, JsonLd } from "@/components/content";
 import { PhoneCard } from "@/components/layout";
-import {
-  Card,
-  Container,
-  DeductionBadge,
-  Icon,
-  LinkButton,
-  PriceLine,
-  PriceList,
-  cx,
-} from "@/components/ui";
+import { PhotoChip, PhotoFrame, RisingArrow } from "@/components/media";
+import { DeductionCalculator } from "@/components/story/DeductionCalculator";
+import { MovingDay } from "@/components/story/MovingDay";
+import { StepsStory } from "@/components/story/StepsStory";
+import { Card, Container, DeductionBadge, Icon, LinkButton, cx } from "@/components/ui";
 import { company } from "@/lib/company";
 import { flyttstadExample, taxFactVars } from "@/lib/content/facts";
 import { faqPreview } from "@/lib/content/faq";
+import type { PhotoKey } from "@/lib/content/photos";
+import { formatKr } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
 
@@ -39,10 +36,18 @@ function NoFeePill({ className }: { className?: string }) {
   );
 }
 
+/** "Du betalar {price}" → ["Du betalar ", "4 200 kr", ""], so the amount can be styled as a price. */
+function splitPrice(template: string, ore: number): [string, string, string] {
+  const [before, after = ""] = template.split("{price}");
+  return [before, formatKr(ore), after];
+}
+
 function Hero() {
+  const example = flyttstadExample();
+  const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
     <section aria-labelledby="hero-rubrik" className="border-b border-border bg-surface">
-      <Container className="grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:items-center">
+      <Container className="grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center">
         <div className="space-y-6">
           <div className="flex flex-wrap gap-2">
             <DeductionBadge type="rut" />
@@ -65,41 +70,102 @@ function Hero() {
           </div>
         </div>
 
-        <Card tone="brand" padding="lg" className="space-y-4">
-          <h2 className="text-2xl text-ink">{c.hero.benefitsTitle}</h2>
-          <CheckList items={c.hero.benefits} className="text-lg" />
-        </Card>
+        <div className="relative pt-6 sm:pt-8">
+          <PhotoFrame
+            photo="cleaningSink"
+            shape="peak"
+            aspect="aspect-[4/3] lg:aspect-square"
+            sizes="(min-width: 1296px) 36rem, (min-width: 1024px) 42vw, 100vw"
+            eager
+          >
+            <PhotoChip label={example.label} className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5">
+              {before}
+              <span className="price text-brand">{price}</span>
+              {after}
+            </PhotoChip>
+          </PhotoFrame>
+          <RisingArrow className="absolute top-0 right-0 z-10 w-2/5 max-w-56" />
+        </div>
       </Container>
     </section>
   );
 }
 
+/** The six benefits, as a band right under the hero. */
+function Benefits() {
+  return (
+    <section aria-labelledby="fordelar-rubrik" className="border-b border-border bg-brand-soft py-8 sm:py-10">
+      <Container className="space-y-5">
+        <h2 id="fordelar-rubrik" className="text-xl text-ink sm:text-2xl">
+          {c.hero.benefitsTitle}
+        </h2>
+        <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+          {c.hero.benefits.map((item) => (
+            <li key={item} className="flex items-start gap-3 text-lg">
+              <Icon name="check-circle" size={24} className="mt-0.5 shrink-0 text-brand" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}
+
+/** Photo behind each step of "Så enkelt är det". */
+const STEP_PHOTOS: readonly PhotoKey[] = ["livingRoom", "kitchen", "carpenter"];
+
+/** "Så enkelt är det" (SPEC §12: Välj tjänst → Välj tid → Vi fixar resten), told as scrollytelling. */
 function Steps() {
+  const example = flyttstadExample();
+  const [before, price] = splitPrice(c.steps.visual.pricePay, example.breakdown.toPay);
   return (
     <section aria-labelledby="steg-rubrik" className="py-12 sm:py-16">
       <Container className="space-y-8">
         <h2 id="steg-rubrik" className="text-2xl text-ink sm:text-3xl">
           {c.steps.title}
         </h2>
-        <ol className="grid gap-4 sm:grid-cols-3 sm:gap-6">
-          {c.steps.items.map((step, i) => (
-            <Card as="li" key={step.title} padding="lg" className="space-y-3">
-              <span
-                aria-hidden="true"
-                className="flex size-12 items-center justify-center rounded-full bg-brand text-xl font-bold text-on-brand"
-              >
-                {i + 1}
-              </span>
-              <h3 className="text-xl text-ink">
-                <span className="sr-only">{fmt(c.steps.stepLabel, { n: i + 1 })}: </span>
-                {step.title}
-              </h3>
-              <p>{step.body}</p>
-            </Card>
-          ))}
-        </ol>
+        <StepsStory
+          steps={c.steps.items.map((step, i) => ({ ...step, photo: STEP_PHOTOS[i] }))}
+          stepLabel={c.steps.stepLabel}
+          visual={{
+            chips: c.steps.visual.chips,
+            priceLabel: example.label,
+            pricePay: [before, price],
+            quote: c.steps.visual.quote,
+            invoice: c.steps.visual.invoice,
+          }}
+        />
         <LinkButton href="/boka" variant="secondary" iconEnd="arrow-right" className="w-full sm:w-auto">
           {t.common.actions.bookInTwoMinutes}
+        </LinkButton>
+      </Container>
+    </section>
+  );
+}
+
+/** Photo for each chapter of the example moving day. */
+const DAY_PHOTOS: readonly PhotoKey[] = ["movingBoxes", "cleaningBottles", "keys"];
+
+/** An example moving day in three chapters (interactive timeline). */
+function MovingDaySection() {
+  const k = c.movingDay;
+  return (
+    <section aria-labelledby="flyttdag-rubrik" className="border-y border-border bg-surface py-12 sm:py-16">
+      <Container className="space-y-8">
+        <div className="max-w-text space-y-3">
+          <h2 id="flyttdag-rubrik" className="text-2xl text-ink sm:text-3xl">
+            {k.title}
+          </h2>
+          <p className="text-lg">{k.lead}</p>
+        </div>
+        <MovingDay
+          label={k.tabsLabel}
+          chapters={k.chapters.map((chapter, i) => ({ ...chapter, photo: DAY_PHOTOS[i] }))}
+        />
+        <p className="text-muted">{k.note}</p>
+        <LinkButton href="/boka" variant="secondary" iconEnd="arrow-right" className="w-full sm:w-auto">
+          {k.cta}
         </LinkButton>
       </Container>
     </section>
@@ -109,7 +175,6 @@ function Steps() {
 function DidYouKnow() {
   const vars = taxFactVars();
   const example = flyttstadExample();
-  const b = example.breakdown;
   const d = c.didYouKnow;
   return (
     <section aria-labelledby="visste-du-rubrik" className="bg-surface-muted py-12 sm:py-16">
@@ -120,7 +185,7 @@ function DidYouKnow() {
           </h2>
           <p className="text-lg">{d.lead}</p>
         </div>
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           <Card padding="lg" className="space-y-3">
             <DeductionBadge type="rut" />
             <h3 className="text-xl text-ink">{fmt(d.rutTitle, vars)}</h3>
@@ -131,21 +196,13 @@ function DidYouKnow() {
             <h3 className="text-xl text-ink">{fmt(d.rotTitle, vars)}</h3>
             <p>{d.rotBody}</p>
           </Card>
-          <Card padding="lg" tone="outline" className="space-y-2">
-            <h3 className="text-xl text-ink">{fmt(d.exampleTitle, { label: example.label })}</h3>
-            <PriceList>
-              <PriceLine label={d.priceBefore} ore={b.total} />
-              <PriceLine
-                label={fmt(d.deduction, { rate: vars.rutRate })}
-                ore={b.deduction}
-                negative
-                accent="rut"
-              />
-              <PriceLine label={d.youPay} ore={b.toPay} emphasis="total" />
-            </PriceList>
-            <p className="text-muted">{d.exampleNote}</p>
-          </Card>
         </div>
+        {/* Starts on the SPEC §12 example: flyttstäd 60 m², 8 400 kr before → 4 200 kr to pay. */}
+        <DeductionCalculator
+          defaultType={example.type}
+          defaultLabourKr={example.breakdown.lines.labour / 100}
+          startHint={fmt(d.calculator.startHint, { label: example.label, price: formatKr(example.breakdown.lines.labour) })}
+        />
         <LinkButton href="/sa-fungerar-rut-och-rot" variant="secondary" iconEnd="arrow-right" className="w-full sm:w-auto">
           {d.readMore}
         </LinkButton>
@@ -306,7 +363,9 @@ export default function HomePage() {
     <>
       <JsonLd data={organizationJsonLd()} />
       <Hero />
+      <Benefits />
       <Steps />
+      <MovingDaySection />
       <DidYouKnow />
       <Comparison />
       <Trust />

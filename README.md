@@ -115,6 +115,26 @@ supabase/                migrations and seed
 docs/SPEC.md             product, legal and data specification
 ```
 
+## Photos
+
+The photos in `public/bilder` come from [Unsplash](https://unsplash.com) under the
+[Unsplash License](https://unsplash.com/license): free for commercial use, no credit required.
+`lib/content/photos.ts` lists each file with its Swedish alt text, photographer and source page.
+People in them are models: show them as illustrations, never as Nordvra customers or staff.
+To swap a photo, replace the file and update its entry (width, height, alt).
+
+| File | Photographer |
+| --- | --- |
+| stadning-diskbank.jpg | everdrop GmbH |
+| stadning-flaskor.jpg | Daiga Ellaby |
+| kok-ljust.jpg | Lisa Anna |
+| vardagsrum.jpg | Collov Home Design |
+| flytt-kartonger.jpg | Vitaly Gariev |
+| nycklar.jpg | Jakub Żerdzicki |
+| snickare.jpg | Minh Đức |
+| rott-hus.jpg | Christer Lässman |
+| stockholm.jpg | Jon Flobrant |
+
 ## Not done yet / before launch
 
 - **Legal review:** Villkor, Integritetspolicy and the RUT/ROT pages are drafts with a visible

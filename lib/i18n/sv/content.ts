@@ -72,6 +72,8 @@ const content = {
       body: "Du ser priset före och efter avdrag direkt. Förfrågan är gratis och inte bindande.",
       ctaHint: "Inga konton, inga lösenord. Bara några klick.",
       benefitsTitle: "Det här får du hos oss",
+      /** Price card on the hero photo; {price} is the flyttstäd example after RUT. */
+      photoPrice: "Du betalar {price}",
       benefits: [
         "Du klickar dig fram – ingen text att skriva",
         "Pris före och efter avdrag direkt",
@@ -98,6 +100,37 @@ const content = {
         },
       ],
       stepLabel: "Steg {n}",
+      /** Overlays on the scrollytelling photos (decoration; the step text says the same). */
+      visual: {
+        chips: ["Städning", "Flytt", "Måla & tapetsera"],
+        pricePay: "Du betalar {price}",
+        quote: "Offert inom 24 timmar",
+        invoice: "Avdraget dras på fakturan",
+      },
+    },
+    movingDay: {
+      title: "En flyttdag med Nordvra",
+      lead: "Så kan det se ut när du bokar både flytthjälp och flyttstädning. Ett exempel, timme för timme.",
+      tabsLabel: "Flyttdagen timme för timme",
+      chapters: [
+        {
+          time: "08:00",
+          title: "Bärarna kommer",
+          body: "Flyttfirman bär, lastar och kör till din nya bostad. Du visar vad som ska med, de lyfter.",
+        },
+        {
+          time: "13:00",
+          title: "Flyttstädningen börjar",
+          body: "När bostaden är tom tar städarna över. De gör kök, badrum, fönster och golv enligt checklistan.",
+        },
+        {
+          time: "17:00",
+          title: "Nycklarna lämnas",
+          body: "Du lämnar över en ren bostad. RUT-avdraget är redan draget på fakturan, så du betalar bara din del.",
+        },
+      ],
+      note: "Det här är ett exempel. Du väljer själv dag och tid när du bokar.",
+      cta: "Boka flytt eller städning",
     },
     didYouKnow: {
       title: "Visste du att…",
@@ -107,11 +140,21 @@ const content = {
         "För städning, flytt, fönsterputs, trädgård och snöskottning, hjälp med IT och vitvaror, barnpassning och omsorg.",
       rotTitle: "ROT-avdrag: {rotRate} på arbetskostnaden",
       rotBody: "För reparation, underhåll och ombyggnad – till exempel målning, badrum, kök, el, VVS och tak.",
-      exampleTitle: "Räkneexempel: {label}",
-      priceBefore: "Pris före avdrag",
-      deduction: "RUT-avdrag {rate}",
-      youPay: "Du betalar",
       exampleNote: "Avdraget gäller bara arbetskostnaden. Ditt exakta pris får du i offerten.",
+      calculator: {
+        title: "Räkna själv",
+        lead: "Dra i reglaget och se hur mycket du betalar efter avdraget.",
+        typeLegend: "Vad gäller det?",
+        rut: "Städning, flytt med mera",
+        rot: "Hantverkare",
+        labourLabel: "Arbetskostnad före avdrag",
+        startHint: "Startvärde: {label}, {price} före avdrag.",
+        labour: "Arbetskostnad",
+        deduction: "{type}-avdrag {rate}",
+        youPay: "Du betalar",
+        taxAgencyPays: "Skatteverket betalar",
+        capped: "Avdraget är begränsat av taket per person och år.",
+      },
       readMore: "Så fungerar RUT och ROT",
     },
     compare: {

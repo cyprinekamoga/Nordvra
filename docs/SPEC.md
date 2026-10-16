@@ -411,6 +411,20 @@ the company, phone support, no booking fee). Trust: based in Stockholm, hela Sve
 F-skatt, Försäkrade hos If, phone, reviews placeholder ("Omdömen kommer snart"). FAQ preview (5
 questions from `lib/content/faq.ts`).
 
+Storytelling and interactive media (photos from `lib/content/photos.ts`, frames from
+`components/media`, interactive parts in `components/story`):
+* Hero photo in the logo's peak frame with the example price and the rising arrow; the six
+  benefits sit in a band under the hero.
+* The 3 steps are scrollytelling: on desktop a sticky photo swaps per step while the logo's zigzag
+  draws up to the current step; on phones each step has its own photo that fades in.
+* "En flyttdag med Nordvra": an example day in three chapters (tabs: 08:00 / 13:00 / 17:00),
+  clearly labelled as an example.
+* "Visste du att…" has a calculator ("Räkna själv": RUT or ROT, labour slider) built on
+  `calculatePrice` and the current rules; it starts on the example above. The same calculator is on
+  /sa-fungerar-rut-och-rot, starting on the painting example.
+* All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. People in stock
+  photos are illustrations, never presented as customers or staff.
+
 ## 13. GDPR
 
 Personnummer collected only on quote approval; encrypted in the app (AES-256-GCM) before it reaches

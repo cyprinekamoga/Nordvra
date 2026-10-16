@@ -179,11 +179,10 @@ export function ChipGroup<V extends string = string>(props: ChipGroupProps<V>) {
                 aria-invalid={error && props.multiple ? true : undefined}
                 onChange={(e) => handleChange(option.value, e.currentTarget.checked)}
               />
-              <Icon
-                name="check"
-                size={20}
-                className="hidden peer-checked:inline-block"
-              />
+              {/* Toggle a wrapper: Icon's own inline-block would otherwise win over `hidden`. */}
+              <span className="hidden shrink-0 peer-checked:inline-flex">
+                <Icon name="check" size={20} />
+              </span>
               <span className="flex flex-col">
                 <span>{option.label}</span>
                 {option.hint ? (

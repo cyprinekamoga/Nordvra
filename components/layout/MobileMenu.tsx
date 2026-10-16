@@ -43,7 +43,7 @@ export function MobileMenu({ className }: { className?: string }) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-brand bg-surface px-3 font-bold text-brand hover:bg-brand-soft aria-expanded:bg-brand-soft"
+        className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-brand bg-surface px-3 font-semibold text-brand hover:bg-brand-soft aria-expanded:bg-brand-soft"
       >
         <Icon name={open ? "close" : "menu"} size={22} />
         <span>{t.common.nav.menu}</span>

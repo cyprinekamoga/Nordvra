@@ -105,7 +105,7 @@ describe("shared strings", () => {
     );
     expect(l.labourOnly.body).toBe("Avdraget gäller bara arbetskostnaden – inte material eller resor.");
     expect(l.cap.body).toBe(
-      "Max 75 000 kr per person och år för RUT och ROT tillsammans, varav max 50 000 kr för ROT.",
+      "Max 75\u00a0000\u00a0kr per person och år för RUT och ROT tillsammans, varav max 50\u00a0000\u00a0kr för ROT.",
     );
     expect(l.payment.body).toBe(
       "Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar.",

@@ -159,7 +159,7 @@ export function PartnerForm({
         <Check label="Aktiv" name="active" defaultChecked={p ? p.active : true} />
       </fieldset>
 
-      <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-bold text-on-brand">
+      <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-semibold text-on-brand">
         Spara utförare
       </button>
     </form>

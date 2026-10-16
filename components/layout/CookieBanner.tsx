@@ -72,7 +72,7 @@ export function CookieBanner() {
         <button
           type="button"
           onClick={acknowledge}
-          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-control border-2 border-on-brand bg-surface px-5 font-bold text-ink hover:bg-brand-soft"
+          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-control border-2 border-on-brand bg-surface px-5 font-semibold text-ink hover:bg-brand-soft"
         >
           {t.common.cookies.accept}
         </button>

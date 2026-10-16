@@ -52,12 +52,20 @@ describe("design tokens", () => {
 
   it("keeps the brand colours from the spec", () => {
     expect(palette.brand).toBe("#0B5D4B");
+    expect(palette.accent).toBe("#2E9E6E");
     expect(palette.canvas).toBe("#FAF7F2");
     expect(palette.ink).toBe("#1A2420");
   });
 
-  it("sets the 18px base and light colour scheme", () => {
-    expect(css).toMatch(/font-size:\s*112\.5%/);
+  it("keeps the emerald accent off text: it is too light for 4.5:1", () => {
+    expect(contrastPairs.filter((p) => p.fg === "accent" && p.min >= AA_TEXT)).toEqual([]);
+    expect(contrastRatio(palette.accent, palette.surface)).toBeLessThan(AA_TEXT);
+  });
+
+  it("sets the 16px root, 18px body text and light colour scheme", () => {
+    expect(css).toMatch(/html\s*\{[^}]*font-size:\s*100%/);
+    expect(css).toMatch(/body\s*\{[^}]*font-size:\s*1\.125rem/);
+    expect(css).toMatch(/body\s*\{[^}]*line-height:\s*1\.6/);
     expect(css).toMatch(/color-scheme:\s*light/);
     expect(css).toMatch(/prefers-reduced-motion:\s*reduce/);
     expect(css).toMatch(/:focus-visible\s*\{/);

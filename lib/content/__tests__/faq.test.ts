@@ -67,7 +67,7 @@ describe("FAQ", () => {
     const all = text(getFaq({ rules }));
     expect(all).toContain("45 %");
     expect(all).toContain("25 %");
-    expect(all).toContain("80 000 kr");
+    expect(all).toContain("80\u00a0000\u00a0kr");
     expect(all).not.toMatch(/\b50 %|\b30 %|75 000|50 000/);
   });
 

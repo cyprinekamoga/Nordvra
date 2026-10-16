@@ -33,7 +33,7 @@ export function PhoneCard({
   if (variant === "compact") {
     return (
       <p className={cx("flex flex-wrap items-center gap-x-2 gap-y-1 text-ink", className)}>
-        <Icon name="phone" className="text-brand" />
+        <Icon name="phone" className="text-accent" />
         <span className="font-semibold">{t.common.phone.cardTitle}</span>
         <a href={company.phoneHref} className="link inline-flex min-h-12 items-center font-bold">
           {fmt(t.common.phone.callUsOn, { phone })}

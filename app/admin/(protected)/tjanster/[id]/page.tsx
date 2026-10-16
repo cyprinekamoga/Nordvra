@@ -95,7 +95,7 @@ export default async function ServicePage({ params, searchParams }: PageProps<"/
             <span>Visas för kunder</span>
           </label>
           <div className="sm:col-span-2">
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-bold text-on-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-semibold text-on-brand">
               Spara tjänst
             </button>
           </div>
@@ -191,7 +191,7 @@ export default async function ServicePage({ params, searchParams }: PageProps<"/
             <input name="note" className={selectClasses} />
           </label>
           <div className="sm:col-span-4">
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-bold text-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
               Lägg till
             </button>
           </div>

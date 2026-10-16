@@ -40,10 +40,10 @@ export default async function ExportPage({ searchParams }: PageProps<"/admin/exp
             <span className="mb-1 block font-bold">till</span>
             <input type="date" name="till" defaultValue={range.to ?? ""} className={selectClasses} />
           </label>
-          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-bold text-brand">
+          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
             Visa
           </button>
-          <a href={csvHref} className="inline-flex min-h-12 items-center rounded-control border-2 border-brand bg-brand px-5 font-bold text-on-brand no-underline">
+          <a href={csvHref} className="inline-flex min-h-12 items-center rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand no-underline">
             Ladda ner CSV
           </a>
         </form>

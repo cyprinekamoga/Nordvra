@@ -37,7 +37,8 @@ deduction shown up front, eligibility check built in, we choose and vet the comp
 * Money is **öre integers** everywhere (1 kr = 100 öre), incl. 25 % VAT. Format with `lib/format.ts`.
 * Never put personnummer in URLs, logs, analytics, emails or sessionStorage. Never `console.log`
   request bodies or form data.
-* Accessibility WCAG 2.1 AA: base font 18 px (`html { font-size: 112.5% }`), tap targets ≥ 48 px,
+* Accessibility WCAG 2.1 AA: body text 18 px (`1.125rem` on a 16 px root, line-height 1.6), no text
+  smaller than 16 px, all sizes in rem, tap targets ≥ 48 px,
   visible focus ring, labels on every input, errors linked with `aria-describedby`, `aria-live` on
   price updates, landmarks, skip link, `lang="sv"`. Test at **375 px** width: no horizontal scroll.
 * Do **not** `npm install` new packages (shared `node_modules`), do not run `next build` / `next dev`
@@ -318,8 +319,16 @@ booking (via the RLS server client) before sending a new quote.
 
 ## 9. Shared UI contracts (built in phase 1 by the UI agent, `components/ui/*`, `components/layout/*`)
 
-Design: deep green `#0B5D4B` (brand) on warm off-white `#FAF7F2`, ink `#1A2420`, text logo "Nordvra".
-Font: Atkinson Hyperlegible Next (`next/font/google`). Light theme.
+Design: deep green `#0B5D4B` (brand: text, links, button fills with white text) on warm off-white
+`#FAF7F2`, ink `#1A2420`; emerald `#2E9E6E` from the logo only for icons and accents on canvas or
+white (never text – it is below 4.5:1). Logo: `public/nordvra-logo.png` (transparent; green "N"
+mountain-arrow mark above NORDVRA), 40 px tall in the mobile header, 48 px from `lg`, alt
+"Nordvra – startsida"; `public/nordvra-mark.png` (mark only) is the source of `app/favicon.ico`,
+`app/icon.png` and `app/apple-icon.png`. Light theme.
+Font: Figtree (`next/font/google`, latin + latin-ext, `--font-sans`). Weights: headings and prices
+700 (hero H1 800), body 400, buttons 600, uppercase small labels 700 with 0.06em letter-spacing
+(`label-caps`). Headings in sentence case. Prices "1 250 kr" with non-breaking spaces
+(`formatKr`), shown with the `price` utility (bold, tabular figures).
 ROT accent: warm amber/terracotta with AA contrast. All tokens in `app/globals.css` `@theme`.
 Components (named exports, documented props, all keyboard-accessible, ≥48 px targets):
 `Button` (variants primary/secondary/ghost, `asChild`-free; `LinkButton` for links), `Tile`
@@ -340,7 +349,7 @@ localStorage with try/catch), `SkipLink`, `LegalReviewBanner`.
 
 | Area | Owns |
 |---|---|
-| UI foundation | `app/globals.css`, `app/layout.tsx`, `app/icon.svg`, `components/ui/**`, `components/layout/**`, `lib/company.ts`, `lib/i18n/index.ts`, `lib/i18n/sv/common.ts` (+ empty stubs of the other modules) |
+| UI foundation | `app/globals.css`, `app/layout.tsx`, `app/icon.png`, `components/ui/**`, `components/layout/**`, `lib/company.ts`, `lib/i18n/index.ts`, `lib/i18n/sv/common.ts` (+ empty stubs of the other modules) |
 | Infra + DB | `lib/supabase/**`, `lib/catalog/load.ts`, `lib/auth/**`, `lib/email/**`, `lib/i18n/sv/email.ts`, `lib/sms/**`, `lib/payments/**`, `proxy.ts`, `next.config.ts`, `.env.example`, `scripts/**`, `supabase/seed.sql`, `package.json` scripts, remote DB |
 | Request flow | `app/boka/**`, `components/booking/**`, `lib/booking/**`, `lib/i18n/sv/booking.ts` |
 | Quote page | `app/offert/**`, `components/quote/**`, `lib/quote/**`, `lib/i18n/sv/quote.ts` |

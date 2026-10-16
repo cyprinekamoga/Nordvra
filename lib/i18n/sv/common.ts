@@ -9,6 +9,8 @@
 const common = {
   brand: {
     name: "Nordvra",
+    /** Alt text of the logo when it links to the start page. */
+    homeLinkLabel: "Nordvra – startsida",
     tagline:
       "Vi hittar ett bra företag, du slipper jämföra offerter, och vi hjälper dig med RUT/ROT-avdraget.",
   },
@@ -174,7 +176,7 @@ const common = {
     },
     cap: {
       title: "Tak för avdraget",
-      body: "Max 75 000 kr per person och år för RUT och ROT tillsammans, varav max 50 000 kr för ROT.",
+      body: "Max 75\u00a0000\u00a0kr per person och år för RUT och ROT tillsammans, varav max 50\u00a0000\u00a0kr för ROT.",
     },
     payment: {
       title: "Betalning",
@@ -303,7 +305,7 @@ const common = {
       rotRepairOnly:
         "Eftersom huset inte är mer än 5 år gammalt ger bara reparation och underhåll ROT-avdrag – inte om- eller tillbyggnad. Vi stämmer av vad som gäller för ditt jobb i offerten.",
       usedThisYear:
-        "Du har redan använt RUT eller ROT i år. Taket är 75 000 kr per person och år, varav max 50 000 kr för ROT. Om taket tar slut betalar du mellanskillnaden.",
+        "Du har redan använt RUT eller ROT i år. Taket är 75\u00a0000\u00a0kr per person och år, varav max 50\u00a0000\u00a0kr för ROT. Om taket tar slut betalar du mellanskillnaden.",
       checkRemaining:
         "Du kan se hur mycket avdrag du har kvar i år på Skatteverkets Mina sidor. Om taket redan är nått betalar du mellanskillnaden.",
     },

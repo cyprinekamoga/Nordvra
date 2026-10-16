@@ -115,7 +115,7 @@ export function getFaq({
       group: "pris",
       question: "Vad kostar det?",
       answer: [
-        "Priset beror på tjänsten, bostadens storlek och var du bor. När du gör en förfrågan ser du direkt ett ungefärligt pris, till exempel ”vanligtvis 3 800–4 800 kr efter RUT-avdrag”.",
+        "Priset beror på tjänsten, bostadens storlek och var du bor. När du gör en förfrågan ser du direkt ett ungefärligt pris, till exempel ”vanligtvis 3\u00a0800–4\u00a0800\u00a0kr efter RUT-avdrag”.",
         "Det exakta priset står i offerten. Alla priser är inklusive moms.",
       ],
     },

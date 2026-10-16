@@ -25,7 +25,7 @@ function Block({ block }: { block: LegalBlock }) {
       return <p>{block.text}</p>;
     case "ul":
       return (
-        <ul className="list-disc space-y-2 pl-6 marker:text-brand">
+        <ul className="list-disc space-y-2 pl-6 marker:text-accent">
           {block.items.map((item) => (
             <li key={item}>{item}</li>
           ))}

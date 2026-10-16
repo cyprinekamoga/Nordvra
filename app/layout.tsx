@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Atkinson_Hyperlegible_Next } from "next/font/google";
+import { Figtree } from "next/font/google";
 import { CookieBanner } from "@/components/layout/CookieBanner";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -9,10 +9,12 @@ import { MAIN_CONTENT_ID, SkipLink } from "@/components/layout/SkipLink";
 import { palette } from "@/lib/design/tokens";
 import "./globals.css";
 
-const atkinson = Atkinson_Hyperlegible_Next({
+/** Figtree (variable 300–900). Sets `--font-sans` on <html>; Tailwind's `font-sans` reads it. */
+const figtree = Figtree({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-atkinson",
   display: "swap",
+  variable: "--font-sans",
+  fallback: ["system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
 });
 
 function siteUrl(): URL {
@@ -52,7 +54,7 @@ export const viewport: Viewport = {
  */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="sv" className={atkinson.variable}>
+    <html lang="sv" className={figtree.variable}>
       <body className="flex min-h-dvh flex-col bg-canvas font-sans text-ink antialiased">
         <SkipLink />
         <PublicChrome>

@@ -126,7 +126,7 @@ const booking = {
       noDeductionNote: "Pris utan avdrag",
       exactWithin24h: "Exakt pris inom 24 timmar.",
       noDeduction: "Inget avdrag",
-      zeroKr: "0 kr",
+      zeroKr: "0\u00a0kr",
       perVisit: "{price} per tillfälle",
       rateHour: "{price}/timme",
       rateM2: "{price}/m²",

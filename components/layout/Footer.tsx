@@ -29,7 +29,7 @@ export function Footer() {
     <footer className="mt-16 border-t border-border bg-surface-muted text-ink">
       <div className="mx-auto grid w-full max-w-page gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
         <div className="space-y-4 sm:col-span-2 lg:col-span-1">
-          <Logo />
+          <Logo size="footer" />
           <p className="text-muted">
             {fmt(f.companyIntro, { legalName: company.legalName, hometown: company.hometown })}
           </p>

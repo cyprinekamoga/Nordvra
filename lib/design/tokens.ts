@@ -24,6 +24,11 @@ export const palette = {
   "brand-strong": "#084536",
   /** Tinted brand background (selected rows, phone strip). */
   "brand-soft": "#E1EFE9",
+  /**
+   * Emerald from the logo. Icons and decorative accents on canvas or surface only – never text or
+   * button text (about 3.2:1, below the 4.5:1 text minimum).
+   */
+  accent: "#2E9E6E",
   /** Text on brand / brand-strong / rot / danger fills. */
   "on-brand": "#FFFFFF",
   /** Decorative separators only (card edges, dividers). Not for form controls. */
@@ -118,6 +123,8 @@ export const contrastPairs: ContrastPair[] = [
   { fg: "control", bg: "surface-muted", min: AA_NON_TEXT, use: "fältkant på dämpad sektion" },
   { fg: "warning-border", bg: "warning-soft", min: AA_NON_TEXT, use: "varningschip kant" },
   { fg: "brand", bg: "canvas", min: AA_NON_TEXT, use: "vald chip/kalenderdag mot sidan" },
+  { fg: "accent", bg: "canvas", min: AA_NON_TEXT, use: "smaragdgrön ikon på sidbakgrund" },
+  { fg: "accent", bg: "surface", min: AA_NON_TEXT, use: "smaragdgrön ikon på kort" },
   { fg: "focus", bg: "canvas", min: AA_NON_TEXT, use: "fokusring på sidbakgrund" },
   { fg: "focus", bg: "surface", min: AA_NON_TEXT, use: "fokusring på kort" },
   { fg: "focus", bg: "focus-halo", min: AA_NON_TEXT, use: "fokusring mot sin ljusa halo" },

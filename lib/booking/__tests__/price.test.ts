@@ -26,13 +26,13 @@ describe("priceView", () => {
       sizeBand: "60-79",
       eligibility: yesRut,
     });
-    expect(v.headline).toBe("Vanligtvis 3 800–4 800 kr efter RUT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 3\u00a0800–4\u00a0800\u00a0kr efter RUT-avdrag");
     expect(v.lines.map((l) => [l.label, l.value])).toEqual([
-      ["Arbetskostnad (före avdrag)", "7 600–9 600 kr"],
+      ["Arbetskostnad (före avdrag)", "7\u00a0600–9\u00a0600\u00a0kr"],
       ["Material / resor", "Tillkommer vid behov – visas i offerten"],
-      ["RUT-avdrag 50 %", "−3 800–4 800 kr"],
-      ["Ingen bokningsavgift", "0 kr"],
-      ["Att betala", "3 800–4 800 kr"],
+      ["RUT-avdrag 50 %", "−3\u00a0800–4\u00a0800\u00a0kr"],
+      ["Ingen bokningsavgift", "0\u00a0kr"],
+      ["Att betala", "3\u00a0800–4\u00a0800\u00a0kr"],
     ]);
     expect(v.lines.find((l) => l.key === "deduction")?.accent).toBe("rut");
   });
@@ -46,14 +46,14 @@ describe("priceView", () => {
       eligibility: yesRut,
     });
     // displayRange widens outward to whole hundreds (450 → 400).
-    expect(v.headline).toBe("Vanligtvis 400–700 kr per tillfälle efter RUT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 400–700\u00a0kr per tillfälle efter RUT-avdrag");
     expect(v.lines.find((l) => l.key === "labour")?.hint).toMatch(/Per städtillfälle/);
   });
 
   it("ROT hourly rate: 30 % and kr/timme, never 'halva priset'", () => {
     const v = view({ categoryId: "el", serviceId: "eluttag", housingType: "villa", eligibility: yesRot });
     expect(v.kind).toBe("rate");
-    expect(v.headline).toBe("Vanligtvis 385–525 kr/timme efter ROT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 385–525\u00a0kr/timme efter ROT-avdrag");
     expect(v.lines.find((l) => l.key === "deduction")?.label).toBe("ROT-avdrag 30 %");
     expect(allText(v)).not.toMatch(/halva priset/i);
   });
@@ -74,9 +74,9 @@ describe("priceView", () => {
       eligibility: yesRot,
     });
     expect(v.eligible).toBe(false);
-    expect(v.headline).toBe("Vanligtvis 550–750 kr/timme");
+    expect(v.headline).toBe("Vanligtvis 550–750\u00a0kr/timme");
     expect(v.lines.find((l) => l.key === "deduction")?.value).toBe("Inget avdrag");
-    expect(v.lines.find((l) => l.key === "toPay")?.value).toBe("550–750 kr/timme");
+    expect(v.lines.find((l) => l.key === "toPay")?.value).toBe("550–750\u00a0kr/timme");
   });
 
   it("never mentions a service or booking fee other than 'Ingen bokningsavgift'", () => {

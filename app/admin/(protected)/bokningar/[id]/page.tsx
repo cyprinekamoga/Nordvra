@@ -258,14 +258,14 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
                 ))}
               </select>
             </label>
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-bold text-on-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand">
               Spara status
             </button>
           </form>
           {b.approved_at && (
             <form action={sendConfirmationAction} className="mt-4">
               <input type="hidden" name="bookingId" value={b.id} />
-              <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-bold text-brand">
+              <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
                 Skicka bekräftelse till kunden
               </button>
             </form>
@@ -361,7 +361,7 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
             <p className="mb-3 text-sm text-muted">
               Personnumret raderas automatiskt {"när"} beslutet från Skatteverket är äldre än lagringstiden i inställningarna.
             </p>
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-bold text-on-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand">
               Spara
             </button>
           </div>
@@ -377,7 +377,7 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
               <span className="sr-only">Ny anteckning</span>
               <textarea name="body" rows={3} required maxLength={5000} className={selectClasses} placeholder="T.ex. portkod, kontakt med utförare …" />
             </label>
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-bold text-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
               Lägg till anteckning
             </button>
           </form>

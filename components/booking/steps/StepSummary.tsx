@@ -74,7 +74,7 @@ export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (s
             {serviceLabel(draft, derived)}
           </h2>
           {view.headline ? (
-            <p className="text-2xl leading-snug font-bold text-ink">{view.headline}</p>
+            <p className="text-2xl leading-snug font-bold text-ink tabular-nums">{view.headline}</p>
           ) : (
             <p className="text-xl leading-snug font-bold text-ink">{view.quoteText}</p>
           )}
@@ -89,7 +89,7 @@ export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (s
               label={line.label}
               hint={line.hint}
               value={
-                line.isAmount ? <span className="whitespace-nowrap tabular-nums">{line.value}</span> : line.value
+                line.isAmount ? <span className="price">{line.value}</span> : line.value
               }
               emphasis={line.emphasis}
               accent={line.accent ?? (line.key === "fee" ? "brand" : undefined)}

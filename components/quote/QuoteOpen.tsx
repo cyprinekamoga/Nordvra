@@ -49,7 +49,7 @@ export function QuoteOpen({
         <p className="text-lg text-ink">{fmt(h.intro, { service: quote.serviceName })}</p>
         {validUntil ? (
           <p className="flex items-start gap-2 font-semibold text-ink">
-            <Icon name="clock" className="mt-1 shrink-0 text-brand" />
+            <Icon name="clock" className="mt-1 shrink-0 text-accent" />
             <span>{fmt(h.validUntil, { date: validUntil })}</span>
           </p>
         ) : null}

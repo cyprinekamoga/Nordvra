@@ -63,7 +63,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
           <NumField label="Tillägg för husdjur, %" name="pets_surcharge_pct" value={settings.petsSurchargePct} hint="Påverkar prisintervallet för städning." />
           <NumField label="Tillägg per extra våningsplan, %" name="extra_floor_surcharge_pct" value={settings.extraFloorSurchargePct} />
           <div className="sm:col-span-2">
-            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-bold text-on-brand">
+            <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-6 font-semibold text-on-brand">
               Spara inställningar
             </button>
           </div>
@@ -130,7 +130,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
                     </label>
                   ))}
                   <div className="flex items-end">
-                    <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-4 font-bold text-brand">
+                    <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-4 font-semibold text-brand">
                       Spara {year}
                     </button>
                   </div>
@@ -165,7 +165,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
             <span className="mb-1 block font-bold">Lägg till administratör (e-post)</span>
             <input name="email" type="email" required className={selectClasses} />
           </label>
-          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-bold text-on-brand">
+          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand">
             Lägg till
           </button>
         </form>

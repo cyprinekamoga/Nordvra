@@ -46,7 +46,7 @@ export function QuotePriceCard({
         <h2 id={headingId} className="text-lg font-bold text-muted">
           {p.title} · {quote.serviceName}
         </h2>
-        <p className="text-2xl leading-snug font-bold text-ink">{headline}</p>
+        <p className="text-2xl leading-snug font-bold text-ink tabular-nums">{headline}</p>
       </div>
 
       <PriceList>
@@ -65,7 +65,7 @@ export function QuotePriceCard({
             />
           </>
         ) : null}
-        <PriceLine label={p.noBookingFee} value={p.zero} accent="brand" />
+        <PriceLine label={p.noBookingFee} value={<span className="price">{p.zero}</span>} accent="brand" />
         <PriceLine label={p.toPay} ore={breakdown.toPay} emphasis="total" />
       </PriceList>
 

@@ -14,7 +14,7 @@ export interface ButtonStyleOptions {
 }
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-control border-2 font-bold leading-tight text-center no-underline transition-colors duration-150 select-none " +
+  "inline-flex items-center justify-center gap-2 rounded-control border-2 font-semibold leading-tight text-center no-underline transition-colors duration-150 select-none " +
   "aria-disabled:cursor-not-allowed disabled:cursor-not-allowed";
 
 const variants: Record<ButtonVariant, string> = {

@@ -48,7 +48,7 @@ function Hero() {
             <DeductionBadge type="rut" />
             <DeductionBadge type="rot" />
           </div>
-          <h1 id="hero-rubrik" className="text-3xl text-ink sm:text-5xl">
+          <h1 id="hero-rubrik" className="text-3xl font-extrabold text-ink sm:text-5xl">
             {c.hero.title}
           </h1>
           <p className="text-xl text-ink">{t.common.brand.tagline}</p>

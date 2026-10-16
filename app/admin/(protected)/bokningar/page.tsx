@@ -81,7 +81,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/b
           />
         </label>
         <div className="flex flex-wrap gap-3 sm:col-span-2 lg:col-span-5">
-          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-bold text-on-brand">
+          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand">
             Filtrera
           </button>
           <LinkButton href="/admin/bokningar" variant="ghost">

@@ -31,7 +31,7 @@ export interface PriceLineProps {
   hint?: ReactNode;
   /** Amount in öre (formatted "4 200 kr") or a [min, max] range ("3 800–4 800 kr"). */
   ore?: number | readonly [number, number];
-  /** Free value instead of `ore`, e.g. "Tillkommer vid behov – visas i offerten". */
+  /** Free value instead of `ore`, e.g. "Tillkommer vid behov – visas i offerten". Wrap a preformatted amount in `<span className="price">`. */
   value?: ReactNode;
   /** Prefix the amount with a minus sign (deductions). */
   negative?: boolean;
@@ -78,8 +78,7 @@ export function PriceLine({
       <dd
         className={cx(
           "ml-auto text-right",
-          isAmount && "whitespace-nowrap tabular-nums",
-          emphasis === "normal" ? "font-semibold" : "font-bold",
+          isAmount ? "price" : emphasis === "normal" ? "font-semibold" : "font-bold",
           accent && accents[accent],
         )}
       >

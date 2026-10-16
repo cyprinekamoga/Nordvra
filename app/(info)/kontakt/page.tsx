@@ -48,7 +48,7 @@ export default function ContactPage() {
               {fmt(t.common.phone.ctaWithNumber, { phone: company.phoneDisplay })}
             </p>
             <p className="flex items-start gap-2">
-              <Icon name="clock" className="mt-1 shrink-0 text-brand" />
+              <Icon name="clock" className="mt-1 shrink-0 text-accent" />
               <span>
                 <span className="font-bold">{c.hoursLabel}:</span> {c.hours}
               </span>

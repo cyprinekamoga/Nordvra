@@ -55,7 +55,7 @@ const quote = {
     shareOfTotalHint: "För den här tjänsten räknas {pct} % av hela priset som arbetskostnad.",
     cappedHint: "Avdraget är begränsat av taket per person och år.",
     noBookingFee: "Ingen bokningsavgift",
-    zero: "0 kr",
+    zero: "0\u00a0kr",
     toPay: "Att betala",
     inclVat: "Alla priser är inklusive moms.",
     buyersNote:

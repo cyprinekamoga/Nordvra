@@ -1,12 +1,16 @@
 const kr = new Intl.NumberFormat("sv-SE", { maximumFractionDigits: 0 });
 
-/** 420000 öre → "4 200 kr" (regular spaces so screen readers and copy/paste behave). */
+/** Non-breaking space: keeps "1 250 kr" on one line. Screen readers read it as a plain space. */
+export const NBSP = "\u00a0";
+
+/** 125000 öre → "1 250 kr", every space non-breaking. Show it with the `price` utility class. */
 export function formatKr(ore: number): string {
-  return `${kr.format(Math.round(ore / 100)).replace(/\s/g, " ")} kr`;
+  return `${formatNumber(Math.round(ore / 100))}${NBSP}kr`;
 }
 
+/** 1250 → "1 250" with a non-breaking thousands separator (ICU varies between U+00A0 and U+202F). */
 export function formatNumber(n: number): string {
-  return kr.format(n).replace(/\s/g, " ");
+  return kr.format(n).replace(/\s/g, NBSP);
 }
 
 /** [380000, 480000] → "3 800–4 800 kr"; equal ends collapse to one amount. */

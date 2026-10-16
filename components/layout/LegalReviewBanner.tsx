@@ -18,7 +18,7 @@ export function LegalReviewBanner({ className }: { className?: string }) {
     >
       <Icon name="warning" size={24} className="mt-0.5" />
       <p>
-        <span className="mr-2 inline-block rounded-full border border-warning-border px-2 text-sm uppercase">
+        <span className="label-caps mr-2 inline-block rounded-full border border-warning-border px-2">
           {t.common.badges.legalDraft}
         </span>
         {t.common.legal.reviewBanner}

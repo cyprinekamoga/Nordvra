@@ -6,13 +6,15 @@
  * that both match and that every text/background pair meets WCAG 2.1 AA.
  *
  * Usage: bg-canvas, bg-surface, bg-surface-muted, text-ink, text-muted, bg-brand text-on-brand,
- * hover:bg-brand-strong, bg-brand-soft, border-border (decorative), border-control (inputs,
- * chips, tiles), bg-rut-soft text-rut, bg-rot-soft text-rot, bg-info-soft text-info,
- * bg-warning-soft text-warning border-warning-border, bg-danger-soft text-danger,
- * bg-success-soft text-success, bg-legal-soft text-legal.
+ * hover:bg-brand-strong, bg-brand-soft, text-accent (icons and decoration only, never text),
+ * border-border (decorative), border-control (inputs, chips, tiles), bg-rut-soft text-rut,
+ * bg-rot-soft text-rot, bg-info-soft text-info, bg-warning-soft text-warning
+ * border-warning-border, bg-danger-soft text-danger, bg-success-soft text-success,
+ * bg-legal-soft text-legal.
  *
- * 1rem = 18px (html font-size 112.5%). Tailwind spacing therefore scales with it:
- * min-h-12 = 54px, size-12 = 54px – both above the 48px tap-target minimum.
+ * Type: Figtree, 1rem = 16px (browser default). Body text is 1.125rem (18px) with line-height 1.6;
+ * no text-* step is below 1rem (16px). The spacing unit is 0.28125rem (4.5px), so
+ * min-h-12 = size-12 = 54px – above the 48px tap-target minimum.
  */
 
 @theme {
@@ -24,6 +26,7 @@
   --color-brand: #0B5D4B;
   --color-brand-strong: #084536;
   --color-brand-soft: #E1EFE9;
+  --color-accent: #2E9E6E;
   --color-on-brand: #FFFFFF;
   --color-border: #DDD5C8;
   --color-control: #6F7A74;
@@ -47,28 +50,52 @@
   --color-focus: #1A2420;
   --color-focus-halo: #FFFFFF;
 
+  --spacing: 0.28125rem;
+
+  /* Type scale in rem (1rem = 16px). xs and sm are both 16px: nothing on the site is smaller. */
+  --text-xs: 1rem;
+  --text-xs--line-height: 1.5;
+  --text-sm: 1rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.5;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.3;
+  --text-3xl: 2.125rem;
+  --text-3xl--line-height: 1.2;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 1.15;
+  --text-5xl: 3.375rem;
+  --text-5xl--line-height: 1.1;
+
   --radius-control: 0.75rem;
   --radius-card: 1rem;
 
   --shadow-card: 0 1px 2px rgb(26 36 32 / 0.06), 0 4px 12px rgb(26 36 32 / 0.05);
   --shadow-raised: 0 2px 4px rgb(26 36 32 / 0.08), 0 12px 32px rgb(26 36 32 / 0.12);
 
-  /* max-w-page (site width), max-w-text (reading width), max-w-narrow (forms, booking flow). */
-  --container-page: 72rem;
+  /*
+   * max-w-page (site width, 1296px), max-w-text (reading width, about 75 characters of 18px
+   * Figtree), max-w-narrow (forms, booking flow, 648px).
+   */
+  --container-page: 81rem;
   --container-text: 42rem;
-  --container-narrow: 36rem;
+  --container-narrow: 40.5rem;
 }
 
-/* Font comes from next/font (Atkinson Hyperlegible Next) as a CSS variable on <html>. */
-@theme inline {
-  --font-sans:
-    var(--font-atkinson), "Atkinson Hyperlegible Next", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, Arial, sans-serif;
-}
+/*
+ * The font: next/font sets --font-sans (Figtree + metric-matched fallback) on <html> in
+ * app/layout.tsx. That rule is unlayered, so it wins over Tailwind's default --font-sans in
+ * @layer theme; font-sans and the body rule below both read it.
+ */
 
 @layer base {
   html {
-    font-size: 112.5%; /* 18px base */
+    font-size: 100%; /* 1rem = 16px, or whatever the reader has set */
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -79,6 +106,8 @@
     background-color: var(--color-canvas);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: 1.125rem; /* 18px */
+    font-weight: 400;
     line-height: 1.6;
     overflow-wrap: break-word;
   }
@@ -141,6 +170,21 @@
     outline-offset: 2px;
     box-shadow: 0 0 0 7px var(--color-focus-halo);
   }
+}
+
+/* Prices ("1 250 kr" from lib/format, non-breaking spaces): bold, figures of equal width. */
+@utility price {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Small uppercase label (badges, banners). Headings stay in sentence case. */
+@utility label-caps {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* Inline text link (body copy, footers, legal text). */

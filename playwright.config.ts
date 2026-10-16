@@ -13,8 +13,9 @@ export default defineConfig({
     ...devices["iPhone SE"],
     viewport: { width: 375, height: 740 },
     locale: "sv-SE",
-    // Disables colour transitions so accessibility checks see final colours.
-    reducedMotion: "reduce",
+    // Disables colour transitions so accessibility checks see final colours. Only honoured inside
+    // contextOptions; a top-level `reducedMotion` is silently ignored.
+    contextOptions: { reducedMotion: "reduce" },
     timezoneId: "Europe/Stockholm",
     // Cloud containers ship Chromium at this path; locally Playwright uses its own browser.
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_PATH

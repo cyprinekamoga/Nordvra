@@ -35,6 +35,7 @@ export function PhotoBand({ photo, veil = "flat", eager = false, className, chil
         alt=""
         fill
         sizes="100vw"
+        quality={50}
         loading={eager ? "eager" : "lazy"}
         fetchPriority={eager ? "high" : undefined}
         className="-z-20 object-cover"

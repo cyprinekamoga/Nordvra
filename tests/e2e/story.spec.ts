@@ -7,9 +7,15 @@ test("homepage tells the three steps with photos", async ({ page }) => {
   for (const title of ["Välj tjänst", "Välj tid", "Vi fixar resten"]) {
     await expect(page.getByRole("heading", { level: 3, name: new RegExp(title) })).toBeVisible();
   }
-  // Hero photo has a real description and the SPEC example price.
-  await expect(page.getByRole("img", { name: /diskbänk/ })).toBeVisible();
+  // The hero shows the SPEC example price; the four service cards link to the booking flow.
   await expect(page.getByText(/Du betalar\s4\s200\skr/).first()).toBeVisible();
+  const services = page.getByRole("region", { name: "Hjälp i hemmet, från golv till tak" });
+  for (const name of ["Städning", "Fönsterputs", "Badrum & kök", "Snickeri"]) {
+    await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", "/boka");
+  }
+  // "Så går det till" jumps to the story band.
+  await page.getByRole("link", { name: "Så går det till" }).click();
+  await expect(page).toHaveURL(/#sa-gar-det-till$/);
 });
 
 test("calculator starts on the SPEC example and follows the slider and the deduction type", async ({ page }) => {

@@ -123,17 +123,23 @@ The photos in `public/bilder` come from [Unsplash](https://unsplash.com) under t
 People in them are models: show them as illustrations, never as Nordvra customers or staff.
 To swap a photo, replace the file and update its entry (width, height, alt).
 
-| File | Photographer |
-| --- | --- |
-| stadning-diskbank.jpg | everdrop GmbH |
-| stadning-flaskor.jpg | Daiga Ellaby |
-| kok-ljust.jpg | Lisa Anna |
-| vardagsrum.jpg | Collov Home Design |
-| flytt-kartonger.jpg | Vitaly Gariev |
-| nycklar.jpg | Jakub Żerdzicki |
-| snickare.jpg | Minh Đức |
-| rott-hus.jpg | Christer Lässman |
-| stockholm.jpg | Jon Flobrant |
+They share one colour grade (slightly cooler, softer warm tones, even brightness) so the set
+reads as one shoot; keep that in mind when adding photos.
+
+| File | Photographer | Place |
+| --- | --- | --- |
+| skog-gavle.jpg | Geranimo | Gävle |
+| dimskog.jpg | Christoph Nolte | Sverige |
+| skog-sundsvall.jpg | Peter van der Meulen | Sundsvall |
+| fjallgard.jpg | Jessica Pamp | Sverige |
+| vag-riksgransen.jpg | Niklas Sagrén | Riksgränsen |
+| stockholm.jpg | Jon Flobrant | Stockholm |
+| stadning.jpg | Giorgio Trovato | |
+| sovrum.jpg | Susan Wilkinson | |
+| badrum.jpg | Tile Merchant Ireland | |
+| snickare-falun.jpg | Jimmy Nilsson Masth | Falun |
+| fonster.jpg | Yikai Sun | |
+| tom-bostad.jpg | Pawel Czerwinski | |
 
 ## Not done yet / before launch
 

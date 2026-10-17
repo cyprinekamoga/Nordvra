@@ -29,6 +29,10 @@ export const palette = {
    * button text (about 3.2:1, below the 4.5:1 text minimum).
    */
   accent: "#2E9E6E",
+  /** Deep forest green for full-bleed story bands and photo overlays (white text on it). */
+  forest: "#06362A",
+  /** Secondary text on forest bands and photo overlays. */
+  "forest-text": "#CFE3D9",
   /** Text on brand / brand-strong / rot / danger fills. */
   "on-brand": "#FFFFFF",
   /** Decorative separators only (card edges, dividers). Not for form controls. */
@@ -117,6 +121,8 @@ export const contrastPairs: ContrastPair[] = [
   { fg: "legal", bg: "legal-soft", min: AA_TEXT, use: "juridisk ruta rubrik" },
   { fg: "ink", bg: "legal-soft", min: AA_TEXT, use: "juridisk ruta text" },
   { fg: "on-brand", bg: "ink", min: AA_TEXT, use: "cookie-ruta" },
+  { fg: "on-brand", bg: "forest", min: AA_TEXT, use: "vit text på skogsgrön yta och fotoöverlägg" },
+  { fg: "forest-text", bg: "forest", min: AA_TEXT, use: "ljus hjälptext på skogsgrön yta" },
   // Non-text: UI component boundaries and focus indicator
   { fg: "control", bg: "canvas", min: AA_NON_TEXT, use: "fältkant på sidbakgrund" },
   { fg: "control", bg: "surface", min: AA_NON_TEXT, use: "fältkant på kort" },
@@ -130,6 +136,8 @@ export const contrastPairs: ContrastPair[] = [
   { fg: "focus", bg: "focus-halo", min: AA_NON_TEXT, use: "fokusring mot sin ljusa halo" },
   { fg: "focus-halo", bg: "brand", min: AA_NON_TEXT, use: "fokushalo på grön knapp/yta" },
   { fg: "focus-halo", bg: "ink", min: AA_NON_TEXT, use: "fokushalo på mörk cookie-ruta" },
+  { fg: "accent", bg: "forest", min: AA_NON_TEXT, use: "smaragdgrön linje på skogsgrön yta" },
+  { fg: "focus-halo", bg: "forest", min: AA_NON_TEXT, use: "fokushalo på skogsgrön yta" },
 ];
 
 function channel(v: number): number {

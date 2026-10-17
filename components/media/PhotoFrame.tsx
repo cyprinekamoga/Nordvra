@@ -3,11 +3,8 @@ import type { ReactNode } from "react";
 import { cx } from "@/components/ui/cx";
 import { photos, type PhotoKey } from "@/lib/content/photos";
 
-/**
- * peak = top edge follows the peaks of the logo's N; window = white Swedish window with glazing
- * bars; arch = rounded top; rounded = plain card corners. Styles live in app/globals.css.
- */
-export type FrameShape = "peak" | "window" | "arch" | "rounded";
+/** rounded = card corners; square = straight editorial edges. Styles live in app/globals.css. */
+export type FrameShape = "rounded" | "square";
 
 export interface PhotoFrameProps {
   photo: PhotoKey;

@@ -98,7 +98,7 @@ export function MovingDay({ label, chapters }: MovingDayProps) {
           hidden={i !== active}
           className={cx("items-center gap-6 rounded-card md:grid-cols-2 md:gap-10", i === active ? "fade-in grid" : "hidden")}
         >
-          <PhotoFrame photo={c.photo} shape="arch" decorative sizes="(min-width: 768px) 34rem, 100vw" />
+          <PhotoFrame photo={c.photo} shape="square" decorative sizes="(min-width: 768px) 34rem, 100vw" />
           <div className="space-y-3">
             <p className="text-lg font-extrabold text-brand tabular-nums">{c.time}</p>
             <h3 className="text-2xl text-ink">{c.title}</h3>

@@ -72,8 +72,10 @@ const content = {
       body: "Du ser priset före och efter avdrag direkt. Förfrågan är gratis och inte bindande.",
       ctaHint: "Inga konton, inga lösenord. Bara några klick.",
       benefitsTitle: "Det här får du hos oss",
-      /** Price card on the hero photo; {price} is the flyttstäd example after RUT. */
+      /** Price card in the hero; {price} is the flyttstäd example after RUT. */
       photoPrice: "Du betalar {price}",
+      /** Second hero button: scrolls down to "Så enkelt är det". */
+      howCta: "Så går det till",
       benefits: [
         "Du klickar dig fram – ingen text att skriva",
         "Pris före och efter avdrag direkt",
@@ -100,13 +102,33 @@ const content = {
         },
       ],
       stepLabel: "Steg {n}",
-      /** Overlays on the scrollytelling photos (decoration; the step text says the same). */
+      lead: "Från förfrågan till färdigt jobb. Du klickar, vi sköter resten.",
+      /** Booking-form cards beside the scrollytelling steps (decoration; the step text says the same). */
       visual: {
+        chipsTitle: "Vad behöver du hjälp med?",
         chips: ["Städning", "Flytt", "Måla & tapetsera"],
         pricePay: "Du betalar {price}",
+        priceNote: "efter RUT-avdrag",
         quote: "Offert inom 24 timmar",
         invoice: "Avdraget dras på fakturan",
       },
+    },
+    services: {
+      eyebrow: "Tjänster",
+      title: "Hjälp i hemmet, från golv till tak",
+      items: [
+        { title: "Städning", body: "Hemstädning, storstädning och flyttstädning." },
+        { title: "Fönsterputs", body: "Rena fönster i lägenhet och villa." },
+        { title: "Badrum & kök", body: "Badrumsrenovering, kakel och klinker, köksskåp." },
+        { title: "Snickeri", body: "Golv, dörrar, trappor och garderober." },
+      ],
+      cardCta: "Se pris och boka",
+      all: "Se alla tjänster",
+    },
+    about: {
+      eyebrow: "Om Nordvra",
+      title: "Från Stockholm, för hela Sverige",
+      link: "Läs mer om oss",
     },
     movingDay: {
       title: "En flyttdag med Nordvra",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { BookCta, FaqList, JsonLd } from "@/components/content";
-import { PhoneCard } from "@/components/layout";
-import { PhotoChip, PhotoFrame, RisingArrow } from "@/components/media";
+import Link from "next/link";
+import { FaqList, JsonLd, TextLink } from "@/components/content";
+import { PhotoBand, PhotoChip, PhotoFrame } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import { MovingDay } from "@/components/story/MovingDay";
 import { StepsStory } from "@/components/story/StepsStory";
@@ -13,6 +13,7 @@ import type { PhotoKey } from "@/lib/content/photos";
 import { formatKr } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
+import type { DeductionType } from "@/lib/taxRules";
 
 const c = t.content.home;
 
@@ -22,72 +23,71 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-function NoFeePill({ className }: { className?: string }) {
-  return (
-    <p
-      className={cx(
-        "inline-flex items-center gap-2 rounded-full bg-brand-soft px-4 py-2 font-bold text-brand",
-        className,
-      )}
-    >
-      <Icon name="check-circle" />
-      {t.common.badges.noBookingFee}
-    </p>
-  );
-}
-
 /** "Du betalar {price}" → ["Du betalar ", "4 200 kr", ""], so the amount can be styled as a price. */
 function splitPrice(template: string, ore: number): [string, string, string] {
   const [before, after = ""] = template.split("{price}");
   return [before, formatKr(ore), after];
 }
 
+/** "Ingen bokningsavgift" and "Hellre ringa? Ring oss på …" in white, for the forest bands. */
+function OnDarkContact({ className }: { className?: string }) {
+  return (
+    <div className={cx("flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6", className)}>
+      <p className="inline-flex min-h-12 items-center gap-2 font-bold">
+        <Icon name="check-circle" className="text-accent" />
+        {t.common.badges.noBookingFee}
+      </p>
+      <p className="flex flex-wrap items-center gap-x-2">
+        <Icon name="phone" className="text-accent" />
+        <span>{t.common.phone.cardTitle}</span>
+        <a
+          href={company.phoneHref}
+          className="inline-flex min-h-12 items-center font-bold underline decoration-1 underline-offset-4 hover:decoration-2"
+        >
+          {fmt(t.common.phone.callUsOn, { phone: company.phoneDisplay })}
+        </a>
+      </p>
+    </div>
+  );
+}
+
+/** Full-bleed Swedish forest under a deep-green veil; the text sits on the darkest side. */
 function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <section aria-labelledby="hero-rubrik" className="border-b border-border bg-surface">
-      <Container className="grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center">
-        <div className="space-y-6">
+    <PhotoBand photo="forestRoad" veil="hero" eager aria-labelledby="hero-rubrik">
+      <Container className="py-14 sm:py-20 lg:py-28">
+        <div className="max-w-[40rem] space-y-6">
           <div className="flex flex-wrap gap-2">
             <DeductionBadge type="rut" />
             <DeductionBadge type="rot" />
           </div>
-          <h1 id="hero-rubrik" className="text-3xl font-extrabold text-ink sm:text-5xl">
+          <h1 id="hero-rubrik" className="text-4xl font-extrabold text-on-brand sm:text-5xl">
             {c.hero.title}
           </h1>
-          <p className="text-xl text-ink">{t.common.brand.tagline}</p>
-          <p className="text-lg text-muted">{c.hero.body}</p>
+          <p className="text-xl">{t.common.brand.tagline}</p>
+          <p className="text-lg text-forest-text">{c.hero.body}</p>
           <div className="space-y-3">
-            <LinkButton href="/boka" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
-              {t.common.actions.bookInTwoMinutes}
-            </LinkButton>
-            <p className="text-muted">{c.hero.ctaHint}</p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
+                {t.common.actions.bookInTwoMinutes}
+              </LinkButton>
+              <LinkButton href="#sa-gar-det-till" variant="inverseOutline" size="lg" className="w-full sm:w-auto">
+                {c.hero.howCta}
+              </LinkButton>
+            </div>
+            <p className="text-forest-text">{c.hero.ctaHint}</p>
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
-            <NoFeePill className="self-start" />
-            <PhoneCard variant="compact" />
-          </div>
-        </div>
-
-        <div className="relative pt-6 sm:pt-8">
-          <PhotoFrame
-            photo="cleaningSink"
-            shape="peak"
-            aspect="aspect-[4/3] lg:aspect-square"
-            sizes="(min-width: 1296px) 36rem, (min-width: 1024px) 42vw, 100vw"
-            eager
-          >
-            <PhotoChip label={example.label} className="absolute bottom-3 left-3 sm:bottom-5 sm:left-5">
-              {before}
-              <span className="price text-brand">{price}</span>
-              {after}
-            </PhotoChip>
-          </PhotoFrame>
-          <RisingArrow className="absolute top-0 right-0 z-10 w-2/5 max-w-56" />
+          <OnDarkContact />
+          <PhotoChip label={example.label} className="inline-block">
+            {before}
+            <span className="price text-brand">{price}</span>
+            {after}
+          </PhotoChip>
         </div>
       </Container>
-    </section>
+    </PhotoBand>
   );
 }
 
@@ -112,46 +112,102 @@ function Benefits() {
   );
 }
 
-/** Photo behind each step of "Så enkelt är det". */
-const STEP_PHOTOS: readonly PhotoKey[] = ["livingRoom", "kitchen", "carpenter"];
+/** Photo and deduction type for each service card, in the order of `c.services.items`. */
+const SERVICE_CARDS: readonly { photo: PhotoKey; type: DeductionType }[] = [
+  { photo: "bedroom", type: "rut" },
+  { photo: "window", type: "rut" },
+  { photo: "bathroom", type: "rot" },
+  { photo: "carpenter", type: "rot" },
+];
 
-/** "Så enkelt är det" (SPEC §12: Välj tjänst → Välj tid → Vi fixar resten), told as scrollytelling. */
-function Steps() {
-  const example = flyttstadExample();
-  const [before, price] = splitPrice(c.steps.visual.pricePay, example.breakdown.toPay);
+/** Four services as editorial photo cards; the whole card links to the booking flow. */
+function Services() {
+  const k = c.services;
   return (
-    <section aria-labelledby="steg-rubrik" className="py-12 sm:py-16">
+    <section aria-labelledby="tjanster-rubrik" className="py-12 sm:py-16">
       <Container className="space-y-8">
-        <h2 id="steg-rubrik" className="text-2xl text-ink sm:text-3xl">
-          {c.steps.title}
-        </h2>
-        <StepsStory
-          steps={c.steps.items.map((step, i) => ({ ...step, photo: STEP_PHOTOS[i] }))}
-          stepLabel={c.steps.stepLabel}
-          visual={{
-            chips: c.steps.visual.chips,
-            priceLabel: example.label,
-            pricePay: [before, price],
-            quote: c.steps.visual.quote,
-            invoice: c.steps.visual.invoice,
-          }}
-        />
-        <LinkButton href="/boka" variant="secondary" iconEnd="arrow-right" className="w-full sm:w-auto">
-          {t.common.actions.bookInTwoMinutes}
-        </LinkButton>
+        <div className="space-y-2">
+          <p className="label-caps text-brand">{k.eyebrow}</p>
+          <h2 id="tjanster-rubrik" className="text-2xl text-ink sm:text-3xl">
+            {k.title}
+          </h2>
+        </div>
+        <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          {k.items.map((item, i) => (
+            <li key={item.title} className="group focus-ring-within relative space-y-3 rounded-control">
+              <PhotoFrame
+                photo={SERVICE_CARDS[i].photo}
+                shape="square"
+                aspect="aspect-[4/5]"
+                decorative
+                reveal
+                sizes="(min-width: 1024px) 18rem, (min-width: 640px) 50vw, 100vw"
+                imageClassName="transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+              <DeductionBadge type={SERVICE_CARDS[i].type} size="sm" />
+              <h3 className="text-xl text-ink">
+                <Link
+                  href="/boka"
+                  className="after:absolute after:inset-0 focus-visible:shadow-none focus-visible:outline-none"
+                >
+                  {item.title}
+                </Link>
+              </h3>
+              <p className="text-muted">{item.body}</p>
+              <span aria-hidden="true" className="inline-flex items-center gap-1.5 font-semibold text-brand">
+                {k.cardCta}
+                <Icon name="arrow-right" className="transition-transform duration-200 group-hover:translate-x-1" />
+              </span>
+            </li>
+          ))}
+        </ul>
       </Container>
     </section>
   );
 }
 
-/** Photo for each chapter of the example moving day. */
-const DAY_PHOTOS: readonly PhotoKey[] = ["movingBoxes", "cleaningBottles", "keys"];
+/** "Så enkelt är det" (SPEC §12: Välj tjänst → Välj tid → Vi fixar resten) as scrollytelling on forest. */
+function Steps() {
+  const example = flyttstadExample();
+  const [before, price] = splitPrice(c.steps.visual.pricePay, example.breakdown.toPay);
+  return (
+    <PhotoBand photo="forestMist" id="sa-gar-det-till" aria-labelledby="steg-rubrik" className="scroll-mt-4">
+      <Container className="space-y-10 py-14 sm:py-20">
+        <div className="max-w-text space-y-3">
+          <h2 id="steg-rubrik" className="text-3xl text-on-brand sm:text-4xl">
+            {c.steps.title}
+          </h2>
+          <p className="text-xl text-forest-text">{c.steps.lead}</p>
+        </div>
+        <StepsStory
+          steps={c.steps.items}
+          stepLabel={c.steps.stepLabel}
+          visual={{
+            chipsTitle: c.steps.visual.chipsTitle,
+            chips: c.steps.visual.chips,
+            priceLabel: example.label,
+            pricePay: [before, price],
+            priceNote: c.steps.visual.priceNote,
+            quote: c.steps.visual.quote,
+            invoice: c.steps.visual.invoice,
+          }}
+        />
+        <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
+          {t.common.actions.bookInTwoMinutes}
+        </LinkButton>
+      </Container>
+    </PhotoBand>
+  );
+}
+
+/** Photo for each chapter of the example moving day: the drive, the cleaning, the empty clean home. */
+const DAY_PHOTOS: readonly PhotoKey[] = ["mountainRoad", "cleaning", "emptyHome"];
 
 /** An example moving day in three chapters (interactive timeline). */
 function MovingDaySection() {
   const k = c.movingDay;
   return (
-    <section aria-labelledby="flyttdag-rubrik" className="border-y border-border bg-surface py-12 sm:py-16">
+    <section aria-labelledby="flyttdag-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
       <Container className="space-y-8">
         <div className="max-w-text space-y-3">
           <h2 id="flyttdag-rubrik" className="text-2xl text-ink sm:text-3xl">
@@ -169,6 +225,51 @@ function MovingDaySection() {
         </LinkButton>
       </Container>
     </section>
+  );
+}
+
+/** "Från Stockholm, för hela Sverige" with a Swedish mountain farm. */
+function About() {
+  const k = c.about;
+  return (
+    <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
+      <Container className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
+        <PhotoFrame
+          photo="mountainFarm"
+          shape="square"
+          aspect="aspect-[3/2]"
+          reveal
+          sizes="(min-width: 1296px) 40rem, (min-width: 1024px) 52vw, 100vw"
+        />
+        <div className="space-y-4">
+          <p className="label-caps text-brand">{k.eyebrow}</p>
+          <h2 id="om-rubrik" className="text-2xl text-ink sm:text-3xl">
+            {k.title}
+          </h2>
+          <p className="text-lg">{fmt(t.common.footer.companyIntro, { hometown: company.hometown })}</p>
+          <TextLink href="/om-oss">{k.link}</TextLink>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/** Closing call to action on a forest-and-lakes photo. */
+function FinalCta() {
+  return (
+    // -mb-16 cancels the footer's top margin so the band meets the footer.
+    <PhotoBand photo="forestLake" veil="fade" aria-labelledby="redo-rubrik" className="-mb-16">
+      <Container className="space-y-5 py-16 sm:py-24">
+        <h2 id="redo-rubrik" className="text-3xl font-extrabold text-on-brand sm:text-5xl">
+          {c.final.title}
+        </h2>
+        <p className="max-w-text text-xl text-forest-text">{c.final.body}</p>
+        <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
+          {t.common.actions.bookInTwoMinutes}
+        </LinkButton>
+        <OnDarkContact />
+      </Container>
+    </PhotoBand>
   );
 }
 
@@ -364,15 +465,15 @@ export default function HomePage() {
       <JsonLd data={organizationJsonLd()} />
       <Hero />
       <Benefits />
+      <Services />
       <Steps />
       <MovingDaySection />
       <DidYouKnow />
+      <About />
       <Comparison />
       <Trust />
       <FaqPreview />
-      <Container width="text" className="pb-4">
-        <BookCta title={c.final.title} body={c.final.body} headingId="redo-rubrik" />
-      </Container>
+      <FinalCta />
     </>
   );
 }

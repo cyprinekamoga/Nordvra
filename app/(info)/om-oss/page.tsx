@@ -24,7 +24,7 @@ export default function AboutPage() {
 
       <PhotoFrame
         photo="stockholm"
-        shape="arch"
+        shape="square"
         aspect="aspect-[3/2]"
         sizes="(min-width: 768px) 42rem, 100vw"
         eager

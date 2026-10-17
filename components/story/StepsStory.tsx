@@ -1,17 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { PhotoChip } from "@/components/media/PhotoChip";
-import { PhotoFrame } from "@/components/media/PhotoFrame";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { cx } from "@/components/ui/cx";
 import { fmt } from "@/lib/i18n";
-import type { PhotoKey } from "@/lib/content/photos";
 
 export interface StoryStep {
   title: string;
   body: string;
-  photo: PhotoKey;
 }
 
 export interface StepsStoryProps {
@@ -19,12 +15,14 @@ export interface StepsStoryProps {
   steps: readonly StoryStep[];
   /** "Steg {n}", read before each step title. */
   stepLabel: string;
-  /** Overlay texts per step (decoration: the step text says the same thing). */
+  /** Texts for the small booking-form cards beside the steps (decoration: the step text says it). */
   visual: {
+    chipsTitle: string;
     chips: readonly string[];
     priceLabel: string;
-    /** Price card text with the amount, e.g. ["Du betalar ", "4 200 kr"]. */
+    /** e.g. ["Du betalar ", "4 200 kr"] */
     pricePay: readonly [string, string];
+    priceNote: string;
     quote: string;
     invoice: string;
   };
@@ -59,10 +57,11 @@ const ARROW = (() => {
   return [tip, left, right].map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ");
 })();
 
+/** Drawn for a dark (forest) background. */
 function Zigzag({ active }: { active: number }) {
   return (
     <svg viewBox="0 0 300 110" className="w-full overflow-visible" aria-hidden="true" focusable="false">
-      <path d={PATH} fill="none" className="stroke-border" strokeWidth="3" strokeDasharray="2 8" strokeLinecap="round" />
+      <path d={PATH} fill="none" className="stroke-white/30" strokeWidth="3" strokeDasharray="2 8" strokeLinecap="round" />
       <path
         d={PATH}
         fill="none"
@@ -75,7 +74,7 @@ function Zigzag({ active }: { active: number }) {
       />
       <polygon
         points={ARROW}
-        className={cx("transition-colors duration-500", active === POINTS.length - 2 ? "fill-accent" : "fill-border")}
+        className={cx("transition-colors duration-500", active === POINTS.length - 2 ? "fill-accent" : "fill-white/30")}
       />
       {POINTS.slice(1).map(([x, y], i) => {
         const reached = i <= active;
@@ -86,7 +85,7 @@ function Zigzag({ active }: { active: number }) {
               cy={y}
               r="13"
               strokeWidth="3"
-              className={cx("stroke-brand transition-colors duration-500", reached ? "fill-brand" : "fill-surface")}
+              className={cx("transition-colors duration-500", reached ? "fill-on-brand stroke-on-brand" : "fill-forest stroke-white/70")}
             />
             <text
               x={x}
@@ -95,7 +94,7 @@ function Zigzag({ active }: { active: number }) {
               dominantBaseline="central"
               fontSize="13"
               fontWeight="800"
-              className={cx("transition-colors duration-500", reached ? "fill-on-brand" : "fill-brand")}
+              className={cx("transition-colors duration-500", reached ? "fill-brand" : "fill-on-brand")}
             >
               {i + 1}
             </text>
@@ -106,47 +105,67 @@ function Zigzag({ active }: { active: number }) {
   );
 }
 
-function Overlay({ index, visual }: { index: number; visual: StepsStoryProps["visual"] }) {
+/** A small white card showing what the step looks like in the booking form. */
+function StepCard({ index, visual }: { index: number; visual: StepsStoryProps["visual"] }) {
+  const shell = "rounded-card bg-surface p-5 text-ink shadow-raised";
   if (index === 0) {
     return (
-      <ul className="absolute right-3 bottom-3 left-3 z-10 flex flex-wrap gap-2">
-        {visual.chips.map((chip, i) => (
-          <li
-            key={chip}
-            className={cx(
-              "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 font-semibold shadow-raised",
-              i === 0 ? "bg-brand text-on-brand" : "bg-surface text-ink",
-            )}
-          >
-            {i === 0 ? <Icon name="check" size={18} /> : null}
-            {chip}
-          </li>
-        ))}
-      </ul>
+      <div className={shell}>
+        <p className="mb-3 font-bold">{visual.chipsTitle}</p>
+        <ul className="flex flex-wrap gap-2">
+          {visual.chips.map((chip, i) => (
+            <li
+              key={chip}
+              className={cx(
+                "inline-flex items-center gap-1.5 rounded-control border-2 px-4 py-2 font-semibold",
+                i === 0 ? "border-brand bg-brand text-on-brand" : "border-control bg-surface text-ink",
+              )}
+            >
+              {i === 0 ? <Icon name="check" size={18} /> : null}
+              {chip}
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }
   if (index === 1) {
     return (
-      <PhotoChip label={visual.priceLabel} className="absolute bottom-3 left-3">
-        {visual.pricePay[0]}
-        <span className="price text-brand">{visual.pricePay[1]}</span>
-      </PhotoChip>
+      <div className={shell}>
+        <p className="text-muted">{visual.priceLabel}</p>
+        <p className="text-2xl font-bold">
+          {visual.pricePay[0]}
+          <span className="price text-brand">{visual.pricePay[1]}</span>
+        </p>
+        <p className="text-muted">{visual.priceNote}</p>
+      </div>
     );
   }
   return (
-    <div className="absolute bottom-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-col items-start gap-2">
-      <PhotoChip icon="clock">{visual.quote}</PhotoChip>
-      <PhotoChip icon="receipt">{visual.invoice}</PhotoChip>
-    </div>
+    <ul className={cx(shell, "space-y-3")}>
+      {[
+        { icon: "clock" as const, text: visual.quote },
+        { icon: "receipt" as const, text: visual.invoice },
+      ].map((row) => (
+        <li key={row.text} className="flex items-center gap-3 font-semibold">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+            <Icon name={row.icon} />
+          </span>
+          {row.text}
+          <Icon name="check-circle" className="ml-auto text-accent" />
+        </li>
+      ))}
+    </ul>
   );
 }
 
 /**
- * "Så enkelt är det" as scrollytelling. Desktop: the steps scroll past a sticky photo that
- * swaps per step while the logo's zigzag draws up to the current step. Phones: each step shows
- * its own photo, which fades in as it scrolls into view. All text is in the server HTML.
+ * "Så enkelt är det" as scrollytelling on a dark forest band. Desktop: the steps scroll past a
+ * sticky panel where the logo's zigzag draws up to the current step and a booking-form card shows
+ * that step. Phones: each step shows its own card, joined by a line. All text is in the server
+ * HTML; with reduced motion nothing animates.
  */
-export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps): ReactNode {
+export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps) {
   const [active, setActive] = useState(0);
   const items = useRef<(HTMLLIElement | null)[]>([]);
 
@@ -166,8 +185,8 @@ export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps): React
   }, []);
 
   return (
-    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14">
-      <ol className="relative space-y-6 lg:space-y-0">
+    <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
+      <ol className="relative space-y-10 before:absolute before:top-6 before:bottom-6 before:left-[1.4375rem] before:w-0.5 before:bg-white/25 lg:space-y-0 lg:before:hidden">
         {steps.map((step, i) => (
           <li
             key={step.title}
@@ -175,33 +194,33 @@ export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps): React
               items.current[i] = el;
             }}
             data-index={i}
-            className="lg:flex lg:min-h-[70vh] lg:items-center"
+            className="relative grid grid-cols-[3rem_minmax(0,1fr)] gap-x-5 lg:flex lg:min-h-[60vh] lg:items-center"
           >
-            {/* Phones: every step is a card. Desktop: only the step beside the sticky photo is. */}
-            <div
+            <span
+              aria-hidden="true"
               className={cx(
-                "w-full space-y-3 rounded-card border border-border bg-surface p-5 shadow-card transition-colors duration-300 sm:p-6",
-                active !== i && "lg:border-transparent lg:bg-transparent lg:shadow-none",
+                "z-10 flex size-12 items-center justify-center rounded-full border-2 text-xl font-extrabold transition-colors duration-300 lg:hidden",
+                "border-on-brand bg-on-brand text-brand",
               )}
             >
-              <span
-                aria-hidden="true"
-                className={cx(
-                  "flex size-12 items-center justify-center rounded-full border-2 border-brand bg-brand text-xl font-extrabold text-on-brand transition-colors duration-300",
-                  active !== i && "lg:bg-surface lg:text-brand",
-                )}
-              >
-                {i + 1}
-              </span>
-              <h3 className="text-2xl text-ink">
+              {i + 1}
+            </span>
+            <div
+              className={cx(
+                "min-w-0 space-y-3 transition-colors duration-300 lg:border-l-4 lg:py-2 lg:pl-8",
+                active === i ? "lg:border-accent" : "lg:border-white/20",
+              )}
+            >
+              <p aria-hidden="true" className="text-base font-bold tracking-[0.06em] text-forest-text uppercase">
+                {fmt(stepLabel, { n: i + 1 })}
+              </p>
+              <h3 className="text-2xl text-on-brand sm:text-3xl">
                 <span className="sr-only">{fmt(stepLabel, { n: i + 1 })}: </span>
                 {step.title}
               </h3>
-              <p className="text-lg">{step.body}</p>
-              <div className="pt-2 lg:hidden" aria-hidden="true">
-                <PhotoFrame photo={step.photo} aspect="aspect-[5/4]" decorative reveal sizes="(min-width: 640px) 40rem, 100vw">
-                  <Overlay index={i} visual={visual} />
-                </PhotoFrame>
+              <p className="text-lg text-forest-text">{step.body}</p>
+              <div className="pt-3 lg:hidden" aria-hidden="true">
+                <StepCard index={i} visual={visual} />
               </div>
             </div>
           </li>
@@ -209,25 +228,19 @@ export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps): React
       </ol>
 
       <div className="hidden lg:block" aria-hidden="true">
-        <div className="sticky top-8 space-y-6 pt-[6vh]">
-          <div className="mx-auto w-3/5">
-            <Zigzag active={active} />
-          </div>
-          <div className="relative aspect-[4/3]">
+        <div className="sticky top-[20vh] space-y-10">
+          <Zigzag active={active} />
+          <div className="relative min-h-44">
             {steps.map((step, i) => (
-              <PhotoFrame
-                key={step.photo}
-                photo={step.photo}
-                decorative
-                aspect=""
-                sizes="(min-width: 1296px) 40rem, 50vw"
+              <div
+                key={step.title}
                 className={cx(
-                  "absolute inset-0 transition-[opacity,transform] duration-700 ease-out",
-                  active === i ? "scale-100 opacity-100" : "pointer-events-none scale-[1.03] opacity-0",
+                  "absolute inset-x-0 top-0 transition-[opacity,transform] duration-500 ease-out",
+                  active === i ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0",
                 )}
               >
-                <Overlay index={i} visual={visual} />
-              </PhotoFrame>
+                <StepCard index={i} visual={visual} />
+              </div>
             ))}
           </div>
         </div>

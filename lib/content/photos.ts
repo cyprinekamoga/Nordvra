@@ -3,8 +3,12 @@
  * no credit required; https://unsplash.com/license). People in them are models, never our
  * customers or staff, so show them as illustrations only.
  *
- * Use them through `PhotoFrame` (components/media). `alt` is for when the photo carries meaning;
- * pass `decorative` when the text next to it already says everything.
+ * Every photo follows the same rules so the set reads as one shoot: mostly white, grey and light
+ * wood; the only strong colour is blue-green (the brand); work and places rather than posed faces;
+ * and one colour grade (slightly cooler, softer warm tones, even brightness).
+ *
+ * Use them through `PhotoFrame` (components/media) or next/image. `alt` is for when the photo
+ * carries meaning; pass `decorative` when the text next to it already says everything.
  */
 export interface Photo {
   src: string;
@@ -15,78 +19,58 @@ export interface Photo {
   /** CSS object-position when the photo is cropped into a frame. */
   focus?: string;
   photographer: string;
+  /** Where it was taken, when Unsplash says so. */
+  place?: string;
   sourceUrl: string;
 }
 
 export const photos = {
-  cleaningSink: {
-    src: "/bilder/stadning-diskbank.jpg",
-    width: 1400,
-    height: 933,
-    alt: "Händer som torkar av en diskbänk med en grön sprayflaska",
-    focus: "62% 50%",
-    photographer: "everdrop GmbH",
-    sourceUrl: "https://unsplash.com/photos/a-woman-is-cleaning-a-kitchen-sink-with-a-rag-SqOMDOQb3ws",
+  // Swedish nature: the brand story.
+  forestRoad: {
+    src: "/bilder/skog-gavle.jpg",
+    width: 1600,
+    height: 1200,
+    alt: "Skog sedd uppifrån med en grusväg som slingrar sig genom granarna",
+    photographer: "Geranimo",
+    place: "Gävle",
+    sourceUrl: "https://unsplash.com/photos/aerial-shot-of-road-surrounded-by-green-trees-qzgN45hseN0",
   },
-  cleaningBottles: {
-    src: "/bilder/stadning-flaskor.jpg",
-    width: 1400,
-    height: 1050,
-    alt: "Två bruna sprayflaskor och en diskborste på ett träbord",
-    photographer: "Daiga Ellaby",
-    sourceUrl: "https://unsplash.com/photos/two-brown-spray-bottles-on-brown-table-uooMllXe6gE",
+  forestMist: {
+    src: "/bilder/dimskog.jpg",
+    width: 1600,
+    height: 2000,
+    alt: "Skog i morgondimma sedd uppifrån",
+    photographer: "Christoph Nolte",
+    place: "Sverige",
+    sourceUrl: "https://unsplash.com/photos/misty-forest-canopy-seen-from-above-at-sunrise-OjNUFawqv3c",
   },
-  kitchen: {
-    src: "/bilder/kok-ljust.jpg",
-    width: 1400,
-    height: 933,
-    alt: "Ljust kök med vita skåp, trägolv och en stor växt",
-    photographer: "Lisa Anna",
-    sourceUrl: "https://unsplash.com/photos/a-kitchen-with-white-cabinets-and-wooden-floors-KuLVrz8KWs0",
+  forestLake: {
+    src: "/bilder/skog-sundsvall.jpg",
+    width: 1600,
+    height: 671,
+    alt: "Barrskog och sjöar sedda uppifrån",
+    photographer: "Peter van der Meulen",
+    place: "Sundsvall",
+    sourceUrl: "https://unsplash.com/photos/an-aerial-view-of-a-forest-with-a-lake-in-the-distance-BZ4ZuzDsBLI",
   },
-  livingRoom: {
-    src: "/bilder/vardagsrum.jpg",
-    width: 1400,
-    height: 1050,
-    alt: "Ljust vardagsrum med vit soffa och gröna växter",
-    photographer: "Collov Home Design",
-    sourceUrl: "https://unsplash.com/photos/living-room-with-white-sofa-set-and-green-potted-plant-NTaF5rBmlyE",
+  mountainFarm: {
+    src: "/bilder/fjallgard.jpg",
+    width: 1600,
+    height: 1067,
+    alt: "Röda trähus med torvtak vid en sjö, med fjäll i bakgrunden",
+    focus: "50% 60%",
+    photographer: "Jessica Pamp",
+    place: "Sverige",
+    sourceUrl: "https://unsplash.com/photos/XiHRIiwq2jY",
   },
-  movingBoxes: {
-    src: "/bilder/flytt-kartonger.jpg",
-    width: 1400,
-    height: 788,
-    alt: "Ett par sitter på golvet bland flyttkartonger i sitt nya hem",
-    focus: "45% 50%",
-    photographer: "Vitaly Gariev",
-    sourceUrl: "https://unsplash.com/photos/couple-sitting-among-moving-boxes-in-new-home-QpRjfYmGtbk",
-  },
-  keys: {
-    src: "/bilder/nycklar.jpg",
-    width: 1400,
-    height: 934,
-    alt: "En hand håller husnycklar framför en ytterdörr",
-    focus: "35% 50%",
-    photographer: "Jakub Żerdzicki",
-    sourceUrl: "https://unsplash.com/photos/holding-house-keys-in-front-of-the-entrance-bqUZEAeWuok",
-  },
-  carpenter: {
-    src: "/bilder/snickare.jpg",
-    width: 1400,
-    height: 933,
-    alt: "En snickare arbetar med en träbit vid en arbetsbänk",
-    focus: "55% 60%",
-    photographer: "Minh Đức",
-    sourceUrl: "https://unsplash.com/photos/carpenter-working-on-wood-with-tools-in-workshop-lQIUbkn6jj4",
-  },
-  redHouse: {
-    src: "/bilder/rott-hus.jpg",
-    width: 1400,
-    height: 933,
-    alt: "Rött trähus med vita knutar bakom en gärdsgård",
-    focus: "50% 45%",
-    photographer: "Christer Lässman",
-    sourceUrl: "https://unsplash.com/photos/a-red-house-with-a-red-fence-in-front-of-it-LD4q7uNlfoY",
+  mountainRoad: {
+    src: "/bilder/vag-riksgransen.jpg",
+    width: 1600,
+    height: 1200,
+    alt: "En väg slingrar sig genom fjällandskapet mot ett snöfläckigt fjäll",
+    photographer: "Niklas Sagrén",
+    place: "Riksgränsen",
+    sourceUrl: "https://unsplash.com/photos/-jR4ZObzFu0",
   },
   stockholm: {
     src: "/bilder/stockholm.jpg",
@@ -94,7 +78,61 @@ export const photos = {
     height: 933,
     alt: "Stockholm vid vattnet i kvällsljus, med Riddarholmskyrkan",
     photographer: "Jon Flobrant",
+    place: "Stockholm",
     sourceUrl: "https://unsplash.com/photos/scenery-of-a-body-of-water-beside-a-city-jxfe3orC4G8",
+  },
+  // Homes and work: the services.
+  cleaning: {
+    src: "/bilder/stadning.jpg",
+    width: 1600,
+    height: 1067,
+    alt: "En person i grön tröja och svarta handskar dammsuger en pall",
+    focus: "40% 50%",
+    photographer: "Giorgio Trovato",
+    sourceUrl: "https://unsplash.com/photos/a-woman-in-a-green-shirt-and-black-gloves-vacuuming-a-gray-ottoman-5TXz228u4eo",
+  },
+  bedroom: {
+    src: "/bilder/sovrum.jpg",
+    width: 1600,
+    height: 1371,
+    alt: "Nybäddad säng med vita lakan och en grön växt i morgonljus",
+    photographer: "Susan Wilkinson",
+    sourceUrl: "https://unsplash.com/photos/white-bed-linen-near-green-plant-gSOdp7YlgNQ",
+  },
+  bathroom: {
+    src: "/bilder/badrum.jpg",
+    width: 1600,
+    height: 2399,
+    alt: "Ljust badrum med mörkgrönt tvättställsskåp",
+    focus: "50% 62%",
+    photographer: "Tile Merchant Ireland",
+    sourceUrl: "https://unsplash.com/photos/9X3dY1BaUTY",
+  },
+  carpenter: {
+    src: "/bilder/snickare-falun.jpg",
+    width: 1600,
+    height: 1067,
+    alt: "En snickare mäter en bräda med tumstock",
+    focus: "65% 50%",
+    photographer: "Jimmy Nilsson Masth",
+    place: "Falun",
+    sourceUrl: "https://unsplash.com/photos/a-man-measuring-a-piece-of-wood-with-a-measuring-tape-ohF5oGzMcUY",
+  },
+  window: {
+    src: "/bilder/fonster.jpg",
+    width: 1600,
+    height: 900,
+    alt: "Ett stort spröjsat fönster med gröna träd utanför",
+    photographer: "Yikai Sun",
+    sourceUrl: "https://unsplash.com/photos/9s8kKkS_Qcw",
+  },
+  emptyHome: {
+    src: "/bilder/tom-bostad.jpg",
+    width: 1600,
+    height: 1067,
+    alt: "Ett tomt, nystädat rum med vita väggar och öppna dörrar",
+    photographer: "Pawel Czerwinski",
+    sourceUrl: "https://unsplash.com/photos/-LxsAkmUYbI",
   },
 } as const satisfies Record<string, Photo>;
 

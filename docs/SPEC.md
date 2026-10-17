@@ -411,19 +411,29 @@ the company, phone support, no booking fee). Trust: based in Stockholm, hela Sve
 F-skatt, Försäkrade hos If, phone, reviews placeholder ("Omdömen kommer snart"). FAQ preview (5
 questions from `lib/content/faq.ts`).
 
-Storytelling and interactive media (photos from `lib/content/photos.ts`, frames from
-`components/media`, interactive parts in `components/story`):
-* Hero photo in the logo's peak frame with the example price and the rising arrow; the six
+Design direction "Nordisk natur" (photos from `lib/content/photos.ts`, `components/media`,
+interactive parts in `components/story`):
+* Photos follow four rules so they read as one shoot: mostly white, grey and light wood; the only
+  strong colour is the brand's blue-green; work and places rather than posed faces; one colour
+  grade (slightly cooler, softer warm tones, even brightness). Swedish nature carries the story,
+  bright homes show the services.
+* Hero: full-bleed Swedish forest from above under a deep-green veil (`forest` token), white text,
+  "Boka på 2 minuter" and "Så går det till", the example price, no booking fee and phone. The six
   benefits sit in a band under the hero.
-* The 3 steps are scrollytelling: on desktop a sticky photo swaps per step while the logo's zigzag
-  draws up to the current step; on phones each step has its own photo that fades in.
+* Services: four photo cards (Städning, Fönsterputs, Badrum & kök, Snickeri) linking to /boka.
+* The 3 steps are scrollytelling on a dark forest band: on desktop the logo's zigzag stays in view
+  and draws up to the current step, with a small booking-form card for each step; on phones each
+  step shows its card along a line.
 * "En flyttdag med Nordvra": an example day in three chapters (tabs: 08:00 / 13:00 / 17:00),
   clearly labelled as an example.
 * "Visste du att…" has a calculator ("Räkna själv": RUT or ROT, labour slider) built on
   `calculatePrice` and the current rules; it starts on the example above. The same calculator is on
   /sa-fungerar-rut-och-rot, starting on the painting example.
-* All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. People in stock
-  photos are illustrations, never presented as customers or staff.
+* "Från Stockholm, för hela Sverige" with a Swedish mountain farm; the page ends on a full-bleed
+  forest-and-lakes band with the booking button and phone.
+* All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. White text on
+  photos always sits on a veil of at least 80 % forest green. People in stock photos are
+  illustrations, never presented as customers or staff.
 
 ## 13. GDPR
 

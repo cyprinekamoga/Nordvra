@@ -1,10 +1,13 @@
 import { cx } from "./cx";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "inverse" | "inverseOutline";
 export type ButtonSize = "md" | "lg";
 
 export interface ButtonStyleOptions {
-  /** primary = filled brand green; secondary = outlined; ghost = text only; danger = red fill. */
+  /**
+   * primary = filled brand green; secondary = outlined; ghost = text only; danger = red fill;
+   * inverse = white fill and inverseOutline = white outline, both for dark photo and forest bands.
+   */
   variant?: ButtonVariant;
   /** md ≈ 54px tall, lg ≈ 63px tall (both above the 48px minimum). */
   size?: ButtonSize;
@@ -30,6 +33,8 @@ const variants: Record<ButtonVariant, string> = {
   danger:
     "border-danger bg-danger text-on-brand hover:brightness-90 " +
     "disabled:border-disabled disabled:bg-disabled aria-disabled:border-disabled aria-disabled:bg-disabled",
+  inverse: "border-on-brand bg-on-brand text-brand hover:border-brand-soft hover:bg-brand-soft",
+  inverseOutline: "border-on-brand bg-transparent text-on-brand hover:bg-white/10",
 };
 
 const sizes: Record<ButtonSize, string> = {

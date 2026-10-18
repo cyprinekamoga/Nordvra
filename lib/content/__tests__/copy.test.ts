@@ -66,10 +66,15 @@ describe("content copy rules", () => {
     }
   });
 
-  it("has no leftover TODO markers except the phone hours placeholder", () => {
+  it("has no leftover TODO markers", () => {
     for (const { path, text } of allCopy) {
-      if (path === "content.contact.hours") continue;
       expect(text, path).not.toMatch(/TODO/);
+    }
+  });
+
+  it("uses no dashes as punctuation (hyphens in words and ranges like 2 300–3 600 kr are fine)", () => {
+    for (const { path, text } of allCopy) {
+      expect(text, path).not.toMatch(/ [–—] |—/);
     }
   });
 });

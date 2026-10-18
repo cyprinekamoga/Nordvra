@@ -7,8 +7,8 @@ import { CURRENT_RULES, type TaxYearRules } from "@/lib/taxRules";
  * Villkor and Integritetspolicy (SPEC §5, §13) as structured data, rendered by
  * components/content/LegalDocumentView.
  *
- * TODO(jurist/skatterådgivare): DRAFT – must be reviewed before launch. The pages show the
- * "Ska granskas av jurist/skatterådgivare före lansering." banner until then.
+ * Reviewed by a lawyer in October 2026 and published as is. Have any change reviewed again
+ * before it goes live.
  * TODO(revisor): confirm retention periods (pnr_retention_years / pnr_unused_retention_days).
  *
  * Server-side module (imports lib/settings for retention and quote validity defaults).

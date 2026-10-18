@@ -3,7 +3,7 @@ import type { DeductionType } from "@/lib/taxRules";
 /**
  * Things that do NOT give RUT or ROT. Used on /vad-ger-inte-avdrag and as warning chips
  * in the request flow (services reference these ids via `warningIds`).
- * TODO(jurist/skatterådgivare): review against Skatteverket's current lists before launch.
+ * Reviewed by a lawyer in October 2026; recheck against Skatteverket's lists when the rules change.
  */
 export interface NotDeductibleItem {
   id: string;

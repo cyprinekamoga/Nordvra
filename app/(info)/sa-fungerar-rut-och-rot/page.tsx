@@ -7,7 +7,6 @@ import {
   TableOfContents,
   TextLink,
 } from "@/components/content";
-import { LegalReviewBanner } from "@/components/layout";
 import { PhotoFrame } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import {
@@ -65,9 +64,7 @@ export default function HowItWorksPage() {
 
   return (
     <Container width="text">
-      <PageIntro title={h.title} lead={h.lead}>
-        <LegalReviewBanner />
-      </PageIntro>
+      <PageIntro title={h.title} lead={h.lead} />
 
       <TableOfContents label={t.content.shared.onThisPage} items={toc} />
 

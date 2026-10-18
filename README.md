@@ -144,8 +144,10 @@ names and number plates.
 
 ## Not done yet / before launch
 
-- **Legal review:** Villkor, Integritetspolicy and the RUT/ROT pages are drafts with a visible
-  "Ska granskas av jurist/skatterådgivare före lansering" banner.
+- **Legal texts:** reviewed by a lawyer in October 2026 and published without a draft banner. Have
+  later changes to Villkor, Integritetspolicy or the RUT/ROT pages reviewed again.
+- **Company name:** `lib/company.ts` uses "Nordvra" as the legal name; change it to the registered
+  name (e.g. "Nordvra AB") once the company is registered. Phone hours on /kontakt: "Vardagar 8–18".
 - **Partners:** add partner companies under **Admin → Partners** (org.nr and verified F-skatt are required before one can be assigned).
 - **Email/SMS:** both run as console placeholders. Enable Resend (domain verification) and implement 46elks.
 - **Payments:** no live payments (manual placeholder). Payment must be electronic and made by the buyer.

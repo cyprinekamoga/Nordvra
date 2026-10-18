@@ -423,9 +423,8 @@ const content = {
     lead: "Ring oss gärna. Vi hjälper dig att boka, svarar på frågor om RUT och ROT och kan fylla i förfrågan åt dig.",
     phoneTitle: "Ring oss",
     phoneBody: "Det enklaste sättet att nå oss. Du pratar med en människa.",
-    // TODO(före lansering): bekräfta telefontiderna.
     hoursLabel: "Telefontider",
-    hours: "Vardagar 8–18 (TODO bekräfta)",
+    hours: "Vardagar 8–18",
     emailTitle: "Mejla oss",
     emailBody: "Vi svarar så snart vi kan, oftast samma dag.",
     privacyNote:

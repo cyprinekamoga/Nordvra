@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { LegalReviewBanner } from "@/components/layout";
 import { Container } from "@/components/ui";
 import { company } from "@/lib/company";
 import type { LegalBlock, LegalDocument } from "@/lib/content/legal";
@@ -65,7 +64,6 @@ export function LegalDocumentView({ document }: { document: LegalDocument }) {
     <Container width="text">
       <article aria-labelledby="dokument-rubrik">
         <header className="space-y-4 pt-8 pb-2 sm:pt-12">
-          <LegalReviewBanner />
           <h1 id="dokument-rubrik" className="text-3xl text-ink sm:text-4xl">
             {document.title}
           </h1>

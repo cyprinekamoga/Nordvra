@@ -118,6 +118,5 @@ describe("shared strings", () => {
       "Vi behöver ditt personnummer eftersom lagen kräver det när avdraget begärs från Skatteverket. Vi delar det bara med företaget som utför arbetet.",
     );
     expect(l.counterparty.complaint).toBe("Du har reklamationsrätt enligt konsumenttjänstlagen i 3 år.");
-    expect(l.reviewBanner).toBe("Ska granskas av jurist/skatterådgivare före lansering.");
   });
 });

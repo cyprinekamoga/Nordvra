@@ -115,7 +115,6 @@ const common = {
     included: "Ingår",
     free: "Gratis",
     notBinding: "Inte bindande",
-    legalDraft: "Utkast",
   },
 
   deduction: {
@@ -209,7 +208,6 @@ const common = {
       checkboxPlain: "Jag godkänner villkoren och integritetspolicyn.",
     },
     requestFree: "Förfrågan är gratis och inte bindande. Du får en offert som du godkänner innan något bokas.",
-    reviewBanner: "Ska granskas av jurist/skatterådgivare före lansering.",
   },
 
   /** Swedish labels for `booking_status`. */

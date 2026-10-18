@@ -53,10 +53,11 @@ test("no booking or service fee is mentioned as a charge", async ({ page }) => {
   }
 });
 
-test("legal pages show the review banner", async ({ page }) => {
-  for (const route of ["/villkor", "/integritetspolicy"]) {
+test("legal pages are published without a draft banner", async ({ page }) => {
+  for (const route of ["/villkor", "/integritetspolicy", "/sa-fungerar-rut-och-rot", "/vad-ger-inte-avdrag"]) {
     await page.goto(route);
-    await expect(page.getByText("Ska granskas av jurist/skatterådgivare före lansering.").first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByText(/Ska granskas av jurist|Utkast/)).toHaveCount(0);
   }
 });
 

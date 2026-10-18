@@ -186,9 +186,9 @@ URL (`/boka?steg=3`) so the browser back button works. Personnummer is NOT colle
 9. **Villkor**: checkbox accepting terms + privacy policy (required).
 
 Pages: Villkor, Integritetspolicy (GDPR), Vanliga frågor, Så fungerar RUT & ROT, Vad ger inte
-avdrag?, Om oss, Kontakt. Legal pages (Villkor, Integritetspolicy, and the legal parts of Så fungerar
-/ Vad ger inte avdrag) carry a visible banner: **"Ska granskas av jurist/skatterådgivare före
-lansering."**
+avdrag?, Om oss, Kontakt. The legal texts (Villkor, Integritetspolicy, and the legal parts of Så
+fungerar / Vad ger inte avdrag) were reviewed by a lawyer in October 2026 and are published without
+a draft banner. Any later change to them should be reviewed again before it goes live.
 
 ---------------------------------------------------------------------------------------------------
 ## 6. i18n structure
@@ -346,7 +346,7 @@ description and error), `InfoBox` (tone info/warning/legal, title, children), `W
 → lucide-react icons). Layout: `Header` (logo, nav: Så fungerar det, Vanliga frågor, Kontakt; phone
 button always visible on mobile), `Footer` (all page links, company info, F-skatt, If, org.nr TODO),
 `PhoneCard` ("Hellre ringa? Ring oss…"), `CookieBanner` (only necessary cookies; acknowledges in
-localStorage with try/catch), `SkipLink`, `LegalReviewBanner`.
+localStorage with try/catch), `SkipLink`.
 
 ---------------------------------------------------------------------------------------------------
 ## 10. File ownership (parallel phase – edit only your own files)

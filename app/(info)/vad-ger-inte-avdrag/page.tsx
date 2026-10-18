@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { BookCta, ContentSection, PageIntro } from "@/components/content";
-import { LegalReviewBanner } from "@/components/layout";
 import { Container, DeductionBadge, Icon, InfoBox, LinkButton } from "@/components/ui";
 import { notDeductible, type NotDeductibleItem } from "@/lib/content/notDeductible";
 import { fmt, t } from "@/lib/i18n";
@@ -44,9 +43,7 @@ export default function NotDeductiblePage() {
 
   return (
     <Container width="text">
-      <PageIntro title={c.title} lead={c.lead}>
-        <LegalReviewBanner />
-      </PageIntro>
+      <PageIntro title={c.title} lead={c.lead} />
 
       <div className="space-y-12">
         <InfoBox tone="legal" title={t.common.legal.labourOnly.title}>

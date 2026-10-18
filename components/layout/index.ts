@@ -3,7 +3,6 @@ export { Footer } from "./Footer";
 export { PhoneCard, type PhoneCardProps } from "./PhoneCard";
 export { CookieBanner, COOKIE_NOTICE_KEY } from "./CookieBanner";
 export { SkipLink, MAIN_CONTENT_ID } from "./SkipLink";
-export { LegalReviewBanner } from "./LegalReviewBanner";
 export { Logo, type LogoProps } from "./Logo";
 export { PublicChrome } from "./PublicChrome";
 export { isAdminPath } from "./PublicOnly";

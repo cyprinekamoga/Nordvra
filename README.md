@@ -124,20 +124,20 @@ People in them are models: show them as illustrations, never as Nordvra customer
 To swap a photo, replace the file and update its entry (width, height, alt).
 
 Every photo shows the work we book (cleaning, moving, painting, building), never landscapes or
-empty rooms. They share one colour grade (slightly cooler, softer warm tones, even brightness) so
+empty rooms. Only photos whose original is at least 4K (3840 × 2160) are used; the files are stored
+at 3840 px on the long side and served at quality 85 in the sizes each screen needs. They share one colour grade (slightly cooler, softer warm tones, even brightness) so
 the set reads as one shoot; keep that in mind when adding photos, and crop or blur readable brand
 names and number plates.
 
 | File | Shows | Photographer |
 | --- | --- | --- |
-| flyttstadning.jpg | Mopping a bright living room | Vitaly Gariev |
-| golvmopp.jpg | Mopping a wooden floor | Vitaly Gariev |
+| stadning-hem.jpg | Vacuuming a bright room | Vitaly Gariev |
 | stadning-kok.jpg | Wiping a kitchen sink | everdrop GmbH |
 | stadning.jpg | Vacuuming | Giorgio Trovato |
 | angtvatt.jpg | Steam-cleaning bathroom tiles | Aurum Gebäudereinigung Kassel |
 | avtorkning.jpg | Wiping a surface in gloves | Anton |
 | packning.jpg | Packing moving boxes | Vitaly Gariev |
-| flyttbil.jpg | Loading a moving truck (number plate blurred) | Egor Ivlev |
+| barhjalp.jpg | Movers carrying furniture from the truck (logos painted out) | Joseph Prospere |
 | malning-roller.jpg | Painting a wall with a roller | Andrew Itaga |
 | farg-och-roller.jpg | Paint, roller and brush | Annie Spratt |
 | snickare-falun.jpg | A carpenter measuring a board (Falun) | Jimmy Nilsson Masth |

@@ -9,6 +9,9 @@
  * people at work rather than posed faces; and one colour grade (slightly cooler, softer warm tones,
  * even brightness). No readable brand names or number plates.
  *
+ * Quality: only photos whose original is at least 4K (3840 × 2160) are used, and the files here
+ * are stored at 3840 px on the long side; next/image serves smaller sizes from them.
+ *
  * Use them through `PhotoFrame` (components/media) or next/image. `alt` is for when the photo
  * carries meaning; pass `decorative` when the text next to it already says everything.
  */
@@ -28,36 +31,27 @@ export interface Photo {
 
 export const photos = {
   // Cleaning (RUT).
-  mopping: {
-    src: "/bilder/flyttstadning.jpg",
-    width: 1600,
-    height: 900,
-    alt: "En person moppar golvet i ett ljust, nästan tomt vardagsrum",
-    focus: "30% 50%",
+  vacuumRoom: {
+    src: "/bilder/stadning-hem.jpg",
+    width: 3840,
+    height: 2160,
+    alt: "En person dammsuger trägolvet i ett ljust rum",
+    focus: "28% 55%",
     photographer: "Vitaly Gariev",
-    sourceUrl: "https://unsplash.com/photos/a-woman-mops-a-bright-modern-living-room-floor-2NcTLdFHpH8",
-  },
-  moppingLiving: {
-    src: "/bilder/golvmopp.jpg",
-    width: 1600,
-    height: 900,
-    alt: "En person i gula handskar moppar trägolvet i ett vardagsrum",
-    focus: "70% 50%",
-    photographer: "Vitaly Gariev",
-    sourceUrl: "https://unsplash.com/photos/woman-with-headphones-mopping-a-wooden-floor-YWS51jdrfdA",
+    sourceUrl: "https://unsplash.com/photos/a-woman-vacuuming-a-bright-modern-living-room-u8knk6Hl8JA",
   },
   kitchenWipe: {
     src: "/bilder/stadning-kok.jpg",
-    width: 1040,
-    height: 1200,
+    width: 3328,
+    height: 3840,
     alt: "Händer sprayar och torkar av diskbänken i ett kök",
     photographer: "everdrop GmbH",
     sourceUrl: "https://unsplash.com/photos/a-woman-is-cleaning-a-kitchen-sink-with-a-rag-SqOMDOQb3ws",
   },
   vacuuming: {
     src: "/bilder/stadning.jpg",
-    width: 1600,
-    height: 1067,
+    width: 3840,
+    height: 2560,
     alt: "En person i grön tröja och svarta handskar dammsuger en pall",
     focus: "40% 50%",
     photographer: "Giorgio Trovato",
@@ -65,8 +59,8 @@ export const photos = {
   },
   steamClean: {
     src: "/bilder/angtvatt.jpg",
-    width: 1600,
-    height: 1067,
+    width: 3840,
+    height: 2560,
     alt: "Kakelväggen i ett badrum rengörs med en ångtvätt",
     focus: "60% 50%",
     photographer: "Aurum Gebäudereinigung Kassel",
@@ -75,8 +69,8 @@ export const photos = {
   },
   wiping: {
     src: "/bilder/avtorkning.jpg",
-    width: 1350,
-    height: 1200,
+    width: 3840,
+    height: 3413,
     alt: "Händer i blå handskar torkar av en vit yta",
     photographer: "Anton",
     sourceUrl: "https://unsplash.com/photos/person-wiping-surface-with-paper-towel-SnKfmC1I9fU",
@@ -84,26 +78,27 @@ export const photos = {
   // Moving (RUT).
   packing: {
     src: "/bilder/packning.jpg",
-    width: 1600,
-    height: 900,
+    width: 3840,
+    height: 2160,
     alt: "En person packar flyttkartonger i ett vardagsrum",
     focus: "58% 50%",
     photographer: "Vitaly Gariev",
     sourceUrl: "https://unsplash.com/photos/a-woman-moving-boxes-in-a-living-room-wS40ELZROLE",
   },
-  movingTruck: {
-    src: "/bilder/flyttbil.jpg",
-    width: 1100,
-    height: 1078,
-    alt: "En flyttbil med öppna bakdörrar lastas med möbler och kartonger",
-    photographer: "Egor Ivlev",
-    sourceUrl: "https://unsplash.com/photos/a-man-unloading-furniture-from-the-back-of-a-moving-truck-rEqEQK_DFJE",
+  movers: {
+    src: "/bilder/barhjalp.jpg",
+    width: 3840,
+    height: 2908,
+    alt: "Två flyttare bär in en inplastad möbel från flyttbilen",
+    photographer: "Joseph Prospere",
+    place: "Gold Coast",
+    sourceUrl: "https://unsplash.com/photos/moving-truck-and-person-carrying-furniture-near-a-building-k0HLWPwfJLU",
   },
   // Painting and building (ROT).
   paintRoller: {
     src: "/bilder/malning-roller.jpg",
-    width: 1600,
-    height: 1200,
+    width: 3840,
+    height: 2880,
     alt: "En vägg målas vit med en målarroller",
     focus: "45% 40%",
     photographer: "Andrew Itaga",
@@ -111,16 +106,16 @@ export const photos = {
   },
   paintKit: {
     src: "/bilder/farg-och-roller.jpg",
-    width: 1600,
-    height: 1199,
+    width: 3840,
+    height: 2878,
     alt: "En burk grön färg, roller, pensel och målartråg på ett täckpapper",
     photographer: "Annie Spratt",
     sourceUrl: "https://unsplash.com/photos/a-green-paint-can-sitting-on-top-of-a-cardboard-box-712YAykhAD8",
   },
   carpenter: {
     src: "/bilder/snickare-falun.jpg",
-    width: 1600,
-    height: 1067,
+    width: 3840,
+    height: 2560,
     alt: "En snickare mäter en bräda med tumstock",
     focus: "65% 50%",
     photographer: "Jimmy Nilsson Masth",

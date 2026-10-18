@@ -417,10 +417,11 @@ interactive parts in `components/story`):
   landscapes, cityscapes or empty rooms. Photos follow four rules so they read as one shoot: bright
   homes in white, grey and light wood; the only strong colour is the brand's blue-green; hands and
   people at work rather than posed faces; one colour grade (slightly cooler, softer warm tones,
-  even brightness). No readable brand names or number plates.
+  even brightness). No readable brand names or number plates. Only photos whose original is at
+  least 4K (3840 × 2160).
 * Hero: split in two (`PhotoSplit`): white text on solid deep green (`forest` token) with "Boka på
   2 minuter" and "Så går det till", the example price, no booking fee and phone; beside it, shown in
-  full, a photo of flyttstädning in progress (on phones a strip above the text). The six benefits
+  full, a photo of cleaning in progress (on phones a strip above the text). The six benefits
   sit in a band under the hero.
 * Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
   linking to /boka.
@@ -428,8 +429,8 @@ interactive parts in `components/story`):
   and draws up to the current step, with a small booking-form card for each step; on phones each
   step shows its card along a line.
 * "En flyttdag med Nordvra": an example day in three chapters (tabs: 08:00 / 13:00 / 17:00:
-  loading the moving truck, steam-cleaning the bathroom, the last wipe), clearly labelled as an
-  example.
+  movers carrying furniture from the truck, steam-cleaning the bathroom, the last wipe), clearly
+  labelled as an example.
 * "Visste du att…" has a calculator ("Räkna själv": RUT or ROT, labour slider) built on
   `calculatePrice` and the current rules; it starts on the example above. The same calculator is on
   /sa-fungerar-rut-och-rot, starting on the painting example.

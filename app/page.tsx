@@ -51,12 +51,12 @@ function OnDarkContact({ className }: { className?: string }) {
   );
 }
 
-/** Text on deep green beside a photo of flyttstädning in progress (on phones the photo is on top). */
+/** Text on deep green beside a photo of cleaning in progress (on phones the photo is on top). */
 function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <PhotoSplit photo="mopping" eager aria-labelledby="hero-rubrik">
+    <PhotoSplit photo="vacuumRoom" eager aria-labelledby="hero-rubrik">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-2">
           <DeductionBadge type="rut" />
@@ -198,8 +198,8 @@ function Steps() {
   );
 }
 
-/** Photo for each chapter of the example moving day: loading the truck, the cleaning, the last wipe. */
-const DAY_PHOTOS: readonly PhotoKey[] = ["movingTruck", "steamClean", "wiping"];
+/** Photo for each chapter of the example moving day: the movers, the cleaning, the last wipe. */
+const DAY_PHOTOS: readonly PhotoKey[] = ["movers", "steamClean", "wiping"];
 
 /** An example moving day in three chapters (interactive timeline). */
 function MovingDaySection() {

@@ -14,6 +14,11 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  images: {
+    // The photos are stored in 4K; serve every size at quality 85 (the default 75 is coerced to
+    // the closest allowed value) so they stay sharp on large and high-density screens.
+    qualities: [85],
+  },
   turbopack: {
     rules: {
       "*.css": {

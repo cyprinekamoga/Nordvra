@@ -7,6 +7,7 @@ import {
   taxFactVars,
   taxFacts,
 } from "@/lib/content/facts";
+import { seedCatalog } from "@/lib/catalog/seed";
 import { formatKr } from "@/lib/format";
 import { t } from "@/lib/i18n";
 import { CURRENT_RULES, getTaxRules, type TaxYearRules } from "@/lib/taxRules";
@@ -55,19 +56,26 @@ describe("capSentence", () => {
 });
 
 describe("price examples", () => {
-  it("flyttstäd 60 m²: 8 400 kr before → 4 200 kr to pay (SPEC §12)", () => {
+  it("flyttstäd 60 m²: 5 600 kr before → 2 800 kr to pay (SPEC §12)", () => {
     const { breakdown, label, type } = flyttstadExample(getTaxRules(2026));
     expect(label).toBe("Flyttstäd 60 m²");
     expect(type).toBe("rut");
     expect(breakdown.total).toBe(FLYTTSTAD_EXAMPLE_LABOUR_ORE);
-    expect(formatKr(breakdown.total)).toBe("8\u00a0400\u00a0kr");
-    expect(formatKr(breakdown.deduction)).toBe("4\u00a0200\u00a0kr");
-    expect(formatKr(breakdown.toPay)).toBe("4\u00a0200\u00a0kr");
+    expect(formatKr(breakdown.total)).toBe("5\u00a0600\u00a0kr");
+    expect(formatKr(breakdown.deduction)).toBe("2\u00a0800\u00a0kr");
+    expect(formatKr(breakdown.toPay)).toBe("2\u00a0800\u00a0kr");
+  });
+
+  it("the example price sits inside the catalogue's flyttstädning band for 60–79 m²", () => {
+    const band = seedCatalog.ranges.find((r) => r.serviceId === "flyttstadning" && r.sizeBand === "60-79");
+    expect(band).toBeDefined();
+    expect(FLYTTSTAD_EXAMPLE_LABOUR_ORE).toBeGreaterThanOrEqual(band!.labourMin);
+    expect(FLYTTSTAD_EXAMPLE_LABOUR_ORE).toBeLessThanOrEqual(band!.labourMax);
   });
 
   it("the example is recomputed when the rate changes", () => {
     const { breakdown } = flyttstadExample(custom);
-    expect(formatKr(breakdown.toPay)).toBe("5\u00a0040\u00a0kr");
+    expect(formatKr(breakdown.toPay)).toBe("3\u00a0360\u00a0kr");
   });
 
   it("ROT example deducts only labour, never material", () => {

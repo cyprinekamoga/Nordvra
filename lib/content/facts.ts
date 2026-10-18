@@ -82,10 +82,14 @@ export interface PriceExample {
   breakdown: PriceBreakdown;
 }
 
-/** Labour for the homepage example (SPEC §12): flyttstäd 60 m², 8 400 kr before deduction. */
-export const FLYTTSTAD_EXAMPLE_LABOUR_ORE = 840_000;
+/**
+ * Labour for the homepage example (SPEC §12): flyttstäd 60 m², 5 600 kr before deduction, so
+ * 2 800 kr to pay. That is a typical market price (firms charge about 2 400–3 300 kr after RUT for
+ * 60 m² in 2026) and sits inside the catalogue's 60–79 m² band.
+ */
+export const FLYTTSTAD_EXAMPLE_LABOUR_ORE = 560_000;
 
-/** "Flyttstäd 60 m²: Pris före avdrag 8 400 kr → du betalar 4 200 kr", computed with calculatePrice. */
+/** "Flyttstäd 60 m²: Pris före avdrag 5 600 kr → du betalar 2 800 kr", computed with calculatePrice. */
 export function flyttstadExample(rules: TaxYearRules = CURRENT_RULES): PriceExample {
   return {
     label: "Flyttstäd 60 m²",

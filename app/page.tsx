@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-/** "Du betalar {price}" → ["Du betalar ", "4 200 kr", ""], so the amount can be styled as a price. */
+/** "Du betalar {price}" → ["Du betalar ", "2 800 kr", ""], so the amount can be styled as a price. */
 function splitPrice(template: string, ore: number): [string, string, string] {
   const [before, after = ""] = template.split("{price}");
   return [before, formatKr(ore), after];
@@ -296,7 +296,7 @@ function DidYouKnow() {
             <p>{d.rotBody}</p>
           </Card>
         </div>
-        {/* Starts on the SPEC §12 example: flyttstäd 60 m², 8 400 kr before → 4 200 kr to pay. */}
+        {/* Starts on the SPEC §12 example: flyttstäd 60 m², 5 600 kr before → 2 800 kr to pay. */}
         <DeductionCalculator
           defaultType={example.type}
           defaultLabourKr={example.breakdown.lines.labour / 100}

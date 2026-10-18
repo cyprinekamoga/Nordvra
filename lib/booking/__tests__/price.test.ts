@@ -26,13 +26,13 @@ describe("priceView", () => {
       sizeBand: "60-79",
       eligibility: yesRut,
     });
-    expect(v.headline).toBe("Vanligtvis 3\u00a0800–4\u00a0800\u00a0kr efter RUT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 2\u00a0300–3\u00a0600\u00a0kr efter RUT-avdrag");
     expect(v.lines.map((l) => [l.label, l.value])).toEqual([
-      ["Arbetskostnad (före avdrag)", "7\u00a0600–9\u00a0600\u00a0kr"],
+      ["Arbetskostnad (före avdrag)", "4\u00a0600–7\u00a0200\u00a0kr"],
       ["Material / resor", "Tillkommer vid behov – visas i offerten"],
-      ["RUT-avdrag 50 %", "−3\u00a0800–4\u00a0800\u00a0kr"],
+      ["RUT-avdrag 50 %", "−2\u00a0300–3\u00a0600\u00a0kr"],
       ["Ingen bokningsavgift", "0\u00a0kr"],
-      ["Att betala", "3\u00a0800–4\u00a0800\u00a0kr"],
+      ["Att betala", "2\u00a0300–3\u00a0600\u00a0kr"],
     ]);
     expect(v.lines.find((l) => l.key === "deduction")?.accent).toBe("rut");
   });
@@ -45,21 +45,20 @@ describe("priceView", () => {
       sizeBand: "0-39",
       eligibility: yesRut,
     });
-    // displayRange widens outward to whole hundreds (450 → 400).
-    expect(v.headline).toBe("Vanligtvis 400–700\u00a0kr per tillfälle efter RUT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 600–900\u00a0kr per tillfälle efter RUT-avdrag");
     expect(v.lines.find((l) => l.key === "labour")?.hint).toMatch(/Per städtillfälle/);
   });
 
   it("ROT hourly rate: 30 % and kr/timme, never 'halva priset'", () => {
     const v = view({ categoryId: "el", serviceId: "eluttag", housingType: "villa", eligibility: yesRot });
     expect(v.kind).toBe("rate");
-    expect(v.headline).toBe("Vanligtvis 385–525\u00a0kr/timme efter ROT-avdrag");
+    expect(v.headline).toBe("Vanligtvis 525–665\u00a0kr/timme efter ROT-avdrag");
     expect(v.lines.find((l) => l.key === "deduction")?.label).toBe("ROT-avdrag 30 %");
     expect(allText(v)).not.toMatch(/halva priset/i);
   });
 
   it("ROT without a price range: the partner quotes", () => {
-    const v = view({ categoryId: "badrum-kok", serviceId: "badrumsrenovering", housingType: "villa", eligibility: yesRot });
+    const v = view({ categoryId: "tak-fasad", serviceId: "takbyte", housingType: "villa", eligibility: yesRot });
     expect(v.kind).toBe("quote");
     expect(v.headline).toBeNull();
     expect(v.quoteText).toBe("Pris efter offert från partnerföretag, oftast inom 48 h");
@@ -74,9 +73,9 @@ describe("priceView", () => {
       eligibility: yesRot,
     });
     expect(v.eligible).toBe(false);
-    expect(v.headline).toBe("Vanligtvis 550–750\u00a0kr/timme");
+    expect(v.headline).toBe("Vanligtvis 750–950\u00a0kr/timme");
     expect(v.lines.find((l) => l.key === "deduction")?.value).toBe("Inget avdrag");
-    expect(v.lines.find((l) => l.key === "toPay")?.value).toBe("550–750\u00a0kr/timme");
+    expect(v.lines.find((l) => l.key === "toPay")?.value).toBe("750–950\u00a0kr/timme");
   });
 
   it("never mentions a service or booking fee other than 'Ingen bokningsavgift'", () => {

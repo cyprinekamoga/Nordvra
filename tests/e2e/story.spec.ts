@@ -8,7 +8,7 @@ test("homepage tells the three steps with photos", async ({ page }) => {
     await expect(page.getByRole("heading", { level: 3, name: new RegExp(title) })).toBeVisible();
   }
   // The hero shows the SPEC example price; the four service cards link to the booking flow.
-  await expect(page.getByText(/Du betalar\s4\s200\skr/).first()).toBeVisible();
+  await expect(page.getByText(/Du betalar\s2\s800\skr/).first()).toBeVisible();
   const services = page.getByRole("region", { name: "Hjälp i hemmet, från golv till tak" });
   for (const name of ["Städning", "Flytthjälp", "Måla & tapetsera", "Snickeri"]) {
     await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", "/boka");
@@ -23,7 +23,7 @@ test("calculator starts on the SPEC example and follows the slider and the deduc
   const calc = page.getByRole("region", { name: "Räkna själv" });
   await calc.scrollIntoViewIfNeeded();
   const total = calc.getByRole("definition").last();
-  await expect(total).toHaveText(/4\s200\skr/);
+  await expect(total).toHaveText(/2\s800\skr/);
 
   await calc.getByLabel("Arbetskostnad före avdrag").fill("20000");
   await expect(total).toHaveText(/10\s000\skr/);

@@ -60,9 +60,9 @@ test("flyttstäd request: click-only flow shows the indicative price and keeps a
   await axe(page);
   await next(page);
 
-  // Step 7 – indicative price for 60–79 m²: usually 3 800–4 800 kr after RUT.
+  // Step 7 – indicative price for 60–79 m²: usually 2 300–3 600 kr after RUT (market price 2026).
   await expect(page.getByText(/Steg 7 av 8/)).toBeVisible();
-  await expect(page.getByText(/3\s800–4\s800\s*kr/).first()).toBeVisible();
+  await expect(page.getByText(/2\s300–3\s600\s*kr/).first()).toBeVisible();
   await expect(page.getByText(/Ingen bokningsavgift/i).first()).toBeVisible();
   await expect(page.getByText(/preliminärt/i).first()).toBeVisible();
   await axe(page);
@@ -71,7 +71,7 @@ test("flyttstäd request: click-only flow shows the indicative price and keeps a
   await page.goBack();
   await expect(page.getByText(/Steg 6 av 8/)).toBeVisible();
   await page.goForward();
-  await expect(page.getByText(/3\s800–4\s800\s*kr/).first()).toBeVisible();
+  await expect(page.getByText(/2\s300–3\s600\s*kr/).first()).toBeVisible();
   await next(page);
 
   // Step 8 – contact form with required consent.
@@ -103,8 +103,8 @@ test("ineligible answers still show a price, without deduction, and never block"
   await choose(page, /redan använt/i, "Nej");
   await next(page);
   await expect(page.getByText(/Steg 7 av 8/)).toBeVisible();
-  // Without deduction: 7 600–9 600 kr.
-  await expect(page.getByText(/7\s600–9\s600\s*kr/).first()).toBeVisible();
+  // Without deduction: 4 600–7 200 kr.
+  await expect(page.getByText(/4\s600–7\s200\s*kr/).first()).toBeVisible();
   await next(page);
   await expect(page.getByText(/Steg 8 av 8/)).toBeVisible();
 });

@@ -276,11 +276,11 @@ describe("navigation", () => {
 });
 
 describe("derived estimate", () => {
-  it("flyttstäd 60–79 m²: vanligtvis 3 800–4 800 kr efter RUT", () => {
+  it("flyttstäd 60–79 m²: vanligtvis 2 300–3 600 kr efter RUT", () => {
     const d = deriveRequest(flyttDraft(), catalog);
     expect(d.eligibility?.eligible).toBe(true);
-    expect(d.display?.after).toEqual([380_000, 480_000]);
-    expect(d.display?.before).toEqual([760_000, 960_000]);
+    expect(d.display?.after).toEqual([230_000, 360_000]);
+    expect(d.display?.before).toEqual([460_000, 720_000]);
     expect(serviceLabel(flyttDraft(), d)).toBe("Flyttstädning, 60–79 m²");
   });
 
@@ -295,7 +295,7 @@ describe("derived estimate", () => {
     const draft = selectCategory(emptyDraft(), "fonsterputs", catalog);
     const d = deriveRequest(draft, catalog);
     expect(d.estimate?.kind).toBe("total");
-    expect(d.display?.after).toEqual([40_000, 60_000]);
+    expect(d.display?.after).toEqual([60_000, 100_000]); // 600–950 kr, widened to whole hundreds
     expect(serviceLabel(draft, d)).toBe("Fönsterputs, 10 fönster");
   });
 });
@@ -342,8 +342,8 @@ describe("buildSubmitPayload", () => {
       eligible: true,
       perVisit: false,
     });
-    // Balcony add-on: +150–250 kr after RUT.
-    expect(p.estimate.after).toEqual([390_000, 510_000]); // 3 950–5 050 kr, widened to whole hundreds
+    // Balcony add-on: +150–300 kr after RUT.
+    expect(p.estimate.after).toEqual([240_000, 390_000]); // 2 450–3 900 kr, widened to whole hundreds
     expect(JSON.stringify(p)).not.toMatch(/personnummer|pnr/i);
   });
 

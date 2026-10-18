@@ -9,7 +9,7 @@ const service = (id: string) => seedCatalog.services.find((s) => s.id === id)!;
 const kr = (n: number) => n * 100;
 
 describe("estimateForRequest", () => {
-  it("flyttstäd 60–79 m²: usually 3 800–4 800 kr after RUT", () => {
+  it("flyttstäd 60–79 m²: usually 2 300–3 600 kr after RUT (market price 2026)", () => {
     const e = estimateForRequest({
       catalog: seedCatalog,
       service: service("flyttstadning"),
@@ -19,8 +19,8 @@ describe("estimateForRequest", () => {
     });
     expect(e.kind).toBe("total");
     if (e.kind !== "total") return;
-    expect(displayRange(e.range).after).toEqual([kr(3_800), kr(4_800)]);
-    expect(e.range.before).toEqual([kr(7_600), kr(9_600)]);
+    expect(displayRange(e.range).after).toEqual([kr(2_300), kr(3_600)]);
+    expect(e.range.before).toEqual([kr(4_600), kr(7_200)]);
   });
 
   it("shows the price without deduction when not eligible", () => {
@@ -32,7 +32,7 @@ describe("estimateForRequest", () => {
       eligible: false,
     });
     if (e.kind !== "total") throw new Error("expected total");
-    expect(e.range.after).toEqual([kr(7_600), kr(9_600)]);
+    expect(e.range.after).toEqual([kr(4_600), kr(7_200)]);
     expect(e.range.deduction).toEqual([0, 0]);
   });
 
@@ -45,8 +45,8 @@ describe("estimateForRequest", () => {
       eligible: true,
     });
     if (e.kind !== "total") throw new Error("expected total");
-    // (7 600 + 300) × 1.10 × 1.05 = 9 124.5 kr labour before RUT.
-    expect(e.range.before[0]).toBe(Math.round(kr(7_900) * 1.1 * 1.05));
+    // (4 600 + 300) × 1.10 × 1.05 = 5 659.5 kr labour before RUT.
+    expect(e.range.before[0]).toBe(Math.round(kr(4_900) * 1.1 * 1.05));
   });
 
   it("multiplies window cleaning by the number of windows", () => {
@@ -58,7 +58,7 @@ describe("estimateForRequest", () => {
       eligible: true,
     });
     if (e.kind !== "total") throw new Error("expected total");
-    expect(e.range.after).toEqual([kr(400), kr(600)]);
+    expect(e.range.after).toEqual([kr(600), kr(950)]);
   });
 
   it("gives a rate for hourly ROT work, at 30 %", () => {
@@ -71,8 +71,8 @@ describe("estimateForRequest", () => {
     });
     expect(e.kind).toBe("rate");
     if (e.kind !== "rate") return;
-    expect(e.range.before).toEqual([kr(550), kr(750)]);
-    expect(e.range.after).toEqual([kr(385), kr(525)]);
+    expect(e.range.before).toEqual([kr(750), kr(950)]);
+    expect(e.range.after).toEqual([kr(525), kr(665)]);
   });
 
   it("second-hand transport: deduction is 25 % of the total", () => {
@@ -84,7 +84,7 @@ describe("estimateForRequest", () => {
       eligible: true,
     });
     if (e.kind !== "total") throw new Error("expected total");
-    expect(e.range.deduction).toEqual([kr(400), kr(1_000)]);
+    expect(e.range.deduction).toEqual([kr(300), kr(800)]);
   });
 
   it("asks for a quote when no range is set", () => {

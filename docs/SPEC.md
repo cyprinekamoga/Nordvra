@@ -94,7 +94,9 @@ in-flow card).
 
 1. Customer completes the click-only **request (förfrågan)** at `/boka`. Nothing is booked.
    Before sending they see an **indicative range**, e.g. "Flyttstäd 60–79 m²: vanligtvis
-   3 800–4 800 kr efter RUT – exakt pris inom 24 timmar". Wide ranges, always "vanligtvis".
+   2 300–3 600 kr efter RUT – exakt pris inom 24 timmar". Wide ranges, always "vanligtvis".
+   The ranges follow what Swedish firms charge (their published price lists, checked October
+   2026; sources in `lib/catalog/seed.ts`) and should be rechecked about once a year.
 2. Owner researches the cheapest good provider for that time, enters the price in admin
    (labour / material / travel split, hours), assigns the partner, and clicks **"Skicka offert"**.
 3. The customer gets email/SMS (placeholder providers) with a link `/offert/<token>` (valid 48 h,
@@ -405,9 +407,10 @@ Routes: `/`, `/boka`, `/boka/klart`, `/offert/[token]`, `/sa-fungerar-rut-och-ro
 Hero: "Vi bokar städning och hantverkare åt dig – med RUT- och ROT-avdrag" + big button "Boka på 2
 minuter" (→ /boka) + "Ingen bokningsavgift" + phone. 3 steps: Välj tjänst → Välj tid → Vi fixar
 resten. "Visste du att…": RUT gives 50 % off labour on cleaning, moving, garden etc.; ROT gives 30 %
-off labour on repairs and renovation. Example: "Flyttstäd 60 m²: Pris före avdrag 8 400 kr → du
-betalar 4 200 kr." Comparison vs offer sites (click-only, price up front, eligibility check, we vet
-the company, phone support, no booking fee). Trust: based in Stockholm, hela Sverige,
+off labour on repairs and renovation. Example: "Flyttstäd 60 m²: Pris före avdrag 5 600 kr → du
+betalar 2 800 kr." (a typical 2026 market price, inside the catalogue's 60–79 m² band).
+Comparison vs offer sites (click-only, price up front, eligibility check, we vet the company,
+phone support, no booking fee). Trust: based in Stockholm, hela Sverige,
 F-skatt, Försäkrade hos If, phone, reviews placeholder ("Omdömen kommer snart"). FAQ preview (5
 questions from `lib/content/faq.ts`).
 

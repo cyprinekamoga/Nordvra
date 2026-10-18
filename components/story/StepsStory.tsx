@@ -20,7 +20,7 @@ export interface StepsStoryProps {
     chipsTitle: string;
     chips: readonly string[];
     priceLabel: string;
-    /** e.g. ["Du betalar ", "4 200 kr"] */
+    /** e.g. ["Du betalar ", "2 800 kr"] */
     pricePay: readonly [string, string];
     priceNote: string;
     quote: string;

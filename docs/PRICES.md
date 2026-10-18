@@ -6,6 +6,12 @@ and price guides. Each range is roughly the middle half of the market (25th–75
 cheap local firms and premium chains both fit. Recheck them about once a year; the admin can also
 edit them in the database.
 
+**Where the live prices are read from:** the site reads the catalogue from the Supabase database
+(tables `price_ranges` and `service_addons`); `lib/catalog/seed.ts` is only the fallback and the
+source for `supabase/seed.sql`. After changing prices in the seed, run `npm run db:seed:generate`
+and apply `supabase/seed.sql` to the database (it upserts and never deletes), or edit the prices in
+admin. The October 2026 prices were applied to the live database on 18 October 2026.
+
 RUT prices are shown **after** the 50 % RUT deduction; ROT prices **before** the 30 % ROT
 deduction, labour only, incl. moms. Material, framkörning and vehicles never give a deduction.
 

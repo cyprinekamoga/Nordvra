@@ -117,9 +117,9 @@ const content = {
       eyebrow: "Tjänster",
       title: "Hjälp i hemmet, från golv till tak",
       items: [
-        { title: "Städning", body: "Hemstädning, storstädning och flyttstädning." },
-        { title: "Fönsterputs", body: "Rena fönster i lägenhet och villa." },
-        { title: "Badrum & kök", body: "Badrumsrenovering, kakel och klinker, köksskåp." },
+        { title: "Städning", body: "Hemstädning, storstädning, flyttstädning och fönsterputs." },
+        { title: "Flytthjälp", body: "Packning, bärhjälp och montering av möbler." },
+        { title: "Måla & tapetsera", body: "Väggar, tak, dörrar och köksluckor." },
         { title: "Snickeri", body: "Golv, dörrar, trappor och garderober." },
       ],
       cardCta: "Se pris och boka",

@@ -14,10 +14,6 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
-  images: {
-    // 75 is the default; 50 is for photos under a dark veil (PhotoBand), where it looks the same.
-    qualities: [50, 75],
-  },
   turbopack: {
     rules: {
       "*.css": {

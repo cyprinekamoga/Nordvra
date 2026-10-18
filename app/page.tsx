@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FaqList, JsonLd, TextLink } from "@/components/content";
-import { PhotoBand, PhotoChip, PhotoFrame } from "@/components/media";
+import { PhotoChip, PhotoFrame, PhotoSplit } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import { MovingDay } from "@/components/story/MovingDay";
 import { StepsStory } from "@/components/story/StepsStory";
@@ -29,7 +29,7 @@ function splitPrice(template: string, ore: number): [string, string, string] {
   return [before, formatKr(ore), after];
 }
 
-/** "Ingen bokningsavgift" and "Hellre ringa? Ring oss på …" in white, for the forest bands. */
+/** "Ingen bokningsavgift" and "Hellre ringa? Ring oss på …" in white, for the deep-green sections. */
 function OnDarkContact({ className }: { className?: string }) {
   return (
     <div className={cx("flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6", className)}>
@@ -51,43 +51,41 @@ function OnDarkContact({ className }: { className?: string }) {
   );
 }
 
-/** Full-bleed Swedish forest under a deep-green veil; the text sits on the darkest side. */
+/** Text on deep green beside a photo of flyttstädning in progress (on phones the photo is on top). */
 function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <PhotoBand photo="forestRoad" veil="hero" eager aria-labelledby="hero-rubrik">
-      <Container className="py-14 sm:py-20 lg:py-28">
-        <div className="max-w-[40rem] space-y-6">
-          <div className="flex flex-wrap gap-2">
-            <DeductionBadge type="rut" />
-            <DeductionBadge type="rot" />
-          </div>
-          <h1 id="hero-rubrik" className="text-4xl font-extrabold text-on-brand sm:text-5xl">
-            {c.hero.title}
-          </h1>
-          <p className="text-xl">{t.common.brand.tagline}</p>
-          <p className="text-lg text-forest-text">{c.hero.body}</p>
-          <div className="space-y-3">
-            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
-                {t.common.actions.bookInTwoMinutes}
-              </LinkButton>
-              <LinkButton href="#sa-gar-det-till" variant="inverseOutline" size="lg" className="w-full sm:w-auto">
-                {c.hero.howCta}
-              </LinkButton>
-            </div>
-            <p className="text-forest-text">{c.hero.ctaHint}</p>
-          </div>
-          <OnDarkContact />
-          <PhotoChip label={example.label} className="inline-block">
-            {before}
-            <span className="price text-brand">{price}</span>
-            {after}
-          </PhotoChip>
+    <PhotoSplit photo="mopping" eager aria-labelledby="hero-rubrik">
+      <div className="space-y-6">
+        <div className="flex flex-wrap gap-2">
+          <DeductionBadge type="rut" />
+          <DeductionBadge type="rot" />
         </div>
-      </Container>
-    </PhotoBand>
+        <h1 id="hero-rubrik" className="text-4xl font-extrabold text-on-brand sm:text-5xl lg:text-[3rem]">
+          {c.hero.title}
+        </h1>
+        <p className="text-xl">{t.common.brand.tagline}</p>
+        <p className="text-lg text-forest-text">{c.hero.body}</p>
+        <div className="space-y-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
+              {t.common.actions.bookInTwoMinutes}
+            </LinkButton>
+            <LinkButton href="#sa-gar-det-till" variant="inverseOutline" size="lg" className="w-full sm:w-auto">
+              {c.hero.howCta}
+            </LinkButton>
+          </div>
+          <p className="text-forest-text">{c.hero.ctaHint}</p>
+        </div>
+        <OnDarkContact />
+        <PhotoChip label={example.label} className="inline-block">
+          {before}
+          <span className="price text-brand">{price}</span>
+          {after}
+        </PhotoChip>
+      </div>
+    </PhotoSplit>
   );
 }
 
@@ -114,13 +112,13 @@ function Benefits() {
 
 /** Photo and deduction type for each service card, in the order of `c.services.items`. */
 const SERVICE_CARDS: readonly { photo: PhotoKey; type: DeductionType }[] = [
-  { photo: "bedroom", type: "rut" },
-  { photo: "window", type: "rut" },
-  { photo: "bathroom", type: "rot" },
+  { photo: "kitchenWipe", type: "rut" },
+  { photo: "packing", type: "rut" },
+  { photo: "paintRoller", type: "rot" },
   { photo: "carpenter", type: "rot" },
 ];
 
-/** Four services as editorial photo cards; the whole card links to the booking flow. */
+/** Four services as photo cards of the work itself; the whole card links to the booking flow. */
 function Services() {
   const k = c.services;
   return (
@@ -166,12 +164,12 @@ function Services() {
   );
 }
 
-/** "Så enkelt är det" (SPEC §12: Välj tjänst → Välj tid → Vi fixar resten) as scrollytelling on forest. */
+/** "Så enkelt är det" (SPEC §12: Välj tjänst → Välj tid → Vi fixar resten) as scrollytelling on deep green. */
 function Steps() {
   const example = flyttstadExample();
   const [before, price] = splitPrice(c.steps.visual.pricePay, example.breakdown.toPay);
   return (
-    <PhotoBand photo="forestMist" id="sa-gar-det-till" aria-labelledby="steg-rubrik" className="scroll-mt-4">
+    <section id="sa-gar-det-till" aria-labelledby="steg-rubrik" className="scroll-mt-4 bg-forest text-on-brand">
       <Container className="space-y-10 py-14 sm:py-20">
         <div className="max-w-text space-y-3">
           <h2 id="steg-rubrik" className="text-3xl text-on-brand sm:text-4xl">
@@ -196,12 +194,12 @@ function Steps() {
           {t.common.actions.bookInTwoMinutes}
         </LinkButton>
       </Container>
-    </PhotoBand>
+    </section>
   );
 }
 
-/** Photo for each chapter of the example moving day: the drive, the cleaning, the empty clean home. */
-const DAY_PHOTOS: readonly PhotoKey[] = ["mountainRoad", "cleaning", "emptyHome"];
+/** Photo for each chapter of the example moving day: loading the truck, the cleaning, the last wipe. */
+const DAY_PHOTOS: readonly PhotoKey[] = ["movingTruck", "steamClean", "wiping"];
 
 /** An example moving day in three chapters (interactive timeline). */
 function MovingDaySection() {
@@ -228,14 +226,14 @@ function MovingDaySection() {
   );
 }
 
-/** "Från Stockholm, för hela Sverige" with a Swedish mountain farm. */
+/** "Från Stockholm, för hela Sverige", beside a photo of cleaning at work. */
 function About() {
   const k = c.about;
   return (
     <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
       <Container className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
         <PhotoFrame
-          photo="mountainFarm"
+          photo="vacuuming"
           shape="square"
           aspect="aspect-[3/2]"
           reveal
@@ -254,12 +252,12 @@ function About() {
   );
 }
 
-/** Closing call to action on a forest-and-lakes photo. */
+/** Closing call to action beside a photo of painting gear (photo on the left from lg). */
 function FinalCta() {
   return (
-    // -mb-16 cancels the footer's top margin so the band meets the footer.
-    <PhotoBand photo="forestLake" veil="fade" aria-labelledby="redo-rubrik" className="-mb-16">
-      <Container className="space-y-5 py-16 sm:py-24">
+    // -mb-16 cancels the footer's top margin so the section meets the footer.
+    <PhotoSplit photo="paintKit" side="start" aria-labelledby="redo-rubrik" className="-mb-16">
+      <div className="space-y-5">
         <h2 id="redo-rubrik" className="text-3xl font-extrabold text-on-brand sm:text-5xl">
           {c.final.title}
         </h2>
@@ -268,8 +266,8 @@ function FinalCta() {
           {t.common.actions.bookInTwoMinutes}
         </LinkButton>
         <OnDarkContact />
-      </Container>
-    </PhotoBand>
+      </div>
+    </PhotoSplit>
   );
 }
 

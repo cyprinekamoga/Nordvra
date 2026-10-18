@@ -6,7 +6,7 @@ export type ButtonSize = "md" | "lg";
 export interface ButtonStyleOptions {
   /**
    * primary = filled brand green; secondary = outlined; ghost = text only; danger = red fill;
-   * inverse = white fill and inverseOutline = white outline, both for dark photo and forest bands.
+   * inverse = white fill and inverseOutline = white outline, both for the deep-green (forest) sections.
    */
   variant?: ButtonVariant;
   /** md ≈ 54px tall, lg ≈ 63px tall (both above the 48px minimum). */

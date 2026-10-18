@@ -10,7 +10,7 @@ test("homepage tells the three steps with photos", async ({ page }) => {
   // The hero shows the SPEC example price; the four service cards link to the booking flow.
   await expect(page.getByText(/Du betalar\s4\s200\skr/).first()).toBeVisible();
   const services = page.getByRole("region", { name: "Hjälp i hemmet, från golv till tak" });
-  for (const name of ["Städning", "Fönsterputs", "Badrum & kök", "Snickeri"]) {
+  for (const name of ["Städning", "Flytthjälp", "Måla & tapetsera", "Snickeri"]) {
     await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", "/boka");
   }
   // "Så går det till" jumps to the story band.

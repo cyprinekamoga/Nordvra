@@ -413,27 +413,31 @@ questions from `lib/content/faq.ts`).
 
 Design direction "Nordisk natur" (photos from `lib/content/photos.ts`, `components/media`,
 interactive parts in `components/story`):
-* Photos follow four rules so they read as one shoot: mostly white, grey and light wood; the only
-  strong colour is the brand's blue-green; work and places rather than posed faces; one colour
-  grade (slightly cooler, softer warm tones, even brightness). Swedish nature carries the story,
-  bright homes show the services.
-* Hero: full-bleed Swedish forest from above under a deep-green veil (`forest` token), white text,
-  "Boka på 2 minuter" and "Så går det till", the example price, no booking fee and phone. The six
-  benefits sit in a band under the hero.
-* Services: four photo cards (Städning, Fönsterputs, Badrum & kök, Snickeri) linking to /boka.
-* The 3 steps are scrollytelling on a dark forest band: on desktop the logo's zigzag stays in view
+* Every photo shows the work we book (RUT/ROT): cleaning, moving, painting and building. No
+  landscapes, cityscapes or empty rooms. Photos follow four rules so they read as one shoot: bright
+  homes in white, grey and light wood; the only strong colour is the brand's blue-green; hands and
+  people at work rather than posed faces; one colour grade (slightly cooler, softer warm tones,
+  even brightness). No readable brand names or number plates.
+* Hero: split in two (`PhotoSplit`): white text on solid deep green (`forest` token) with "Boka på
+  2 minuter" and "Så går det till", the example price, no booking fee and phone; beside it, shown in
+  full, a photo of flyttstädning in progress (on phones a strip above the text). The six benefits
+  sit in a band under the hero.
+* Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
+  linking to /boka.
+* The 3 steps are scrollytelling on a deep-green band: on desktop the logo's zigzag stays in view
   and draws up to the current step, with a small booking-form card for each step; on phones each
   step shows its card along a line.
-* "En flyttdag med Nordvra": an example day in three chapters (tabs: 08:00 / 13:00 / 17:00),
-  clearly labelled as an example.
+* "En flyttdag med Nordvra": an example day in three chapters (tabs: 08:00 / 13:00 / 17:00:
+  loading the moving truck, steam-cleaning the bathroom, the last wipe), clearly labelled as an
+  example.
 * "Visste du att…" has a calculator ("Räkna själv": RUT or ROT, labour slider) built on
   `calculatePrice` and the current rules; it starts on the example above. The same calculator is on
   /sa-fungerar-rut-och-rot, starting on the painting example.
-* "Från Stockholm, för hela Sverige" with a Swedish mountain farm; the page ends on a full-bleed
-  forest-and-lakes band with the booking button and phone.
-* All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. White text on
-  photos always sits on a veil of at least 80 % forest green. People in stock photos are
-  illustrations, never presented as customers or staff.
+* "Från Stockholm, för hela Sverige" beside a cleaning photo; the page ends on a split section
+  (painting gear on one side, the booking button and phone on deep green on the other).
+* All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. Text never sits
+  on a photo: white text is on solid deep green. People in stock photos are illustrations, never
+  presented as customers or staff.
 
 ## 13. GDPR
 

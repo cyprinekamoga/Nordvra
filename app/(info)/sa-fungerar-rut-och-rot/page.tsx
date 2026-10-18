@@ -75,7 +75,7 @@ export default function HowItWorksPage() {
         <ContentSection id="i-korthet" title={s.overview.title}>
           <div className="grid gap-4">
             <Card padding="md" className="space-y-3">
-              <PhotoFrame photo="cleaning" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
+              <PhotoFrame photo="moppingLiving" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
               <DeductionBadge type="rut" />
               <h3 className="text-xl text-ink">{fmt(s.overview.rutTitle, vars)}</h3>
               <p>{s.overview.rutBody}</p>
@@ -86,7 +86,7 @@ export default function HowItWorksPage() {
               </ul>
             </Card>
             <Card padding="md" className="space-y-3">
-              <PhotoFrame photo="bathroom" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
+              <PhotoFrame photo="paintKit" aspect="aspect-[16/9]" decorative reveal sizes="(min-width: 768px) 40rem, 100vw" />
               <DeductionBadge type="rot" />
               <h3 className="text-xl text-ink">{fmt(s.overview.rotTitle, vars)}</h3>
               <p>{s.overview.rotBody}</p>

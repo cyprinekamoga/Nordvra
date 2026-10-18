@@ -57,7 +57,7 @@ const ARROW = (() => {
   return [tip, left, right].map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ");
 })();
 
-/** Drawn for a dark (forest) background. */
+/** Drawn for the deep-green (forest) background. */
 function Zigzag({ active }: { active: number }) {
   return (
     <svg viewBox="0 0 300 110" className="w-full overflow-visible" aria-hidden="true" focusable="false">
@@ -160,7 +160,7 @@ function StepCard({ index, visual }: { index: number; visual: StepsStoryProps["v
 }
 
 /**
- * "Så enkelt är det" as scrollytelling on a dark forest band. Desktop: the steps scroll past a
+ * "Så enkelt är det" as scrollytelling on a deep-green band. Desktop: the steps scroll past a
  * sticky panel where the logo's zigzag draws up to the current step and a booking-form card shows
  * that step. Phones: each step shows its own card, joined by a line. All text is in the server
  * HTML; with reduced motion nothing animates.

@@ -8,6 +8,19 @@ import { isSupabaseConfigured } from "@/lib/supabase/env";
 /** Cache tag for everything read from the catalogue. Admin saves call `updateTag(CATALOG_TAG)`. */
 export const CATALOG_TAG = "catalog";
 
+/** FNV-1a hash of the bundled seed: changes whenever its prices or services change. */
+function seedVersion(seed: Catalog): string {
+  const text = JSON.stringify(seed);
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+const SEED_VERSION = seedVersion(seedCatalog);
+
 /**
  * The service catalogue (categories, services, add-ons, indicative prices and public config).
  *
@@ -18,9 +31,18 @@ export const CATALOG_TAG = "catalog";
  * when any query fails, so the booking flow never breaks. Only the error message is logged.
  */
 export async function getCatalog(): Promise<Catalog> {
+  return cachedCatalog(SEED_VERSION);
+}
+
+/**
+ * The seed version is part of the cache key (cache keys come from the arguments, not from
+ * imported modules), so a deploy with new seed prices never reuses a catalogue cached by an
+ * older deploy.
+ */
+async function cachedCatalog(seed: string): Promise<Catalog> {
   "use cache";
   cacheLife("minutes");
-  cacheTag(CATALOG_TAG);
+  cacheTag(CATALOG_TAG, `catalog-seed-${seed}`);
 
   if (!isSupabaseConfigured()) return seedCatalog;
 

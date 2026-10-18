@@ -148,7 +148,7 @@ export async function saveQuoteAction(_prev: QuoteFormState, formData: FormData)
   return {
     ok: true,
     message:
-      "Offerten är skickad. E-post och SMS går via testleverantörer tills riktiga är inkopplade – skicka gärna länken själv också.",
+      "Offerten är skickad. E-post och SMS går via testleverantörer tills riktiga är inkopplade, så skicka gärna länken själv också.",
     link,
   };
 }

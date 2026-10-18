@@ -118,7 +118,7 @@ export function QuoteEditor(props: QuoteEditorProps) {
               <option key={p.id} value={p.id} disabled={Boolean(p.blockedReason)}>
                 {p.matches ? "★ " : ""}
                 {p.name}
-                {p.blockedReason ? ` – ${p.blockedReason}` : ""}
+                {p.blockedReason ? `: ${p.blockedReason}` : ""}
               </option>
             ))}
           </select>

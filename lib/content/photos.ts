@@ -6,8 +6,9 @@
  * Every photo shows the work we book: cleaning, moving, painting and building (RUT and ROT), never
  * landscapes or empty rooms. They follow the same rules so the set reads as one shoot: bright
  * homes in white, grey and light wood; the only strong colour is blue-green (the brand); hands and
- * people at work rather than posed faces; and one colour grade (slightly cooler, softer warm tones,
- * even brightness). No readable brand names or number plates.
+ * people at work rather than posed faces, and professionals rather than people doing it themselves;
+ * and one colour grade (slightly cooler, softer warm tones, even brightness). No readable brand
+ * names or number plates.
  *
  * Quality: only photos whose original is at least 4K (3840 × 2160) are used, and the files here
  * are stored at 3840 px on the long side; next/image serves smaller sizes from them.
@@ -31,15 +32,6 @@ export interface Photo {
 
 export const photos = {
   // Cleaning (RUT).
-  vacuumRoom: {
-    src: "/bilder/stadning-hem.jpg",
-    width: 3840,
-    height: 2160,
-    alt: "En person dammsuger trägolvet i ett ljust rum",
-    focus: "28% 55%",
-    photographer: "Vitaly Gariev",
-    sourceUrl: "https://unsplash.com/photos/a-woman-vacuuming-a-bright-modern-living-room-u8knk6Hl8JA",
-  },
   kitchenWipe: {
     src: "/bilder/stadning-kok.jpg",
     width: 3328,
@@ -52,8 +44,8 @@ export const photos = {
     src: "/bilder/stadning.jpg",
     width: 3840,
     height: 2560,
-    alt: "En person i grön tröja och svarta handskar dammsuger en pall",
-    focus: "40% 50%",
+    alt: "En städare i grön tröja och arbetshandskar dammsuger en pall",
+    focus: "45% 50%",
     photographer: "Giorgio Trovato",
     sourceUrl: "https://unsplash.com/photos/a-woman-in-a-green-shirt-and-black-gloves-vacuuming-a-gray-ottoman-5TXz228u4eo",
   },
@@ -111,6 +103,16 @@ export const photos = {
     alt: "En burk grön färg, roller, pensel och målartråg på ett täckpapper",
     photographer: "Annie Spratt",
     sourceUrl: "https://unsplash.com/photos/a-green-paint-can-sitting-on-top-of-a-cardboard-box-712YAykhAD8",
+  },
+  facadePainter: {
+    src: "/bilder/fasadmalare.jpg",
+    width: 3840,
+    height: 2561,
+    alt: "En hantverkare på en stege lagar och målar fasaden på ett vitt hus",
+    focus: "45% 55%",
+    photographer: "Flow Clark",
+    place: "London",
+    sourceUrl: "https://unsplash.com/photos/man-in-yellow-shirt-and-blue-denim-jeans-standing-on-white-concrete-building-during-daytime-ioOlenqfMqA",
   },
   carpenter: {
     src: "/bilder/snickare-falun.jpg",

@@ -7,7 +7,7 @@ import { AdminShell } from "@/components/admin/AdminShell";
 export const instant = false;
 
 export const metadata: Metadata = {
-  title: { default: "Administration", template: "%s – Nordvra admin" },
+  title: { default: "Administration", template: "%s | Nordvra admin" },
   robots: { index: false, follow: false },
 };
 

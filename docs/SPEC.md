@@ -94,7 +94,7 @@ in-flow card).
 
 1. Customer completes the click-only **request (förfrågan)** at `/boka`. Nothing is booked.
    Before sending they see an **indicative range**, e.g. "Flyttstäd 60–79 m²: vanligtvis
-   2 300–3 600 kr efter RUT – exakt pris inom 24 timmar". Wide ranges, always "vanligtvis".
+   2 300–3 600 kr efter RUT. Exakt pris inom 24 timmar". Wide ranges, always "vanligtvis".
    The ranges follow what Swedish firms charge (their published price lists, checked October
    2026; sources in `lib/catalog/seed.ts`) and should be rechecked about once a year.
 2. Owner researches the cheapest good provider for that time, enters the price in admin
@@ -136,7 +136,7 @@ URL (`/boka?steg=3`) so the browser back button works. Personnummer is NOT colle
   (Tvättmaskin, Torktumlare, Diskmaskin, Kyl, Frys, Ugn, Spis, Köksfläkt).
 * **Step 4 "När?"** – accessible calendar (Swedish, weeks start Monday, roving tabindex, arrow keys,
   min tomorrow, max +6 months) + time chips Förmiddag / Eftermiddag / Flexibel; flyttstäd also
-  "Besiktningsdatum" (optional date or "Vet inte än"); toggle "Jag är flexibel – välj billigaste
+  "Besiktningsdatum" (optional date or "Vet inte än"); toggle "Jag är flexibel, välj billigaste
   tid" (internal note only, **no discount**).
 * **Step 5 "Var?"** – postcode, digits only (`inputMode="numeric"`, `autoComplete="postal-code"`,
   formatted "632 20"), 5 digits. **No coverage blocking** – all of Sweden.
@@ -150,7 +150,7 @@ URL (`/boka?steg=3`) so the browser back button works. Personnummer is NOT colle
   explain why in plain Swedish (reason texts), and let them continue. **Never block.**
 * **Step 7 price summary card** (from `estimateForRequest` + `displayRange`/`displayRate`):
   "Vanligtvis X–Y kr efter RUT-avdrag" (big), then lines: Arbetskostnad (före avdrag) range;
-  Material / resor: "Tillkommer vid behov – visas i offerten" (or range if set); RUT-avdrag 50 % /
+  Material / resor: "Tillkommer vid behov och visas i offerten" (or range if set); RUT-avdrag 50 % /
   ROT-avdrag 30 % (negative range); **"Ingen bokningsavgift"**; Att betala (range). Rate services
   show "vanligtvis X–Y kr/timme" (or kr/m²). ROT with no range: "Pris efter offert från
   partnerföretag, oftast inom 48 h". Text: "Priset är preliminärt. Vi bekräftar exakt pris och tid
@@ -169,7 +169,7 @@ URL (`/boka?steg=3`) so the browser back button works. Personnummer is NOT colle
 1. **Avdraget är inte garanterat** (required checkbox on the quote page): "RUT/ROT-avdraget
    förutsätter att du har rätt till det. Om Skatteverket nekar helt eller delvis (t.ex. för att du
    har för lite skatt eller redan använt ditt tak) betalar du mellanskillnaden."
-2. **Bara arbetskostnad**: "Avdraget gäller bara arbetskostnaden – inte material eller resor."
+2. **Bara arbetskostnad**: "Avdraget gäller bara arbetskostnaden, inte material eller resor."
    (No service fee exists.)
 3. **ROT är 30 %**: never write "halva priset" for ROT. For RUT write "50 % på arbetskostnaden", not
    "halva priset" without qualification.
@@ -329,7 +329,9 @@ mountain-arrow mark above NORDVRA), 40 px tall in the mobile header, 48 px from 
 `app/icon.png` and `app/apple-icon.png`. Light theme.
 Font: Figtree (`next/font/google`, latin + latin-ext, `--font-sans`). Weights: headings and prices
 700 (hero H1 800), body 400, buttons 600, uppercase small labels 700 with 0.06em letter-spacing
-(`label-caps`). Headings in sentence case. Prices "1 250 kr" with non-breaking spaces
+(`label-caps`). Headings in sentence case. No dashes as punctuation in customer-facing copy
+(" – " or "—"): use a comma, colon or full stop. Hyphens in words (RUT-avdrag) and ranges
+("2 300–3 600 kr") are fine. Prices "1 250 kr" with non-breaking spaces
 (`formatKr`), shown with the `price` utility (bold, tabular figures).
 ROT accent: warm amber/terracotta with AA contrast. All tokens in `app/globals.css` `@theme`.
 Components (named exports, documented props, all keyboard-accessible, ≥48 px targets):
@@ -404,7 +406,7 @@ Routes: `/`, `/boka`, `/boka/klart`, `/offert/[token]`, `/sa-fungerar-rut-och-ro
 
 ## 12. Homepage
 
-Hero: "Vi bokar städning och hantverkare åt dig – med RUT- och ROT-avdrag" + big button "Boka på 2
+Hero: "Vi bokar städning och hantverkare åt dig, med RUT- och ROT-avdrag" + big button "Boka på 2
 minuter" (→ /boka) + "Ingen bokningsavgift" + phone. 3 steps: Välj tjänst → Välj tid → Vi fixar
 resten. "Visste du att…": RUT gives 50 % off labour on cleaning, moving, garden etc.; ROT gives 30 %
 off labour on repairs and renovation. Example: "Flyttstäd 60 m²: Pris före avdrag 5 600 kr → du
@@ -424,7 +426,7 @@ interactive parts in `components/story`):
   least 4K (3840 × 2160).
 * Hero: split in two (`PhotoSplit`): white text on solid deep green (`forest` token) with "Boka på
   2 minuter" and "Så går det till", the example price, no booking fee and phone; beside it, shown in
-  full, a photo of cleaning in progress (on phones a strip above the text). The six benefits
+  full, a photo of a professional cleaner at work (on phones a strip above the text). The six benefits
   sit in a band under the hero.
 * Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
   linking to /boka.
@@ -437,7 +439,7 @@ interactive parts in `components/story`):
 * "Visste du att…" has a calculator ("Räkna själv": RUT or ROT, labour slider) built on
   `calculatePrice` and the current rules; it starts on the example above. The same calculator is on
   /sa-fungerar-rut-och-rot, starting on the painting example.
-* "Från Stockholm, för hela Sverige" beside a cleaning photo; the page ends on a split section
+* "Från Stockholm, för hela Sverige" beside a photo of a craftsman painting a facade; the page ends on a split section
   (painting gear on one side, the booking button and phone on deep green on the other).
 * All text is in the server HTML; motion is skipped with `prefers-reduced-motion`. Text never sits
   on a photo: white text is on solid deep green. People in stock photos are illustrations, never

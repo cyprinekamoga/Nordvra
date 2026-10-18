@@ -104,7 +104,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
                 </p>
                 {!file && (
                   <InfoBox tone="warning">
-                    Det finns inga regler för {year} i koden ännu – värdena från närmaste tidigare år används. Uppdatera{" "}
+                    Det finns inga regler för {year} i koden ännu, så värdena från närmaste tidigare år används. Uppdatera{" "}
                     <code>lib/taxRules.ts</code> när beslutet är klart.
                   </InfoBox>
                 )}

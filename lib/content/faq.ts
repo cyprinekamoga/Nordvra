@@ -62,7 +62,7 @@ export function getFaq({
       group: "bokning",
       question: "Hur går det till när jag bokar?",
       answer: [
-        "Du svarar på några frågor genom att klicka – det tar ungefär två minuter. Du behöver inte skriva någon beskrivning.",
+        "Du svarar på några frågor genom att klicka. Det tar ungefär två minuter. Du behöver inte skriva någon beskrivning.",
         "Innan du skickar ser du ett ungefärligt pris, både före och efter avdraget. Förfrågan är gratis och inte bindande.",
         "Inom 24 timmar får du en offert med exakt pris och tid via mejl och sms. Bokningen blir klar först när du har godkänt offerten.",
       ],
@@ -84,7 +84,7 @@ export function getFaq({
       question: "Vem kommer hem till mig och gör jobbet?",
       answer: [
         `Antingen ${company.legalName} eller ett av våra partnerföretag. Vi väljer företaget åt dig och kontrollerar att det är godkänt för F-skatt och har försäkring.`,
-        "I offerten står det vilket företag som gör jobbet och vem som är din avtalspart. Om vi själva gör jobbet säger vi det tydligt – vill du hellre ha ett annat företag ordnar vi det.",
+        "I offerten står det vilket företag som gör jobbet och vem som är din avtalspart. Om vi själva gör jobbet säger vi det tydligt. Vill du hellre ha ett annat företag ordnar vi det.",
       ],
     },
     {
@@ -124,7 +124,7 @@ export function getFaq({
       group: "pris",
       question: "Tar ni någon bokningsavgift?",
       answer: [
-        "Nej. Det finns ingen bokningsavgift. Du betalar bara för själva jobbet – priset som står i offerten.",
+        "Nej. Det finns ingen bokningsavgift. Du betalar bara för själva jobbet, alltså priset som står i offerten.",
         "När ett partnerföretag gör jobbet och fakturerar dig får vi en ersättning från företaget, inte från dig.",
       ],
     },
@@ -134,7 +134,7 @@ export function getFaq({
       question: "Hur betalar jag?",
       answer: [
         "Du betalar efter att jobbet är gjort, mot en faktura från din avtalspart. Avdraget är redan draget på fakturan.",
-        "För att du ska få avdraget måste du betala elektroniskt – med kort, Swish eller banköverföring – och själv vara den som betalar. Kontant betalning ger inte avdrag.",
+        "För att du ska få avdraget måste du betala elektroniskt, med kort, Swish eller banköverföring, och själv vara den som betalar. Kontant betalning ger inte avdrag.",
       ],
     },
     {
@@ -155,7 +155,7 @@ export function getFaq({
       question: "Hur mycket får jag i avdrag?",
       answer: [
         `RUT-avdraget är ${f.rutRate} på arbetskostnaden, till exempel för städning, flytt och trädgård. ROT-avdraget är ${f.rotRate} på arbetskostnaden för reparation, underhåll och ombyggnad.`,
-        "Avdraget gäller bara arbetskostnaden – inte material eller resor.",
+        "Avdraget gäller bara arbetskostnaden, inte material eller resor.",
         capSentence(rules),
       ],
       links: [{ href: "/sa-fungerar-rut-och-rot", label: "Så fungerar RUT och ROT" }],
@@ -166,7 +166,7 @@ export function getFaq({
       question: "Vem har rätt till RUT- och ROT-avdrag?",
       answer: [
         `Du behöver fylla minst ${f.minimumAge} år under året och betala skatt i Sverige.`,
-        "RUT gäller arbete i bostaden där du bor, i ditt fritidshus eller i dina föräldrars hem. ROT gäller en bostad som du själv äger – med lagfart på huset eller som medlem i bostadsrättsföreningen. ROT gäller inte i en hyreslägenhet.",
+        "RUT gäller arbete i bostaden där du bor, i ditt fritidshus eller i dina föräldrars hem. ROT gäller en bostad som du själv äger, med lagfart på huset eller som medlem i bostadsrättsföreningen. ROT gäller inte i en hyreslägenhet.",
         "När du gör en förfrågan ställer vi några enkla frågor och visar om det ser ut som att du har rätt till avdraget.",
       ],
     },
@@ -192,7 +192,7 @@ export function getFaq({
     {
       id: "flera-kopare",
       group: "avdrag",
-      question: "Vi är två i hushållet – kan vi dela på avdraget?",
+      question: "Vi är två i hushållet. Kan vi dela på avdraget?",
       answer: [
         "Ja. Om ni båda står som köpare får var och en avdrag för sin del, och var och en har sitt eget tak. På så sätt kan ni tillsammans få större avdrag för ett dyrt jobb.",
         "Båda behöver ha rätt till avdraget och betala sin del själva. För ROT behöver båda äga bostaden. När ni godkänner offerten fyller ni i personnummer och hur stor andel var och en betalar.",
@@ -225,7 +225,7 @@ export function getFaq({
       question: "Varför behöver ni mitt personnummer?",
       answer: [
         "Vi behöver ditt personnummer eftersom lagen kräver det när avdraget begärs från Skatteverket. Vi delar det bara med företaget som utför arbetet.",
-        "Vi frågar efter personnumret först när du godkänner offerten – inte i förfrågan. Det krypteras innan det sparas, och vi skickar det aldrig i mejl eller sms.",
+        "Vi frågar efter personnumret först när du godkänner offerten, inte i förfrågan. Det krypteras innan det sparas, och vi skickar det aldrig i mejl eller sms.",
       ],
       links: [{ href: "/integritetspolicy#personnummer", label: "Läs mer i vår integritetspolicy" }],
     },

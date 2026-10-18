@@ -28,11 +28,11 @@ function siteUrl(): URL {
 export const metadata: Metadata = {
   metadataBase: siteUrl(),
   title: {
-    default: "Nordvra – vi bokar städning och hantverkare åt dig",
-    template: "%s – Nordvra",
+    default: "Nordvra | Vi bokar städning och hantverkare åt dig",
+    template: "%s | Nordvra",
   },
   description:
-    "Vi bokar städning, flytthjälp och hantverkare åt dig – med RUT- och ROT-avdrag. Se ungefärligt pris före och efter avdrag direkt. Ingen bokningsavgift.",
+    "Vi bokar städning, flytthjälp och hantverkare åt dig, med RUT- och ROT-avdrag. Se ungefärligt pris före och efter avdrag direkt. Ingen bokningsavgift.",
   applicationName: "Nordvra",
   robots: { index: true, follow: true },
   openGraph: {

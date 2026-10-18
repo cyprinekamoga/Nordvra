@@ -96,7 +96,7 @@ export const services: Service[] = [
     {
       id: "hemstadning",
       name: "Hemstädning",
-      description: "Löpande städning varje eller varannan vecka – eller en gång.",
+      description: "Löpande städning varje eller varannan vecka, eller en gång.",
       unit: "visit",
       form: "hemstad",
       sizeBand: true,
@@ -159,7 +159,7 @@ export const services: Service[] = [
     {
       id: "bara-lasta",
       name: "Bära, lasta och lossa",
-      description: "Bärhjälp vid flytt – lastning och lossning.",
+      description: "Bärhjälp vid flytt: lastning och lossning.",
       unit: "hour",
       skv: "Flyttjänster",
       warnings: ["rut-flyttbil", "rut-tippen"],
@@ -247,7 +247,7 @@ export const services: Service[] = [
     {
       id: "tillsyn",
       name: "Tillsyn av bostaden",
-      description: "Vi tittar till bostaden när du är borta – vattnar, tömmer post, kollar läget.",
+      description: "Vi tittar till bostaden när du är borta. Vi vattnar, tömmer posten och kollar läget.",
       unit: "visit",
       skv: "Tillsyn av bostad",
     },

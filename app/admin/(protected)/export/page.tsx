@@ -29,7 +29,7 @@ export default async function ExportPage({ searchParams }: PageProps<"/admin/exp
       <Card className="mb-6">
         <p className="mb-4 max-w-3xl">
           Utförda jobb där Nordvra är säljare (vi söker avdraget). Förmedlade ROT-jobb söker partnern själv och
-          finns inte med. Filen innehåller personnummer – spara den säkert och radera den när ansökan är gjord.
+          finns inte med. Filen innehåller personnummer. Spara den säkert och radera den när ansökan är gjord.
         </p>
         <form method="get" className="flex flex-wrap items-end gap-3">
           <label className="block">

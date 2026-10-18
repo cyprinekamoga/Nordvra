@@ -153,7 +153,7 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
             </Row>
             <Row label="Önskat datum">
               {formatDateLong(b.preferred_date)}, {t.common.timeWindows[b.time_window]}
-              {b.flexible && <strong> · Flexibel – välj billigaste tid</strong>}
+              {b.flexible && <strong> · Flexibel, välj billigaste tid</strong>}
             </Row>
             {b.inspection_date && <Row label="Besiktning">{formatDateLong(b.inspection_date)}</Row>}
             <Row label="Bostad">
@@ -281,7 +281,7 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
         <Card as="section" aria-labelledby="kopare">
           <h2 id="kopare" className="mb-3 text-xl font-bold">Köpare (efter godkännande)</h2>
           {buyerRows.length === 0 ? (
-            <p className="text-muted">Inga köpare ännu – fylls i när kunden godkänner offerten.</p>
+            <p className="text-muted">Inga köpare ännu. De fylls i när kunden godkänner offerten.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className={tableClasses}>

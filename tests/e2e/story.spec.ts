@@ -39,18 +39,24 @@ test("calculator starts on the SPEC example and follows the slider and the deduc
   await expect(calc.getByText("Avdraget är begränsat av taket per person och år.")).toBeVisible();
 });
 
-test("moving day chapters work with clicks and arrow keys", async ({ page }) => {
+test("moving day is told as you scroll, and the times jump to their chapter", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 860 });
   await page.goto("/");
-  const tabs = page.getByRole("tablist", { name: "Flyttdagen timme för timme" });
-  await expect(page.getByRole("tabpanel")).toHaveCount(1);
-  await expect(page.getByRole("tabpanel").getByRole("heading", { name: "Bärarna kommer" })).toBeVisible();
+  const timeline = page.getByRole("navigation", { name: "Flyttdagen timme för timme" });
+  const chapters = page.locator("section[aria-labelledby=flyttdag-rubrik] li[data-index]");
+  // All three chapters are in the page, not hidden behind tabs.
+  for (const title of ["Bärarna kommer", "Flyttstädningen börjar", "Nycklarna lämnas"]) {
+    await expect(page.getByRole("heading", { level: 3, name: title })).toHaveCount(1);
+  }
+  await expect(chapters).toHaveCount(3);
 
-  await tabs.getByRole("tab", { name: /13:00/ }).click();
-  await expect(page.getByRole("tabpanel").getByRole("heading", { name: "Flyttstädningen börjar" })).toBeVisible();
+  // Scrolling the second chapter to the middle of the screen moves the timeline on.
+  await chapters.nth(1).evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await expect(timeline.getByRole("link", { name: /13:00/ })).toHaveAttribute("aria-current", "step");
 
-  await page.keyboard.press("ArrowRight");
-  await expect(tabs.getByRole("tab", { name: /17:00/ })).toBeFocused();
-  await expect(page.getByRole("tabpanel").getByRole("heading", { name: "Nycklarna lämnas" })).toBeVisible();
-  await page.keyboard.press("Home");
-  await expect(tabs.getByRole("tab", { name: /08:00/ })).toHaveAttribute("aria-selected", "true");
+  // A time in the timeline jumps to its chapter.
+  await timeline.getByRole("link", { name: /17:00/ }).click();
+  await expect(page).toHaveURL(/#flyttdag-3$/);
+  await expect(timeline.getByRole("link", { name: /17:00/ })).toHaveAttribute("aria-current", "step");
+  await expect(page.getByRole("heading", { level: 3, name: "Nycklarna lämnas" })).toBeInViewport();
 });

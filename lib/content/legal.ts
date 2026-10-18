@@ -81,7 +81,7 @@ export function termsOfService({
     version: company.termsVersion,
     intro: [
       `De här villkoren gäller när du använder Nordvra för att skicka en förfrågan, få en offert och boka en tjänst.`,
-      "Vi har försökt skriva villkoren så enkelt som möjligt. Du har alltid de rättigheter som konsumentlagarna ger dig – inget i villkoren kan ta bort dem.",
+      "Vi har försökt skriva villkoren så enkelt som möjligt. Du har alltid de rättigheter som konsumentlagarna ger dig, och inget i villkoren kan ta bort dem.",
     ],
     sections: [
       {
@@ -99,13 +99,13 @@ export function termsOfService({
         blocks: [
           p("Så här går det till:"),
           ul(
-            "Förfrågan: Du berättar vad du behöver hjälp med, när och var. Förfrågan är gratis och inte bindande – ingenting är bokat ännu.",
+            "Förfrågan: Du berättar vad du behöver hjälp med, när och var. Förfrågan är gratis och inte bindande. Ingenting är bokat ännu.",
             "Ungefärligt pris: Innan du skickar förfrågan visar vi ett ungefärligt pris. Det är bara en vägledning. Det exakta priset står i offerten.",
             "Offert: Vi tar fram ett exakt pris och en tid, oftast inom 24 timmar. För ROT-jobb lämnar ett partnerföretag offerten, oftast inom 48 timmar. Du får en länk till offerten via mejl och sms.",
             `Bokning: Avtalet blir bindande först när du trycker på ”Godkänn och boka” i offerten. Länken gäller i ${quoteValidHours} timmar. Trycker du på ”Nej tack”, eller låter länken gå ut, kostar det ingenting.`,
           ),
           p("När du godkänner offerten lämnar du också de uppgifter som behövs för avdraget, till exempel personnummer för varje köpare och vilken andel var och en betalar."),
-          p("Efter bokningen får du en bekräftelse via mejl. Spara den – där står ditt bokningsnummer."),
+          p("Efter bokningen får du en bekräftelse via mejl. Spara den, för där står ditt bokningsnummer."),
         ],
       },
       {
@@ -126,7 +126,7 @@ export function termsOfService({
             title: "ROT-tjänster: avtal med partnerföretaget",
             blocks: [
               p(`För ROT-tjänster, till exempel målning, badrum, el och VVS, är partnerföretaget som nämns i offerten din avtalspart. ${us} förmedlar jobbet.`),
-              p("Partnerföretaget lämnar offerten, utför arbetet, fakturerar dig, begär ROT-avdraget och ansvarar för arbetet. Partnerföretagets egna villkor kan också gälla – i så fall står det i offerten."),
+              p("Partnerföretaget lämnar offerten, utför arbetet, fakturerar dig, begär ROT-avdraget och ansvarar för arbetet. Partnerföretagets egna villkor kan också gälla. I så fall står det i offerten."),
               p("Vi får en ersättning från partnerföretaget för att vi förmedlar jobbet. Du betalar ingen avgift till oss."),
               p("Vi hjälper dig gärna om något inte fungerar med partnerföretaget."),
             ],
@@ -149,7 +149,7 @@ export function termsOfService({
           p("Vi använder fakturamodellen. Det betyder att avdraget dras direkt på fakturan. Företaget som fakturerar dig begär sedan resten av betalningen från Skatteverket."),
           ul(
             `RUT-avdraget är ${f.rutRate} och ROT-avdraget ${f.rotRate} av arbetskostnaden.`,
-            "Avdraget gäller bara arbetskostnaden – inte material eller resor.",
+            "Avdraget gäller bara arbetskostnaden, inte material eller resor.",
             capSentence(rules),
             "Avdraget kan aldrig bli större än den skatt du betalar under året.",
           ),
@@ -178,7 +178,7 @@ export function termsOfService({
           p("Vill du att jobbet görs inom de 14 dagarna måste du be om det när du godkänner offerten. Ångrar du dig efter att arbetet har börjat betalar du för den del av arbetet som redan är gjord."),
           p("Om hela arbetet har utförts inom ångerfristen, efter att du har bett om det, har du ingen ångerrätt kvar."),
           p("Har du redan betalat något som ska återbetalas får du pengarna tillbaka senast 14 dagar efter att du har ångrat dig."),
-          links({ href: KONSUMENTVERKET_URL, label: "Konsumentverket – om ångerrätt" }),
+          links({ href: KONSUMENTVERKET_URL, label: "Konsumentverket: om ångerrätt" }),
         ],
       },
       {
@@ -211,7 +211,7 @@ export function termsOfService({
       },
       {
         id: "reklamation",
-        title: "10. Reklamation – om något inte blev bra",
+        title: "10. Reklamation: om något inte blev bra",
         blocks: [
           p("Hör av dig så snart du märker att något inte blev bra. Berätta vad som är fel, gärna med bilder. Reklamerar du inom två månader från att du märkte felet har du alltid gjort det i tid."),
           p(`När ${us} är din avtalspart har du reklamationsrätt enligt konsumenttjänstlagen i 3 år från att jobbet blev klart. Vi rättar till felet utan kostnad för dig. Går det inte, eller dröjer det för länge, kan du ha rätt till prisavdrag, att häva avtalet eller skadestånd enligt lagen.`),
@@ -294,7 +294,7 @@ export function privacyPolicy({
           ul(
             "Kontaktuppgifter: namn, telefonnummer, e-postadress och adressen där jobbet ska göras.",
             "Uppgifter om jobbet: vilken tjänst du vill ha, typ av bostad och storlek, önskat datum och det du skriver i fältet för övrig information.",
-            "Svar på frågorna om avdraget: till exempel om du fyller minst 18 år i år, betalar skatt i Sverige och äger bostaden. Svaren är ja eller nej – vi frågar inte efter ditt personnummer i förfrågan.",
+            "Svar på frågorna om avdraget: till exempel om du fyller minst 18 år i år, betalar skatt i Sverige och äger bostaden. Svaren är ja eller nej. Vi frågar inte efter ditt personnummer i förfrågan.",
             "När du godkänner en offert: personnummer och namn för varje köpare, hur stor andel var och en betalar och, för ROT, fastighetsbeteckning eller bostadsrättsföreningens organisationsnummer och lägenhetsnummer.",
             "Faktura och betalning: fakturanummer, belopp, betaldatum och betalsätt, och vad Skatteverket har beslutat om avdraget.",
             "Kontakt med oss: mejl, sms och anteckningar från telefonsamtal.",
@@ -337,7 +337,7 @@ export function privacyPolicy({
               },
             ],
           },
-          p("Vi skickar ingen reklam utan att du har sagt ja till det. Vi fattar inga beslut om dig som enbart bygger på automatisk behandling. Frågorna om avdraget är bara vägledning – du kan alltid skicka din förfrågan."),
+          p("Vi skickar ingen reklam utan att du har sagt ja till det. Vi fattar inga beslut om dig som enbart bygger på automatisk behandling. Frågorna om avdraget är bara vägledning. Du kan alltid skicka din förfrågan."),
         ],
       },
       {
@@ -346,7 +346,7 @@ export function privacyPolicy({
         blocks: [
           p("Vi behöver ditt personnummer eftersom lagen kräver det när avdraget begärs från Skatteverket. Vi delar det bara med företaget som utför arbetet."),
           ul(
-            "Vi frågar efter personnumret först när du godkänner offerten – aldrig i förfrågan.",
+            "Vi frågar efter personnumret först när du godkänner offerten, aldrig i förfrågan.",
             "Personnumret krypteras innan det sparas i vår databas.",
             "I våra listor visas det bara delvis dolt, till exempel 850101-XXXX. Det fullständiga numret visas bara för den som ska begära avdraget.",
             "Vi skickar aldrig personnummer i mejl eller sms, lägger det aldrig i en webbadress och skriver det aldrig i loggar.",
@@ -373,7 +373,7 @@ export function privacyPolicy({
         blocks: [
           ul(
             `Personnummer och andra underlag för RUT- och ROT-avdraget sparas i ${retentionYears} år efter att Skatteverket har betalat ut eller beslutat om avdraget. Sedan tas personnumret bort automatiskt.`,
-            `Jobb som aldrig blir av – till exempel när du tackar nej, offerten går ut eller jobbet avbokas – sparas i högst ${unusedRetentionDays} dagar med personnummer. Sedan tas personnumret bort automatiskt.`,
+            `Jobb som aldrig blir av, till exempel när du tackar nej, offerten går ut eller jobbet avbokas, sparas i högst ${unusedRetentionDays} dagar med personnummer. Sedan tas personnumret bort automatiskt.`,
             `När ett partnerföretag är din avtalspart tar vi bort personnumret hos oss ${unusedRetentionDays} dagar efter jobbet. Partnerföretaget sparar det enligt sina egna regler.`,
             "Fakturor och annat bokföringsmaterial sparas i 7 år efter utgången av det kalenderår då räkenskapsåret avslutades, enligt bokföringslagen.",
             "Kontaktuppgifter och uppgifter om jobbet sparas så länge du kan reklamera jobbet, det vill säga i 3 år efter att jobbet blev klart, om de inte måste sparas längre enligt lag.",
@@ -408,7 +408,7 @@ export function privacyPolicy({
             "få ut uppgifter som du själv har lämnat i ett maskinläsbart format (dataportabilitet)",
           ),
           p("Vi kan inte radera uppgifter som lagen kräver att vi sparar, till exempel underlag för bokföring och för RUT- och ROT-avdraget."),
-          p(`Kontakta oss på ${company.email} eller ${company.phoneDisplay}. Vi svarar inom en månad. Vi kan behöva kontrollera vem du är innan vi lämnar ut uppgifter – skicka inte ditt personnummer via mejl.`),
+          p(`Kontakta oss på ${company.email} eller ${company.phoneDisplay}. Vi svarar inom en månad. Vi kan behöva kontrollera vem du är innan vi lämnar ut uppgifter. Skicka inte ditt personnummer via mejl.`),
         ],
       },
       {
@@ -423,7 +423,7 @@ export function privacyPolicy({
         id: "cookies",
         title: "10. Cookies",
         blocks: [
-          p("Vi använder bara nödvändiga cookies och liknande tekniker – sådant som behövs för att webbplatsen ska fungera. Därför behöver vi inte ditt samtycke. Vi använder inga cookies för statistik eller reklam, och inga cookies från andra företag."),
+          p("Vi använder bara nödvändiga cookies och liknande tekniker, alltså sådant som behövs för att webbplatsen ska fungera. Därför behöver vi inte ditt samtycke. Vi använder inga cookies för statistik eller reklam, och inga cookies från andra företag."),
           {
             kind: "dl",
             items: [
@@ -450,7 +450,7 @@ export function privacyPolicy({
         blocks: [
           p("Vi uppdaterar integritetspolicyn när vi ändrar hur vi behandlar personuppgifter. Datumet högst upp visar när den senast ändrades."),
           links(
-            { href: SKATTEVERKET_URL, label: "Skatteverket.se – om RUT och ROT" },
+            { href: SKATTEVERKET_URL, label: "Skatteverket.se: om RUT och ROT" },
             { href: "/villkor", label: "Läs våra villkor" },
           ),
         ],

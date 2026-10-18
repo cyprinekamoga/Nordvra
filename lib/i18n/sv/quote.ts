@@ -116,7 +116,7 @@ const quote = {
       buyerFallback: "Köpare {n}",
       share: "{share} % av jobbet",
       capped: "Begränsat av taket för avdraget",
-      under18: "Inget avdrag – fyller inte 18 år i år",
+      under18: "Inget avdrag, fyller inte 18 år i år",
       totalDeduction: "Totalt avdrag",
       toPay: "Att betala",
       invalid: "Avdraget per köpare visas när andelarna blir 100 % tillsammans.",
@@ -193,7 +193,7 @@ const quote = {
 
   decline: {
     title: "Vill du tacka nej till offerten?",
-    body: "Det är helt i sin ordning. Berätta gärna varför – det hjälper oss att bli bättre.",
+    body: "Det är helt i sin ordning. Berätta gärna varför. Det hjälper oss att bli bättre.",
     reasonsLegend: "Varför tackar du nej?",
     reasonsHint: "Valfritt. Du kan välja flera.",
     reasons: {

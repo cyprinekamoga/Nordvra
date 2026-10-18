@@ -57,7 +57,7 @@ const email = {
     linkFallback: "Fungerar inte knappen? Kopiera länken till din webbläsare:",
     validUntil: "Länken gäller till {expiresAt}.",
     notBooked:
-      "Ingenting är bokat förrän du har godkänt offerten med knappen ”Godkänn och boka”. Vill du inte gå vidare väljer du ”Nej tack” – det kostar ingenting.",
+      "Ingenting är bokat förrän du har godkänt offerten med knappen ”Godkänn och boka”. Vill du inte gå vidare väljer du ”Nej tack”. Det kostar ingenting.",
     pnrNote:
       "När du godkänner fyller du i personnummer direkt på offertsidan, eftersom Skatteverket kräver det för avdraget. Skicka aldrig personnummer via mejl eller SMS.",
   },

@@ -51,12 +51,12 @@ function OnDarkContact({ className }: { className?: string }) {
   );
 }
 
-/** Text on deep green beside a photo of cleaning in progress (on phones the photo is on top). */
+/** Text on deep green beside a photo of a cleaner at work (on phones the photo is on top). */
 function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <PhotoSplit photo="vacuumRoom" eager aria-labelledby="hero-rubrik">
+    <PhotoSplit photo="vacuuming" eager aria-labelledby="hero-rubrik">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-2">
           <DeductionBadge type="rut" />
@@ -226,14 +226,14 @@ function MovingDaySection() {
   );
 }
 
-/** "Från Stockholm, för hela Sverige", beside a photo of cleaning at work. */
+/** "Från Stockholm, för hela Sverige", beside a photo of a craftsman at work. */
 function About() {
   const k = c.about;
   return (
     <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
       <Container className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
         <PhotoFrame
-          photo="vacuuming"
+          photo="facadePainter"
           shape="square"
           aspect="aspect-[3/2]"
           reveal

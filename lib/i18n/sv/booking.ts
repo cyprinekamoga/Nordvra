@@ -55,7 +55,7 @@ const booking = {
       petsHint: "Med husdjur tar arbetet ofta lite längre tid.",
       frequencyLegend: "Hur ofta vill du ha städning?",
       windowsLabel: "Antal fönster",
-      windowsHint: "Ett ungefärligt antal räcker – vi stämmer av i offerten.",
+      windowsHint: "Ett ungefärligt antal räcker. Vi stämmer av i offerten.",
       windowsUnit: "fönster",
       appliancesLegend: "Vilka vitvaror gäller det?",
       appliancesHint: "Välj en eller flera.",
@@ -66,7 +66,7 @@ const booking = {
       },
       addonsHint: {
         flyttstad: "Ugn och kyl och frys ingår alltid. Välj det som gäller din bostad.",
-        fonster: "Välj om fönstren har spröjs – då tar putsningen längre tid.",
+        fonster: "Välj om fönstren har spröjs, för då tar putsningen längre tid.",
         default: "Välj det du vill ha med. Du kan hoppa över frågan.",
       },
       includedHint: "Ingår",
@@ -81,7 +81,7 @@ const booking = {
       inspectionKnown: "Jag vet datumet",
       inspectionUnknown: "Vet inte än",
       inspectionDateLabel: "Besiktningsdatum",
-      flexibleLabel: "Jag är flexibel – välj billigaste tid",
+      flexibleLabel: "Jag är flexibel, välj billigaste tid",
       flexibleDescription:
         "Vi tar hänsyn till det när vi letar utförare. Det är ett önskemål, inte en rabatt.",
     },
@@ -109,7 +109,7 @@ const booking = {
         rutResidence: null,
         rotOwner: null,
         rotBuildingOver5:
-          "Svarar du nej ger bara reparation och underhåll avdrag – inte om- eller tillbyggnad.",
+          "Svarar du nej ger bara reparation och underhåll avdrag, inte om- eller tillbyggnad.",
         buyerCount:
           "Bor ni flera i bostaden kan ni dela på arbetskostnaden och få avdrag var för sig.",
         usedThisYear: null,
@@ -145,7 +145,7 @@ const booking = {
         postcode: "Postnummer",
         deduction: "Avdrag",
       },
-      deductionYes: "{deduction} – du verkar ha rätt till det",
+      deductionYes: "{deduction}. Du verkar ha rätt till det",
       deductionNo: "Inget avdrag enligt dina svar",
       flexible: "flexibel",
     },
@@ -163,7 +163,7 @@ const booking = {
       city: "Ort",
       note: "Något mer vi bör veta?",
       noteHint:
-        "Till exempel portkod, parkering eller något som är extra viktigt. Skriv inte ditt personnummer här – vi frågar efter det först när du godkänner offerten.",
+        "Till exempel portkod, parkering eller något som är extra viktigt. Skriv inte ditt personnummer här. Vi frågar efter det först när du godkänner offerten.",
       termsLegend: "Villkor",
     },
   },
@@ -241,7 +241,7 @@ const booking = {
     next: [
       "Vi letar upp ett bra och kontrollerat företag som kan göra jobbet när det passar dig.",
       "Inom 24 timmar får du en offert via mejl och SMS, med exakt pris före och efter avdrag.",
-      "Inget är bokat förrän du har godkänt offerten. Passar den inte tackar du bara nej – det kostar ingenting.",
+      "Inget är bokat förrän du har godkänt offerten. Passar den inte tackar du bara nej. Det kostar ingenting.",
     ],
     newRequest: "Skicka en ny förfrågan",
   },

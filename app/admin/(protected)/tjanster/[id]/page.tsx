@@ -68,8 +68,8 @@ export default async function ServicePage({ params, searchParams }: PageProps<"/
           <label className="block">
             <span className="mb-1 block font-bold">Affärsmodell</span>
             <select name="model" defaultValue={s.model} className={selectClasses}>
-              <option value="seller">Säljare – Nordvra fakturerar och söker avdraget</option>
-              <option value="agent">Förmedlare – partnern fakturerar och söker avdraget</option>
+              <option value="seller">Säljare: Nordvra fakturerar och söker avdraget</option>
+              <option value="agent">Förmedlare: partnern fakturerar och söker avdraget</option>
             </select>
           </label>
           <label className="block sm:col-span-2">

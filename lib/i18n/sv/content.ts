@@ -13,7 +13,7 @@
 const content = {
   meta: {
     home: {
-      title: "Nordvra – vi bokar städning och hantverkare åt dig, med RUT- och ROT-avdrag",
+      title: "Nordvra | Vi bokar städning och hantverkare åt dig, med RUT- och ROT-avdrag",
       description:
         "Boka städning, flytthjälp och hantverkare på två minuter. Se priset före och efter RUT- och ROT-avdrag direkt. Vi väljer och kontrollerar företaget. Ingen bokningsavgift.",
     },
@@ -35,11 +35,11 @@ const content = {
     about: {
       title: "Om oss",
       description:
-        "Nordvra finns i Stockholm. Vi bokar städning och hantverkare åt dig i hela Sverige – med RUT- och ROT-avdrag.",
+        "Nordvra finns i Stockholm. Vi bokar städning och hantverkare åt dig i hela Sverige, med RUT- och ROT-avdrag.",
     },
     contact: {
       title: "Kontakt",
-      description: "Ring oss eller mejla – vi hjälper dig att boka och svarar på frågor om RUT och ROT.",
+      description: "Ring oss eller mejla, så hjälper vi dig att boka och svarar på frågor om RUT och ROT.",
     },
     terms: {
       title: "Villkor",
@@ -68,7 +68,7 @@ const content = {
 
   home: {
     hero: {
-      title: "Vi bokar städning och hantverkare åt dig – med RUT- och ROT-avdrag",
+      title: "Vi bokar städning och hantverkare åt dig, med RUT- och ROT-avdrag",
       body: "Du ser priset före och efter avdrag direkt. Förfrågan är gratis och inte bindande.",
       ctaHint: "Inga konton, inga lösenord. Bara några klick.",
       benefitsTitle: "Det här får du hos oss",
@@ -77,7 +77,7 @@ const content = {
       /** Second hero button: scrolls down to "Så enkelt är det". */
       howCta: "Så går det till",
       benefits: [
-        "Du klickar dig fram – ingen text att skriva",
+        "Du klickar dig fram utan att skriva någon text",
         "Pris före och efter avdrag direkt",
         "Vi kollar om du har rätt till avdraget",
         "Vi väljer och kontrollerar företaget",
@@ -98,7 +98,7 @@ const content = {
         },
         {
           title: "Vi fixar resten",
-          body: "Vi hittar ett bra företag och skickar en offert inom 24 timmar. När du har godkänt den sköter vi resten – även avdraget.",
+          body: "Vi hittar ett bra företag och skickar en offert inom 24 timmar. När du har godkänt den sköter vi resten, även avdraget.",
         },
       ],
       stepLabel: "Steg {n}",
@@ -156,12 +156,12 @@ const content = {
     },
     didYouKnow: {
       title: "Visste du att…",
-      lead: "Med RUT- och ROT-avdraget betalar du mindre för hjälp i hemmet. Avdraget dras direkt på fakturan – du behöver inte ansöka själv.",
+      lead: "Med RUT- och ROT-avdraget betalar du mindre för hjälp i hemmet. Avdraget dras direkt på fakturan, så du behöver inte ansöka själv.",
       rutTitle: "RUT-avdrag: {rutRate} på arbetskostnaden",
       rutBody:
         "För städning, flytt, fönsterputs, trädgård och snöskottning, hjälp med IT och vitvaror, barnpassning och omsorg.",
       rotTitle: "ROT-avdrag: {rotRate} på arbetskostnaden",
-      rotBody: "För reparation, underhåll och ombyggnad – till exempel målning, badrum, kök, el, VVS och tak.",
+      rotBody: "För reparation, underhåll och ombyggnad, till exempel målning, badrum, kök, el, VVS och tak.",
       exampleNote: "Avdraget gäller bara arbetskostnaden. Ditt exakta pris får du i offerten.",
       calculator: {
         title: "Räkna själv",
@@ -188,7 +188,7 @@ const content = {
       colThem: "Offertsajter",
       rows: [
         {
-          feature: "Du klickar dig fram på ett par minuter – ingen text att skriva",
+          feature: "Du klickar dig fram på ett par minuter utan att skriva någon text",
           us: "Ja",
           them: "Nej, du beskriver jobbet själv",
           themYes: false,
@@ -251,7 +251,7 @@ const content = {
         {
           icon: "phone",
           title: "Riktiga människor i telefon",
-          body: "Ring {phone} – vi hjälper dig med bokningen och svarar på dina frågor.",
+          body: "Ring {phone}, så hjälper vi dig med bokningen och svarar på dina frågor.",
         },
       ],
       reviewsTitle: "Omdömen",
@@ -273,14 +273,14 @@ const content = {
     sections: {
       overview: {
         title: "RUT och ROT i korthet",
-        rutTitle: "RUT-avdrag – {rutRate} på arbetskostnaden",
+        rutTitle: "RUT-avdrag: {rutRate} på arbetskostnaden",
         rutBody: "RUT gäller hushållsnära tjänster, till exempel:",
-        rotTitle: "ROT-avdrag – {rotRate} på arbetskostnaden",
+        rotTitle: "ROT-avdrag: {rotRate} på arbetskostnaden",
         rotBody: "ROT gäller reparation, underhåll, om- och tillbyggnad av din bostad, till exempel:",
       },
       labourOnly: {
         title: "Avdraget gäller bara arbetskostnaden",
-        body: "Avdraget räknas på arbetskostnaden inklusive moms. Material, resor och utrustning ger aldrig avdrag – de betalar du fullt ut.",
+        body: "Avdraget räknas på arbetskostnaden inklusive moms. Material, resor och utrustning ger aldrig avdrag. De betalar du fullt ut.",
         exampleTitle: "Exempel: {label}",
         labour: "Arbetskostnad",
         material: "Material",
@@ -289,7 +289,7 @@ const content = {
         youPay: "Du betalar",
       },
       cap: {
-        title: "Tak – så mycket kan du få per år",
+        title: "Tak: så mycket kan du få per år",
         perPerson:
           "Taket gäller per person. Är ni två som köper tjänsten tillsammans har var och en sitt eget tak.",
         ownTax:
@@ -308,12 +308,12 @@ const content = {
         rutTitle: "För RUT gäller också",
         rutItems: [
           "att arbetet görs i bostaden där du bor eller i ditt fritidshus",
-          "eller i dina föräldrars hem – då är det du som köper och betalar",
+          "eller i dina föräldrars hem, om det är du som köper och betalar",
           "att det gäller både hyresrätt, bostadsrätt och villa",
         ],
         rotTitle: "För ROT gäller också",
         rotItems: [
-          "att du äger bostaden – med lagfart på huset eller som medlem i bostadsrättsföreningen",
+          "att du äger bostaden, med lagfart på huset eller som medlem i bostadsrättsföreningen",
           "att du bor där, eller att det är ditt fritidshus",
           "att ROT inte gäller i en hyreslägenhet eller i dina föräldrars hem",
         ],
@@ -338,7 +338,7 @@ const content = {
         lead: "Du behöver inte ansöka om avdraget själv. Avdraget dras direkt på fakturan, och företaget som fakturerar dig begär resten av betalningen från Skatteverket.",
         sellerTitle: "RUT-jobb: vi sköter allt",
         sellerBody:
-          "För RUT-jobb är {legalName} din avtalspart. Vi fakturerar dig, tar emot betalningen och begär avdraget hos Skatteverket. Ibland utförs arbetet av ett partnerföretag som vi har valt ut – vi ansvarar ändå för jobbet.",
+          "För RUT-jobb är {legalName} din avtalspart. Vi fakturerar dig, tar emot betalningen och begär avdraget hos Skatteverket. Ibland utförs arbetet av ett partnerföretag som vi har valt ut, men vi ansvarar ändå för jobbet.",
         agentTitle: "ROT-jobb: partnerföretaget ansöker",
         agentBody:
           "För ROT-jobb är partnerföretaget som nämns i offerten din avtalspart. Företaget fakturerar dig och begär avdraget. Vi förmedlar jobbet och hjälper dig hela vägen.",
@@ -355,7 +355,7 @@ const content = {
       },
       notDeductible: {
         title: "Vad ger inte avdrag?",
-        body: "Det mesta som görs i hemmet ger avdrag – men inte allt. Till exempel ger byggstädning, nybyggnation och resor inte avdrag.",
+        body: "Det mesta som görs i hemmet ger avdrag, men inte allt. Till exempel ger byggstädning, nybyggnation och resor inte avdrag.",
         link: "Se listan över vad som inte ger avdrag",
       },
       skatteverket: {
@@ -367,7 +367,7 @@ const content = {
 
   notDeductible: {
     title: "Vad ger inte avdrag?",
-    lead: "Det mesta som görs i hemmet ger RUT- eller ROT-avdrag – men inte allt. Här är vanliga saker som inte ger avdrag. Är du osäker? Ring oss, så kollar vi åt dig.",
+    lead: "Det mesta som görs i hemmet ger RUT- eller ROT-avdrag, men inte allt. Här är vanliga saker som inte ger avdrag. Är du osäker? Ring oss, så kollar vi åt dig.",
     rutTitle: "Ger inte RUT-avdrag",
     rutIntro: "RUT gäller arbetet i hemmet. Det här ingår inte:",
     rotTitle: "Ger inte ROT-avdrag",
@@ -375,7 +375,7 @@ const content = {
     countLabel: "{count} exempel",
     notListedTitle: "Hittar du inte det du letar efter?",
     notListedBody:
-      "Listan visar vanliga exempel och är inte komplett. Skatteverket har de fullständiga reglerna – eller ring oss, så hjälper vi dig.",
+      "Listan visar vanliga exempel och är inte komplett. Skatteverket har de fullständiga reglerna. Du kan också ringa oss, så hjälper vi dig.",
   },
 
   faqPage: {
@@ -386,7 +386,7 @@ const content = {
 
   about: {
     title: "Om Nordvra",
-    lead: "Nordvra finns i {hometown}. Vi startade Nordvra för att det ska vara enkelt för alla att boka hjälp i hemmet – med RUT- och ROT-avdraget klart från början.",
+    lead: "Nordvra finns i {hometown}. Vi startade Nordvra för att det ska vara enkelt för alla att boka hjälp i hemmet, med RUT- och ROT-avdraget klart från början.",
     why: {
       title: "Därför finns Nordvra",
       body: [
@@ -397,7 +397,7 @@ const content = {
     how: {
       title: "Så arbetar vi",
       items: [
-        "Vi väljer ett bra företag som kan göra jobbet när du vill – du slipper jämföra offerter.",
+        "Vi väljer ett bra företag som kan göra jobbet när du vill, så du slipper jämföra offerter.",
         "Vi kontrollerar att företaget är godkänt för F-skatt och har försäkring innan det får jobb av oss.",
         "Vi är tydliga med vem som är din avtalspart och vem som gör jobbet.",
         "Det finns ingen bokningsavgift. Du betalar bara för jobbet.",

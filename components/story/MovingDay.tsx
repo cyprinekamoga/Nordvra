@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PhotoFrame } from "@/components/media/PhotoFrame";
 import { cx } from "@/components/ui/cx";
 import type { PhotoKey } from "@/lib/content/photos";
@@ -13,99 +13,134 @@ export interface DayChapter {
 }
 
 export interface MovingDayProps {
-  /** Accessible name of the tab list. */
+  /** Accessible name of the timeline navigation. */
   label: string;
   chapters: readonly DayChapter[];
 }
 
 /**
- * One example day told in chapters: a row of times works as tabs (arrow keys, Home, End), the
- * panel shows that chapter's photo and text. The first chapter is in the server HTML.
+ * One example day told as scrollytelling. Desktop: the timeline (08:00 → 13:00 → 17:00) and the
+ * chapter's photo stay in view while the chapters scroll past; the line fills and the photo
+ * changes as each chapter reaches the middle of the screen, and the times link to their chapter.
+ * Phones: the chapters follow each other, each with its own photo. All text is in
+ * the server HTML; with reduced motion nothing animates.
  */
 export function MovingDay({ label, chapters }: MovingDayProps) {
-  const id = useId();
   const [active, setActive] = useState(0);
-  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+  const items = useRef<(HTMLLIElement | null)[]>([]);
 
-  function select(i: number, focus = false) {
-    setActive(i);
-    if (focus) tabs.current[i]?.focus();
-  }
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return;
+    // A chapter becomes active when it crosses a thin band in the middle of the screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.index));
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    items.current.forEach((el) => el && io.observe(el));
+    return () => io.disconnect();
+  }, []);
 
-  function onKeyDown(e: KeyboardEvent, i: number) {
-    const last = chapters.length - 1;
-    const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[e.key];
-    if (next === undefined) return;
-    e.preventDefault();
-    select(next, true);
-  }
+  // Readable anchors (#flyttdag-1 …); there is one moving day per page.
+  const chapterId = (i: number) => `flyttdag-${i + 1}`;
 
   return (
-    <div className="space-y-6">
-      <div className="relative">
-        {/* The day's timeline: a line behind the three times, filled up to the open chapter. */}
-        <div aria-hidden="true" className="absolute top-6 right-[16%] left-[16%] h-1 rounded-full bg-border">
-          <div
-            className="h-full rounded-full bg-accent transition-[width] duration-500 ease-out"
-            style={{ width: `${(active / (chapters.length - 1)) * 100}%` }}
-          />
-        </div>
-        <div role="tablist" aria-label={label} className="relative grid grid-cols-3 gap-2 sm:gap-4">
-          {chapters.map((c, i) => {
-            const selected = i === active;
-            return (
-              <button
+    <div className="md:grid md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] md:gap-12">
+      <div className="hidden md:block">
+        <div className="sticky top-[10vh] space-y-6">
+          <nav aria-label={label} className="relative">
+            {/* The day's timeline: a line behind the three times, filled up to the current chapter. */}
+            <div aria-hidden="true" className="absolute top-6 right-[16%] left-[16%] h-1 rounded-full bg-border">
+              <div
+                className="h-full rounded-full bg-accent transition-[width] duration-500 ease-out"
+                style={{ width: `${(active / (chapters.length - 1)) * 100}%` }}
+              />
+            </div>
+            <ol className="relative grid grid-cols-3 gap-2">
+              {chapters.map((c, i) => {
+                const current = i === active;
+                return (
+                  <li key={c.time}>
+                    <a
+                      href={`#${chapterId(i)}`}
+                      aria-current={current ? "step" : undefined}
+                      className="group flex min-h-12 flex-col items-center gap-2 rounded-control px-1 pb-2 text-center"
+                    >
+                      <span
+                        className={cx(
+                          "flex h-12 min-w-20 items-center justify-center rounded-full border-2 px-3 text-lg font-extrabold tabular-nums transition-colors duration-300",
+                          current
+                            ? "border-brand bg-brand text-on-brand"
+                            : "border-brand bg-surface text-brand group-hover:bg-brand-soft",
+                        )}
+                      >
+                        {c.time}
+                      </span>
+                      <span className={cx("leading-snug", current ? "font-bold text-ink" : "font-semibold text-muted")}>
+                        {c.title}
+                      </span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ol>
+          </nav>
+
+          {/* The photos lie on top of each other and cross-fade; the chapter text says what they show. */}
+          <div className="relative aspect-[4/3]" aria-hidden="true">
+            {chapters.map((c, i) => (
+              <div
                 key={c.time}
-                ref={(el) => {
-                  tabs.current[i] = el;
-                }}
-                type="button"
-                role="tab"
-                id={`${id}-tab-${i}`}
-                aria-controls={`${id}-panel-${i}`}
-                aria-selected={selected}
-                tabIndex={selected ? 0 : -1}
-                onClick={() => select(i)}
-                onKeyDown={(e) => onKeyDown(e, i)}
-                className="group flex min-h-12 flex-col items-center gap-2 rounded-control px-1 pb-2 text-center"
+                className={cx(
+                  "absolute inset-0 transition-opacity duration-700 ease-out",
+                  i === active ? "opacity-100" : "opacity-0",
+                )}
               >
-                <span
-                  className={cx(
-                    "flex h-12 min-w-20 items-center justify-center rounded-full border-2 px-3 text-lg font-extrabold tabular-nums transition-colors duration-300",
-                    selected
-                      ? "border-brand bg-brand text-on-brand"
-                      : "border-brand bg-surface text-brand group-hover:bg-brand-soft",
-                  )}
-                >
-                  {c.time}
-                </span>
-                <span className={cx("leading-snug", selected ? "font-bold text-ink" : "font-semibold text-muted")}>
-                  {c.title}
-                </span>
-              </button>
-            );
-          })}
+                <PhotoFrame
+                  photo={c.photo}
+                  shape="square"
+                  aspect="aspect-[4/3]"
+                  decorative
+                  sizes="(min-width: 1296px) 42rem, (min-width: 768px) 52vw, 100vw"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {chapters.map((c, i) => (
-        <div
-          key={c.time}
-          role="tabpanel"
-          id={`${id}-panel-${i}`}
-          aria-labelledby={`${id}-tab-${i}`}
-          tabIndex={0}
-          hidden={i !== active}
-          className={cx("items-center gap-6 rounded-card md:grid-cols-2 md:gap-10", i === active ? "fade-in grid" : "hidden")}
-        >
-          <PhotoFrame photo={c.photo} shape="square" decorative sizes="(min-width: 768px) 34rem, 100vw" />
-          <div className="space-y-3">
-            <p className="text-lg font-extrabold text-brand tabular-nums">{c.time}</p>
-            <h3 className="text-2xl text-ink">{c.title}</h3>
-            <p className="text-lg">{c.body}</p>
-          </div>
-        </div>
-      ))}
+      <ol className="space-y-12 md:space-y-0">
+        {chapters.map((c, i) => (
+          <li
+            key={c.time}
+            id={chapterId(i)}
+            ref={(el) => {
+              items.current[i] = el;
+            }}
+            data-index={i}
+            className="relative scroll-mt-[30vh] md:flex md:min-h-[60vh] md:items-center"
+          >
+            <div
+              className={cx(
+                "min-w-0 space-y-3 transition-colors duration-300 md:border-l-4 md:py-2 md:pl-8",
+                active === i ? "md:border-accent" : "md:border-border",
+              )}
+            >
+              <p className="relative z-10 inline-flex h-12 min-w-20 items-center justify-center rounded-full border-2 border-brand bg-brand px-3 text-lg font-extrabold text-on-brand tabular-nums md:h-auto md:min-w-0 md:justify-start md:border-0 md:bg-transparent md:px-0 md:text-brand">
+                {c.time}
+              </p>
+              <h3 className="text-2xl text-ink">{c.title}</h3>
+              <p className="text-lg">{c.body}</p>
+              <div className="pt-2 md:hidden">
+                <PhotoFrame photo={c.photo} shape="square" aspect="aspect-[4/3]" decorative sizes="100vw" />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

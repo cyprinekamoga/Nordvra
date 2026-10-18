@@ -103,7 +103,7 @@ describe("shared strings", () => {
     expect(l.notGuaranteed.body).toBe(
       "RUT/ROT-avdraget förutsätter att du har rätt till det. Om Skatteverket nekar helt eller delvis (t.ex. för att du har för lite skatt eller redan använt ditt tak) betalar du mellanskillnaden.",
     );
-    expect(l.labourOnly.body).toBe("Avdraget gäller bara arbetskostnaden – inte material eller resor.");
+    expect(l.labourOnly.body).toBe("Avdraget gäller bara arbetskostnaden, inte material eller resor.");
     expect(l.cap.body).toBe(
       "Max 75\u00a0000\u00a0kr per person och år för RUT och ROT tillsammans, varav max 50\u00a0000\u00a0kr för ROT.",
     );

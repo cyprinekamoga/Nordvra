@@ -10,7 +10,7 @@ const common = {
   brand: {
     name: "Nordvra",
     /** Alt text of the logo when it links to the start page. */
-    homeLinkLabel: "Nordvra – startsida",
+    homeLinkLabel: "Nordvra, startsida",
     tagline:
       "Vi hittar ett bra företag, du slipper jämföra offerter, och vi hjälper dig med RUT/ROT-avdraget.",
   },
@@ -47,7 +47,7 @@ const common = {
     companyIntro:
       "Nordvra finns i {hometown}. Vi hjälper kunder i hela Sverige tillsammans med noga utvalda partnerföretag.",
     /** "Stockholm – vi hjälper dig i hela Sverige" */
-    location: "{hometown} – vi hjälper dig i hela Sverige",
+    location: "Från {hometown} hjälper vi dig i hela Sverige",
     fSkatt: "Godkänd för F-skatt",
     insured: "Försäkrade hos If",
     noBookingFee: "Ingen bokningsavgift",
@@ -141,7 +141,7 @@ const common = {
     material: "Material",
     travel: "Resor",
     materialAndTravel: "Material / resor",
-    materialAndTravelLater: "Tillkommer vid behov – visas i offerten",
+    materialAndTravelLater: "Tillkommer vid behov och visas i offerten",
     deduction: "{type}-avdrag {rate} %",
     noBookingFee: "Ingen bokningsavgift",
     toPay: "Att betala",
@@ -168,7 +168,7 @@ const common = {
     },
     labourOnly: {
       title: "Bara arbetskostnad",
-      body: "Avdraget gäller bara arbetskostnaden – inte material eller resor.",
+      body: "Avdraget gäller bara arbetskostnaden, inte material eller resor.",
     },
     rates: {
       title: "Så mycket är avdraget",
@@ -286,7 +286,7 @@ const common = {
     /** Why the deduction does not apply (`IneligibleReason` in lib/eligibility.ts). */
     reasons: {
       under18:
-        "Du behöver fylla minst 18 år i år för att få RUT- eller ROT-avdrag. Du kan ändå boka – priset blir då utan avdrag.",
+        "Du behöver fylla minst 18 år i år för att få RUT- eller ROT-avdrag. Du kan ändå boka, men då blir priset utan avdrag.",
       noSwedishTax:
         "Avdraget räknas av från skatt som du betalar i Sverige. Om du inte betalar skatt här kan du inte få avdraget, men du kan ändå boka till priset utan avdrag.",
       rutNotResidence:
@@ -296,14 +296,14 @@ const common = {
       rotParentsHome:
         "ROT-avdrag gäller bara en bostad som du själv äger. Arbete i dina föräldrars hem kan ge RUT-avdrag, men inte ROT-avdrag.",
       rotNotOwner:
-        "För ROT-avdrag behöver du äga bostaden – med lagfart på huset eller som medlem i bostadsrättsföreningen. Vi visar priset utan avdrag.",
+        "För ROT-avdrag behöver du äga bostaden, med lagfart på huset eller som medlem i bostadsrättsföreningen. Vi visar priset utan avdrag.",
       rotNewBuilding:
         "Om- och tillbyggnad ger bara ROT-avdrag om huset är mer än 5 år gammalt. Reparation och underhåll ger avdrag oavsett hur gammalt huset är.",
     },
     /** Good to know even when the deduction applies (`EligibilityWarning`). */
     warnings: {
       rotRepairOnly:
-        "Eftersom huset inte är mer än 5 år gammalt ger bara reparation och underhåll ROT-avdrag – inte om- eller tillbyggnad. Vi stämmer av vad som gäller för ditt jobb i offerten.",
+        "Eftersom huset inte är mer än 5 år gammalt ger bara reparation och underhåll ROT-avdrag, inte om- eller tillbyggnad. Vi stämmer av vad som gäller för ditt jobb i offerten.",
       usedThisYear:
         "Du har redan använt RUT eller ROT i år. Taket är 75\u00a0000\u00a0kr per person och år, varav max 50\u00a0000\u00a0kr för ROT. Om taket tar slut betalar du mellanskillnaden.",
       checkRemaining:
@@ -312,7 +312,7 @@ const common = {
     eligibleTitle: "Det ser ut som att du har rätt till avdraget",
     notEligibleTitle: "Det ser ut som att du inte kan få avdraget",
     notEligibleBody:
-      "Det gör inget – du kan fortfarande skicka din förfrågan. Vi visar priset utan avdrag.",
+      "Det gör inget. Du kan fortfarande skicka din förfrågan. Vi visar priset utan avdrag.",
     warningsTitle: "Bra att veta",
     skatteverketLink: "Kolla hur mycket du har kvar på Skatteverkets Mina sidor",
     skatteverketUrl: "https://www.skatteverket.se",
@@ -355,7 +355,7 @@ const common = {
 
   cookies: {
     label: "Om cookies",
-    text: "Vi använder bara nödvändiga cookies – de som behövs för att webbplatsen ska fungera.",
+    text: "Vi använder bara nödvändiga cookies, alltså de som behövs för att webbplatsen ska fungera.",
     link: "Läs mer om cookies",
     accept: "Jag förstår",
   },

@@ -131,7 +131,6 @@ names and number plates.
 
 | File | Shows | Photographer |
 | --- | --- | --- |
-| stadning-hem.jpg | Vacuuming a bright room | Vitaly Gariev |
 | stadning-kok.jpg | Wiping a kitchen sink | everdrop GmbH |
 | stadning.jpg | Vacuuming | Giorgio Trovato |
 | angtvatt.jpg | Steam-cleaning bathroom tiles | Aurum Gebäudereinigung Kassel |
@@ -140,6 +139,7 @@ names and number plates.
 | barhjalp.jpg | Movers carrying furniture from the truck (logos painted out) | Joseph Prospere |
 | malning-roller.jpg | Painting a wall with a roller | Andrew Itaga |
 | farg-och-roller.jpg | Paint, roller and brush | Annie Spratt |
+| fasadmalare.jpg | A craftsman repairing and painting a facade (London) | Flow Clark |
 | snickare-falun.jpg | A carpenter measuring a board (Falun) | Jimmy Nilsson Masth |
 
 ## Not done yet / before launch

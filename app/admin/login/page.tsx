@@ -4,7 +4,7 @@ import { Logo } from "@/components/layout";
 import { LoginForms } from "@/components/admin/AuthForms";
 
 export const metadata: Metadata = {
-  title: "Logga in – administration",
+  title: "Logga in | Administration",
   robots: { index: false, follow: false },
 };
 

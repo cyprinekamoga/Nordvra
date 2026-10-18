@@ -339,7 +339,7 @@ export function ApprovalForm(props: ApprovalFormProps) {
               <Icon name={sum === 100 ? "check-circle" : "warning"} className="mt-0.5 shrink-0" />
               <span>
                 {fmt(f.sharesTotal, { sum })}
-                {sum === 100 ? "" : ` – ${f.sharesOff}`}
+                {sum === 100 ? "" : `. ${f.sharesOff}`}
               </span>
             </div>
           ) : null}

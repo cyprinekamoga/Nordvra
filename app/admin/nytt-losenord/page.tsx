@@ -3,7 +3,7 @@ import { Card, Container } from "@/components/ui";
 import { NewPasswordForm } from "@/components/admin/AuthForms";
 
 export const metadata: Metadata = {
-  title: "Nytt lösenord – administration",
+  title: "Nytt lösenord | Administration",
   robots: { index: false, follow: false },
 };
 

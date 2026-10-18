@@ -29,7 +29,7 @@ describe("priceView", () => {
     expect(v.headline).toBe("Vanligtvis 2\u00a0300–3\u00a0600\u00a0kr efter RUT-avdrag");
     expect(v.lines.map((l) => [l.label, l.value])).toEqual([
       ["Arbetskostnad (före avdrag)", "4\u00a0600–7\u00a0200\u00a0kr"],
-      ["Material / resor", "Tillkommer vid behov – visas i offerten"],
+      ["Material / resor", "Tillkommer vid behov och visas i offerten"],
       ["RUT-avdrag 50 %", "−2\u00a0300–3\u00a0600\u00a0kr"],
       ["Ingen bokningsavgift", "0\u00a0kr"],
       ["Att betala", "2\u00a0300–3\u00a0600\u00a0kr"],

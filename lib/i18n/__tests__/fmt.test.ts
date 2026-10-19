@@ -54,8 +54,8 @@ describe("messages", () => {
   });
 
   it("phone CTA renders with the number", () => {
-    expect(fmt(t.common.phone.ctaWithNumber, { phone: "076-113 43 84" })).toBe(
-      "Hellre ringa? Ring oss på 076-113 43 84",
+    expect(fmt(t.common.phone.ctaWithNumber, { phone: "072-222 88 00" })).toBe(
+      "Hellre ringa? Ring oss på 072-222 88 00",
     );
   });
 });

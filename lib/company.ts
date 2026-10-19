@@ -7,8 +7,8 @@ export const company = {
   brandName: "Nordvra",
   // TODO(före lansering): bolagets registrerade namn, t.ex. "Nordvra AB".
   legalName: "Nordvra",
-  phoneDisplay: "076-113 43 84",
-  phoneHref: "tel:+46761134384",
+  phoneDisplay: "072-222 88 00",
+  phoneHref: "tel:+46722228800",
   email: "info@nordvra.se",
   emailHref: "mailto:info@nordvra.se",
   insurance: "If Skadeförsäkring",

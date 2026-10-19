@@ -15,7 +15,7 @@ import { bookingConfirmedSms, quoteSentSms, requestReceivedSms } from "@/lib/sms
 
 /** Personnummer/samordningsnummer in any common format (YYMMDD-XXXX, YYYYMMDDXXXX, …). */
 const PNR = /(?<!\d)(?:19|20)?\d{2}[01]\d[0-3]\d[-+\s]?\d{4}(?!\d)/;
-const PHONE = "076-113 43 84";
+const PHONE = "072-222 88 00";
 const QUOTE_LINK = "https://nordvra.se/offert/Zx9_abcDEF123-token";
 const ADMIN_LINK = "https://nordvra.se/admin/bokningar/1b2c";
 

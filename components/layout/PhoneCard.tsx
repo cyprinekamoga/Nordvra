@@ -7,7 +7,7 @@ import { company } from "@/lib/company";
 import { fmt, t } from "@/lib/i18n";
 
 export interface PhoneCardProps {
-  /** compact = one line "Hellre ringa? Ring oss på 076-113 43 84" (e.g. under the step buttons). */
+  /** compact = one line "Hellre ringa? Ring oss på 072-222 88 00" (e.g. under the step buttons). */
   variant?: "card" | "compact";
   /** Heading level of the card title (default 2). */
   headingLevel?: 2 | 3;

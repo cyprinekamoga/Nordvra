@@ -65,7 +65,7 @@ const common = {
     headerButtonLabel: "Ring oss på {phone}",
     /** "Hellre ringa?" – first half of the CTA. */
     cardTitle: "Hellre ringa?",
-    /** "Ring oss på 076-113 43 84" – second half of the CTA (link text). */
+    /** "Ring oss på 072-222 88 00" – second half of the CTA (link text). */
     callUsOn: "Ring oss på {phone}",
     cardBody:
       "Du kan boka hela tjänsten per telefon. Vi svarar på dina frågor och fyller i förfrågan åt dig.",

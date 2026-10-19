@@ -29,9 +29,9 @@ describe("acceptErrorAnswer", () => {
   });
 
   it("offers the phone number when something unexpected happens", () => {
-    expect(acceptErrorAnswer("other").message).toContain("076-113 43 84");
-    expect(acceptErrorAnswer("buyers_exist").message).toContain("076-113 43 84");
-    expect(declineErrorAnswer("other").message).toContain("076-113 43 84");
+    expect(acceptErrorAnswer("other").message).toContain("072-222 88 00");
+    expect(acceptErrorAnswer("buyers_exist").message).toContain("072-222 88 00");
+    expect(declineErrorAnswer("other").message).toContain("072-222 88 00");
     expect(declineErrorAnswer("quote_not_open").reload).toBe(true);
   });
 });

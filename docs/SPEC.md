@@ -61,7 +61,7 @@ deduction shown up front, eligibility check built in, we choose and vet the comp
 ```
 brandName: "Nordvra"
 legalName: "Nordvra"  (TODO: registered company name, e.g. "Nordvra AB")
-phoneDisplay: "076-113 43 84", phoneHref: "tel:+46761134384"
+phoneDisplay: "072-222 88 00", phoneHref: "tel:+46722228800"
 email: "info@nordvra.se"
 insurance: "If Skadeförsäkring"  (copy: "Försäkrade hos If")
 hasFSkatt: true (copy: "Godkänd för F-skatt")
@@ -69,7 +69,7 @@ No org.nr and no postal address are shown (Nordvra works online).
 hometown: "Stockholm", coverage: "Hela Sverige"
 termsVersion: "2026-10-15"
 ```
-"Hellre ringa? Ring oss på 076-113 43 84" must be visible on every customer page (header button +
+"Hellre ringa? Ring oss på 072-222 88 00" must be visible on every customer page (header button +
 in-flow card).
 
 ---------------------------------------------------------------------------------------------------

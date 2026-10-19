@@ -10,8 +10,8 @@ import type { EligibilityWarning, IneligibleReason } from "@/lib/eligibility";
 
 describe("company constants", () => {
   it("matches SPEC §1", () => {
-    expect(company.phoneDisplay).toBe("076-113 43 84");
-    expect(company.phoneHref).toBe("tel:+46761134384");
+    expect(company.phoneDisplay).toBe("072-222 88 00");
+    expect(company.phoneHref).toBe("tel:+46722228800");
     expect(company.email).toBe("info@nordvra.se");
     expect(company.termsVersion).toBe("2026-10-15");
   });

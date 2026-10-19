@@ -53,8 +53,8 @@ describe("other identifiers", () => {
   });
 
   it("normalises Swedish phone numbers", () => {
-    expect(normalizePhone("076-113 43 84")).toBe("+46761134384");
-    expect(normalizePhone("+46 76 113 43 84")).toBe("+46761134384");
+    expect(normalizePhone("072-222 88 00")).toBe("+46722228800");
+    expect(normalizePhone("+46 72 222 88 00")).toBe("+46722228800");
     expect(normalizePhone("12")).toBeNull();
   });
 });

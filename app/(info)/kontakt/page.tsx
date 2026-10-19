@@ -23,7 +23,7 @@ export default function ContactPage() {
 
       <div className="space-y-12">
         <div className="grid gap-4">
-          {/* In-flow phone card ("Ring oss på 076-113 43 84", SPEC §1). */}
+          {/* In-flow phone card ("Ring oss på 072-222 88 00", SPEC §1). */}
           <Card as="section" tone="brand" padding="lg" aria-labelledby="ring-rubrik" className="space-y-4">
             <div className="flex items-center gap-3">
               <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-brand text-on-brand">
@@ -34,7 +34,7 @@ export default function ContactPage() {
               </h2>
             </div>
             <p className="text-lg">{c.phoneBody}</p>
-            {/* The visible number is part of the accessible name ("Ring oss på 076-113 43 84"). */}
+            {/* The visible number is part of the accessible name ("Ring oss på 072-222 88 00"). */}
             <LinkButton
               href={company.phoneHref}
               size="lg"

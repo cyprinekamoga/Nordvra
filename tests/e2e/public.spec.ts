@@ -39,9 +39,9 @@ for (const route of PUBLIC_ROUTES) {
 
 test("phone number is visible on the homepage and in the flow", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /076-113 43 84/ }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /072-222 88 00/ }).first()).toBeVisible();
   await page.goto("/boka");
-  await expect(page.getByText(/076-113 43 84/).first()).toBeVisible();
+  await expect(page.getByText(/072-222 88 00/).first()).toBeVisible();
 });
 
 test("no booking or service fee is mentioned as a charge", async ({ page }) => {
@@ -70,5 +70,5 @@ test("unknown quote link shows a friendly message", async ({ page }) => {
   const res = await page.goto("/offert/finns-inte-alls-1234567890abcdefghijklmnop");
   expect(res?.status()).toBeLessThan(500);
   await expect(page.locator("h1").first()).toBeVisible();
-  await expect(page.getByText(/076-113 43 84/).first()).toBeVisible();
+  await expect(page.getByText(/072-222 88 00/).first()).toBeVisible();
 });

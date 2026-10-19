@@ -313,11 +313,7 @@ function DidYouKnow() {
 function YesNoCell({ yes, text }: { yes: boolean; text: string }) {
   return (
     <span className="inline-flex items-start gap-2">
-      <Icon
-        name={yes ? "check-circle" : "minus"}
-        size={24}
-        className={cx("mt-0.5 shrink-0", yes ? "text-success" : "text-muted")}
-      />
+      {yes ? <Icon name="check-circle" size={24} className="mt-0.5 shrink-0 text-success" /> : null}
       <span className={yes ? "font-bold" : undefined}>{text}</span>
     </span>
   );

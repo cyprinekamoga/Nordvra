@@ -208,7 +208,7 @@ const content = {
         {
           feature: "Vi väljer och kontrollerar företaget åt dig",
           us: "Ja",
-          them: "Nej, du jämför 2–6 offerter själv",
+          them: "Nej, du jämför flera offerter själv",
           themYes: false,
         },
         {

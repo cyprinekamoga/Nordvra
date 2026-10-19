@@ -140,6 +140,15 @@ names and number plates.
 | malning-roller.jpg | Painting a wall with a roller | Andrew Itaga |
 | farg-och-roller.jpg | Paint, roller and brush | Annie Spratt |
 | fasadmalare.jpg | A craftsman repairing and painting a facade (London) | Flow Clark |
+| fonsterputsare.jpg | Window cleaner with a water-fed pole | Joshua Bowers |
+| tradgardsmastare.jpg | Gardener with a wheelbarrow | FRAEM GmbH |
+| it-tekniker.jpg | Technician repairing a laptop | Revendo |
+| hemtjanst.jpg | Carer serving tea at home | Care Assure |
+| badrum-vvs.jpg | Tradesman working in a bathroom | bhagya laxmi |
+| rormokare.jpg | Plumber at a water heater | Marian Florinel Condruz |
+| elektriker.jpg | Electrician fitting a light | Bermix Studio |
+| takarbete.jpg | Roofers with safety harnesses | Raze Solar |
+| markarbete.jpg | Mini excavator digging a trench in a garden | Annie Spratt |
 | snickare-falun.jpg | A carpenter measuring a board (Falun) | Jimmy Nilsson Masth |
 
 ## Not done yet / before launch

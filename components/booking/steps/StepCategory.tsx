@@ -3,12 +3,13 @@
 import { useId } from "react";
 import { FieldError, Tile } from "@/components/ui";
 import { selectCategory } from "@/lib/booking/state";
+import { categoryPhotos } from "@/lib/content/photos";
 import { t } from "@/lib/i18n";
 import type { StepProps } from "../types";
 
 const s = t.booking.steps.category;
 
-/** Step 1: 13 category tiles. Choosing one saves it and moves on (`onPicked`). */
+/** Step 1: 13 category tiles, each with a photo of the work. Choosing one saves it and moves on (`onPicked`). */
 export function StepCategory({
   catalog,
   draft,
@@ -27,6 +28,7 @@ export function StepCategory({
             <Tile
               title={category.name}
               icon={category.icon}
+              photo={categoryPhotos[category.id]}
               deduction={category.deductionType}
               selected={draft.categoryId === category.id}
               aria-describedby={errors.categoryId ? errorId : undefined}

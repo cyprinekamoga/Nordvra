@@ -1,3 +1,4 @@
+import { Promises } from "@/components/content/Promises";
 import { Card, Icon } from "@/components/ui";
 import { formatDateTime } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
@@ -6,9 +7,11 @@ import type { PriceBreakdown } from "@/lib/pricing/calculate";
 import { propertyKind, type QuoteData } from "@/lib/quote/quote";
 import type { ResolvedTaxRules } from "@/lib/taxRules";
 import { ApprovalForm } from "./ApprovalForm";
+import { QuoteChecks } from "./QuoteChecks";
 import { QuoteCounterparty } from "./QuoteCounterparty";
 import { QuoteDetails } from "./QuoteDetails";
 import { QuoteEligibility } from "./QuoteEligibility";
+import { QuoteGuarantees } from "./QuoteGuarantees";
 import { QuoteLegal } from "./QuoteLegal";
 import { QuotePriceCard } from "./QuotePriceCard";
 
@@ -76,9 +79,15 @@ export function QuoteOpen({
 
       <QuoteDetails quote={quote} headingId="offert-detaljer-rubrik" />
 
+      <QuoteChecks quote={quote} today={today} />
+
       <QuoteCounterparty quote={quote} />
 
       <QuoteLegal headingId="offert-juridik-rubrik" withDeduction={breakdown.eligible && breakdown.deduction > 0} />
+
+      <QuoteGuarantees quote={quote} withDeduction={breakdown.eligible && breakdown.deduction > 0} />
+
+      <Promises compact />
 
       <ApprovalForm
         acceptAction={acceptAction}

@@ -20,17 +20,39 @@ export function quoteSentSms(p: { bookingNumber: string; link: string; expiresAt
   });
 }
 
+function whenText(scheduledDate: string | null, timeWindowValue: string | null): string {
+  const date = displayDate(scheduledDate);
+  const timeWindow = displayTimeWindow(timeWindowValue).toLowerCase();
+  return !date
+    ? s.whenUnscheduled
+    : timeWindow
+      ? fmt(s.whenScheduledWithTime, { date, timeWindow })
+      : fmt(s.whenScheduled, { date });
+}
+
 export function bookingConfirmedSms(p: {
   bookingNumber: string;
   scheduledDate: string | null;
   timeWindow: string | null;
 }): string {
-  const date = displayDate(p.scheduledDate);
-  const timeWindow = displayTimeWindow(p.timeWindow).toLowerCase();
-  const when = !date
-    ? s.whenUnscheduled
-    : timeWindow
-      ? fmt(s.whenScheduledWithTime, { date, timeWindow })
-      : fmt(s.whenScheduled, { date });
+  const when = whenText(p.scheduledDate, p.timeWindow);
   return fmt(s.bookingConfirmed, { bookingNumber: p.bookingNumber, when, phone: company.phoneDisplay });
+}
+
+/**
+ * To the person who lives in the home when a relative booked: who is coming and when, and that
+ * nobody may take payment or sell extra work at the door. No names (SMS rule).
+ */
+export function residentSms(p: {
+  serviceName: string;
+  scheduledDate: string | null;
+  timeWindow: string | null;
+  partnerName: string | null;
+}): string {
+  const vars = {
+    service: p.serviceName.toLocaleLowerCase("sv-SE"),
+    when: whenText(p.scheduledDate, p.timeWindow),
+    phone: company.phoneDisplay,
+  };
+  return p.partnerName ? fmt(s.resident, { ...vars, partner: p.partnerName }) : fmt(s.residentNoPartner, vars);
 }

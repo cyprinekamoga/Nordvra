@@ -152,6 +152,44 @@ export type Database = {
           },
         ]
       }
+      booking_photos: {
+        Row: {
+          booking_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          kind: string
+          path: string
+          uploaded_by: string
+        }
+        Insert: {
+          booking_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          path: string
+          uploaded_by: string
+        }
+        Update: {
+          booking_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          path?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_photos_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           approved_at: string | null
@@ -202,6 +240,12 @@ export type Database = {
           quote_message: string | null
           quote_sent_at: string | null
           quote_token_hash: string | null
+          redo_message: string | null
+          redo_requested_at: string | null
+          remind_on: string | null
+          reminder_sent_at: string | null
+          resident_name: string | null
+          resident_phone: string | null
           rot_kind: Database["public"]["Enums"]["rot_kind"] | null
           rot_property: Json | null
           scheduled_date: string | null
@@ -269,6 +313,12 @@ export type Database = {
           quote_message?: string | null
           quote_sent_at?: string | null
           quote_token_hash?: string | null
+          redo_message?: string | null
+          redo_requested_at?: string | null
+          remind_on?: string | null
+          reminder_sent_at?: string | null
+          resident_name?: string | null
+          resident_phone?: string | null
           rot_kind?: Database["public"]["Enums"]["rot_kind"] | null
           rot_property?: Json | null
           scheduled_date?: string | null
@@ -336,6 +386,12 @@ export type Database = {
           quote_message?: string | null
           quote_sent_at?: string | null
           quote_token_hash?: string | null
+          redo_message?: string | null
+          redo_requested_at?: string | null
+          remind_on?: string | null
+          reminder_sent_at?: string | null
+          resident_name?: string | null
+          resident_phone?: string | null
           rot_kind?: Database["public"]["Enums"]["rot_kind"] | null
           rot_property?: Json | null
           scheduled_date?: string | null
@@ -408,6 +464,7 @@ export type Database = {
           employer_registered: boolean
           f_skatt_checked_at: string | null
           f_skatt_verified: boolean
+          founded_on: string | null
           id: string
           insurance_company: string | null
           insurance_valid_to: string | null
@@ -432,6 +489,7 @@ export type Database = {
           employer_registered?: boolean
           f_skatt_checked_at?: string | null
           f_skatt_verified?: boolean
+          founded_on?: string | null
           id?: string
           insurance_company?: string | null
           insurance_valid_to?: string | null
@@ -456,6 +514,7 @@ export type Database = {
           employer_registered?: boolean
           f_skatt_checked_at?: string | null
           f_skatt_verified?: boolean
+          founded_on?: string | null
           id?: string
           insurance_company?: string | null
           insurance_valid_to?: string | null
@@ -729,9 +788,14 @@ export type Database = {
         Returns: string
       }
       expire_quotes: { Args: never; Returns: number }
+      get_home_log: { Args: { p_token_hash: string }; Returns: Json }
       get_quote: { Args: { p_token_hash: string }; Returns: Json }
       is_admin: { Args: never; Returns: boolean }
       public_config: { Args: never; Returns: Json }
+      request_redo: {
+        Args: { p_message: string; p_token_hash: string }
+        Returns: string
+      }
       submit_request: { Args: { p: Json }; Returns: string }
     }
     Enums: {

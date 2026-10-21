@@ -15,15 +15,30 @@ export const metadata: Metadata = {
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
-/** The booking number from `?nr=`, only when it has the expected shape (NV-2026-00012). */
+function bookingNumberParam(value: string | string[] | undefined): string | null {
+  const text = typeof value === "string" ? value.trim() : "";
+  return BOOKING_NUMBER_RE.test(text) ? text : null;
+}
+
+/**
+ * The booking number from `?nr=`, only when it has the expected shape (NV-2026-00012), and the
+ * second number of a move-out package from `?nr2=`.
+ */
 async function BookingNumber({ searchParams }: { searchParams: SearchParams }) {
-  const { nr } = await searchParams;
-  const value = typeof nr === "string" ? nr.trim() : "";
-  if (!BOOKING_NUMBER_RE.test(value)) return null;
+  const params = await searchParams;
+  const value = bookingNumberParam(params.nr);
+  if (!value) return null;
+  const extra = bookingNumberParam(params.nr2);
   return (
     <Card tone="outline" padding="sm" className="space-y-1">
       <p className="text-muted">{d.numberLabel}</p>
       <p className="text-2xl font-bold tracking-wide text-ink tabular-nums">{value}</p>
+      {extra ? (
+        <>
+          <p className="pt-2 text-muted">{d.packageNumberLabel}</p>
+          <p className="text-2xl font-bold tracking-wide text-ink tabular-nums">{extra}</p>
+        </>
+      ) : null}
       <p className="text-muted">{d.numberHint}</p>
     </Card>
   );

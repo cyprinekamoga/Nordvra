@@ -91,6 +91,13 @@ export function PartnerForm({
         </div>
         <Field label="Försäkringsbolag" name="insurance_company" defaultValue={p?.insurance_company} />
         <Field label="Försäkring giltig till" name="insurance_valid_to" type="date" defaultValue={p?.insurance_valid_to} />
+        <Field
+          label="Registreringsdatum (Bolagsverket)"
+          name="founded_on"
+          type="date"
+          defaultValue={p?.founded_on}
+          hint="Visas för kunden som ”Har funnits sedan …” i offerten."
+        />
       </fieldset>
 
       <fieldset>

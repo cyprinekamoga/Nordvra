@@ -1,6 +1,7 @@
 "use client";
 
-import { ChipGroup, Stepper, YesNo, booleanToYesNo, yesNoToBoolean, type ChipOption } from "@/components/ui";
+import Link from "next/link";
+import { Checkbox, ChipGroup, Stepper, YesNo, booleanToYesNo, yesNoToBoolean, type ChipOption } from "@/components/ui";
 import {
   APPLIANCES,
   FLOORS_MAX,
@@ -9,9 +10,10 @@ import {
   WINDOWS_MIN,
   type Appliance,
 } from "@/lib/booking/schema";
+import { RECURRING_CHOICES, seasonalService, type RecurringChoice } from "@/lib/booking/extras";
 import { effectiveFloors, effectiveWindows, housingOptions } from "@/lib/booking/state";
 import { FREQUENCIES, SIZE_BANDS, type Frequency, type HousingType, type SizeBand } from "@/lib/catalog/types";
-import { t } from "@/lib/i18n";
+import { fmt, t } from "@/lib/i18n";
 import type { StepProps } from "../types";
 
 const s = t.booking.steps.home;
@@ -19,11 +21,21 @@ const c = t.common;
 
 /**
  * Step 3 "Om bostaden": housing type and size for every service, plus the service-specific
- * questions (floors/pets, frequency, windows, appliances, add-ons).
+ * questions (floors/pets, frequency, windows, appliances, add-ons), the move-out package and
+ * the seasonal subscription.
  */
 export function StepHome({ draft, derived, errors, update }: StepProps) {
-  const { service, questions } = derived;
+  const { service, questions, companion } = derived;
   if (!service || !questions) return null;
+  const seasonal = seasonalService(service);
+  const recurringOptions: ChipOption<RecurringChoice>[] = seasonal
+    ? RECURRING_CHOICES.map((value) => ({
+        value,
+        label: value === "once" ? t.booking.recurring.once : t.booking.recurring.season[seasonal],
+      }))
+    : [];
+  const cleaningInPackage =
+    service.formKind === "flyttstad" || (draft.packageAdd && companion?.formKind === "flyttstad");
 
   const housing: ChipOption<HousingType>[] = housingOptions(service.deductionType).map((value) => ({
     value,
@@ -45,6 +57,43 @@ export function StepHome({ draft, derived, errors, update }: StepProps) {
 
   return (
     <div className="space-y-8">
+      {companion ? (
+        <fieldset className="space-y-3">
+          <legend className="mb-2 text-lg font-bold text-ink">{t.booking.package.legend}</legend>
+          <Checkbox
+            name="packageAdd"
+            boxed
+            checked={draft.packageAdd}
+            onChange={(event) => {
+              const checked = event.currentTarget.checked;
+              update((d) => ({ ...d, packageAdd: checked }));
+            }}
+            label={fmt(t.booking.package.label, { service: companion.name.toLocaleLowerCase("sv-SE") })}
+            description={t.booking.package.hint}
+          />
+          {cleaningInPackage ? (
+            <p className="text-muted">
+              {c.legal.inspectionGuarantee.title}: {c.legal.inspectionGuarantee.body}{" "}
+              <Link href="/flyttstadning-checklista" className="link">
+                {c.legal.inspectionGuarantee.checklistLink}
+              </Link>
+            </p>
+          ) : null}
+        </fieldset>
+      ) : null}
+
+      {seasonal ? (
+        <ChipGroup<RecurringChoice>
+          name="recurring"
+          legend={t.booking.recurring.legend}
+          hint={t.booking.recurring.hint}
+          options={recurringOptions}
+          value={draft.recurring ?? "once"}
+          onChange={(value) => update((d) => ({ ...d, recurring: value }))}
+          layout="stack"
+        />
+      ) : null}
+
       <ChipGroup<HousingType>
         name="housingType"
         legend={s.housingLegend}

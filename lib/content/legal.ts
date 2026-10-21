@@ -106,6 +106,9 @@ export function termsOfService({
           ),
           p("När du godkänner offerten lämnar du också de uppgifter som behövs för avdraget, till exempel personnummer för varje köpare och vilken andel var och en betalar."),
           p("Efter bokningen får du en bekräftelse via mejl. Spara den, för där står ditt bokningsnummer."),
+          p("Länken till offerten blir efter bokningen din bokningssida. Där ser du bokningen, företaget som gör jobbet och vad vi har kontrollerat om det, bilder från jobbet när de finns och bostadens logg med alla jobb du har bokat hos oss för samma bostad."),
+          p("Flyttpaket: Bokar du flytthjälp och flyttstädning i samma förfrågan blir det två förfrågningar med var sin offert. Du godkänner eller tackar nej till dem var för sig."),
+          p("Bokar du åt någon annan, till exempel en förälder, får du offerten. Den som ska få avdraget måste själv vara köpare och betala fakturan. Har du lämnat ett mobilnummer till den som bor i bostaden skickar vi ett sms med företagets namn och tid inför besöket."),
         ],
       },
       {
@@ -139,6 +142,7 @@ export function termsOfService({
         blocks: [
           p("Alla priser är i svenska kronor och inklusive moms. Offerten visar arbetskostnad, material och resor var för sig, avdraget och vad du ska betala."),
           p("Det finns ingen bokningsavgift. Du betalar bara för jobbet."),
+          p("Offertens pris är hela priset. Resor, framkörning och det material som behövs för jobbet står i offerten, och inga avgifter tillkommer i efterhand."),
           p("Priset i offerten gäller för det arbete som beskrivs där. Om det visar sig att jobbet är större än du har uppgett, till exempel att bostaden är större, kontaktar vi dig innan något extra görs. Du betalar aldrig för extra arbete som du inte har godkänt."),
         ],
       },
@@ -154,6 +158,7 @@ export function termsOfService({
             "Avdraget kan aldrig bli större än den skatt du betalar under året.",
           ),
           p("Avdraget är inte garanterat. RUT/ROT-avdraget förutsätter att du har rätt till det. Om Skatteverket nekar helt eller delvis (t.ex. för att du har för lite skatt eller redan använt ditt tak) betalar du mellanskillnaden."),
+          p("Avdragsgaranti: Om Skatteverket nekar avdraget helt eller delvis på grund av ett fel från oss eller partnerföretaget, till exempel att fel typ av arbete har angetts, att begäran har skickats för sent eller att avdraget har räknats fel, betalar vi mellanskillnaden. Du betalar alltså bara mellanskillnaden när nekandet beror på dina egna förutsättningar eller på uppgifter som du har lämnat."),
           p("Mellanskillnaden faktureras dig, och du betalar den inom 30 dagar."),
           p("Du ansvarar för att uppgifterna du lämnar är riktiga: att du har rätt till avdraget, ditt personnummer, hur stor andel varje köpare betalar och, för ROT, fastighetsbeteckning eller bostadsrättsföreningens organisationsnummer och lägenhetsnummer."),
           p(`Ungefärliga priser efter avdrag utgår från att du har rätt till fullt avdrag. Reglerna som gäller är de som Skatteverket tillämpar för det år du betalar. Våra beräkningar bygger på: ${f.source}.`),
@@ -163,7 +168,7 @@ export function termsOfService({
         id: "betalning",
         title: "6. Betalning",
         blocks: [
-          p("Du får en faktura när jobbet är gjort. Fakturan visar arbetskostnad, material, resor, avdraget och vad du ska betala."),
+          p("Vi tar aldrig betalt i förskott. Du får en faktura när jobbet är gjort. Fakturan visar arbetskostnad, material, resor, avdraget och vad du ska betala."),
           p("Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar. Är ni flera köpare betalar var och en sin andel. Kontant betalning ger inte rätt till avdrag."),
           p("Betala senast på förfallodagen som står på fakturan. Betalar du för sent kan vi ta ut dröjsmålsränta enligt räntelagen och påminnelseavgift enligt lag."),
           p("För ROT-jobb betalar du till partnerföretaget enligt dess faktura."),
@@ -215,7 +220,7 @@ export function termsOfService({
         blocks: [
           p("Hör av dig så snart du märker att något inte blev bra. Berätta vad som är fel, gärna med bilder. Reklamerar du inom två månader från att du märkte felet har du alltid gjort det i tid."),
           p(`När ${us} är din avtalspart har du reklamationsrätt enligt konsumenttjänstlagen i 3 år från att jobbet blev klart. Vi rättar till felet utan kostnad för dig. Går det inte, eller dröjer det för länge, kan du ha rätt till prisavdrag, att häva avtalet eller skadestånd enligt lagen.`),
-          p("Vid flyttstädning: berätta för oss så snart som möjligt om något anmärks vid besiktningen, så kommer vi tillbaka och åtgärdar det."),
+          p("Besiktningsgaranti vid flyttstädning: Blir något underkänt vid besiktningen städar vi om det utan kostnad. Garantin gäller till och med besiktningsdagen, och alltid minst 7 dagar efter städningen. Anmäl det på din bokningssida eller ring oss. Din reklamationsrätt enligt konsumenttjänstlagen gäller dessutom som vanligt."),
           p("När ett partnerföretag är din avtalspart reklamerar du till partnerföretaget. Konsumenttjänstlagen gäller på samma sätt. Vi hjälper dig att få kontakt och följer upp."),
         ],
       },
@@ -297,6 +302,9 @@ export function privacyPolicy({
             "Svar på frågorna om avdraget: till exempel om du fyller minst 18 år i år, betalar skatt i Sverige och äger bostaden. Svaren är ja eller nej. Vi frågar inte efter ditt personnummer i förfrågan.",
             "När du godkänner en offert: personnummer och namn för varje köpare, hur stor andel var och en betalar och, för ROT, fastighetsbeteckning eller bostadsrättsföreningens organisationsnummer och lägenhetsnummer.",
             "Faktura och betalning: fakturanummer, belopp, betaldatum och betalsätt, och vad Skatteverket har beslutat om avdraget.",
+            "Om du bokar åt någon annan: namn och, om du lämnar det, mobilnummer till den som bor i bostaden.",
+            "Bilder från jobbet (fotorapport) som företaget tar av det utförda arbetet. Bilderna visar bostaden, inte personer.",
+            "Om du ber om det: datumet då vi ska påminna dig om att det är dags för samma jobb igen.",
             "Kontakt med oss: mejl, sms och anteckningar från telefonsamtal.",
             "Tekniska uppgifter: IP-adress och tidpunkt i våra serverloggar, som behövs för att skydda webbplatsen.",
           ),
@@ -322,6 +330,18 @@ export function privacyPolicy({
               {
                 term: "Begära RUT- eller ROT-avdrag hos Skatteverket med ditt personnummer",
                 detail: "Rättslig grund: rättslig förpliktelse. Lagen om förfarandet vid skattereduktion för hushållsarbete kräver köparens personnummer när avdraget begärs.",
+              },
+              {
+                term: "Fotorapport och bostadens logg på din bokningssida",
+                detail: "Rättslig grund: avtal och vårt berättigade intresse av att kunna visa vad som har gjorts, till exempel vid en reklamation.",
+              },
+              {
+                term: "Sms till den som bor i bostaden när någon annan har bokat",
+                detail: "Rättslig grund: vårt berättigade intresse av att den som bor i bostaden vet vem som kommer och när.",
+              },
+              {
+                term: "Påminnelse när det är dags för samma jobb igen",
+                detail: "Rättslig grund: samtycke. Du kryssar själv i att du vill ha påminnelsen och kan ta tillbaka samtycket när du vill.",
               },
               {
                 term: "Bokföring",
@@ -377,6 +397,8 @@ export function privacyPolicy({
             `När ett partnerföretag är din avtalspart tar vi bort personnumret hos oss ${unusedRetentionDays} dagar efter jobbet. Partnerföretaget sparar det enligt sina egna regler.`,
             "Fakturor och annat bokföringsmaterial sparas i 7 år efter utgången av det kalenderår då räkenskapsåret avslutades, enligt bokföringslagen.",
             "Kontaktuppgifter och uppgifter om jobbet sparas så länge du kan reklamera jobbet, det vill säga i 3 år efter att jobbet blev klart, om de inte måste sparas längre enligt lag.",
+            "Bilder i fotorapporten sparas lika länge som uppgifterna om jobbet.",
+            "En påminnelse som du har bett om sparas tills den är skickad eller tills du säger nej till den.",
             "Serverloggar sparas en kort tid och används bara för säkerhet och felsökning.",
           ),
         ],

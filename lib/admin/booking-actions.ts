@@ -12,7 +12,7 @@ import { parseKrToOre } from "@/lib/format";
 import { sendEmailSafe } from "@/lib/email";
 import { bookingConfirmed, quoteSent } from "@/lib/email/templates";
 import { sendSmsSafe } from "@/lib/sms";
-import { bookingConfirmedSms, quoteSentSms } from "@/lib/sms/templates";
+import { bookingConfirmedSms, quoteSentSms, residentSms } from "@/lib/sms/templates";
 import { BOOKING_STATUSES } from "@/lib/admin/filters";
 import { Constants } from "@/lib/supabase/database.types";
 
@@ -209,7 +209,9 @@ export async function sendConfirmationAction(formData: FormData): Promise<void> 
   const supabase = await createServerSupabase();
   const { data: b } = await supabase
     .from("bookings")
-    .select("booking_number,service_name,contact_name,contact_email,contact_phone,scheduled_date,scheduled_time_window")
+    .select(
+      "booking_number,service_name,contact_name,contact_email,contact_phone,scheduled_date,scheduled_time_window,resident_phone,partners(name)",
+    )
     .eq("id", bookingId)
     .single();
   if (!b) return backTo(bookingId, "fel=fel");
@@ -231,6 +233,18 @@ export async function sendConfirmationAction(formData: FormData): Promise<void> 
       timeWindow: b.scheduled_time_window,
     }),
   });
+  // Booked by a relative: the person who lives there learns who is coming and when.
+  if (b.resident_phone) {
+    await sendSmsSafe({
+      to: b.resident_phone,
+      text: residentSms({
+        serviceName: b.service_name,
+        scheduledDate: b.scheduled_date,
+        timeWindow: b.scheduled_time_window,
+        partnerName: b.partners?.name ?? null,
+      }),
+    });
+  }
   await supabase.from("booking_events").insert({
     booking_id: bookingId,
     actor: admin.email,

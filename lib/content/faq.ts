@@ -176,9 +176,13 @@ export function getFaq({
       question: "Vad händer om Skatteverket säger nej till avdraget?",
       answer: [
         "RUT/ROT-avdraget förutsätter att du har rätt till det. Om Skatteverket nekar helt eller delvis (t.ex. för att du har för lite skatt eller redan använt ditt tak) betalar du mellanskillnaden.",
+        "Beror nekandet på ett fel från oss eller företaget, till exempel att fel typ av arbete har angetts eller att begäran skickades för sent, betalar vi mellanskillnaden. Det är vår avdragsgaranti.",
         "Avdraget kan aldrig bli större än den skatt du betalar under året. Är du osäker kan du se hur mycket avdrag du har kvar på Skatteverkets Mina sidor.",
       ],
-      links: [{ href: SKATTEVERKET_URL, label: "Skatteverket.se" }],
+      links: [
+        { href: "/villkor#avdrag", label: "Läs om avdragsgarantin" },
+        { href: SKATTEVERKET_URL, label: "Skatteverket.se" },
+      ],
     },
     {
       id: "ansoka-sjalv",
@@ -217,6 +221,45 @@ export function getFaq({
       answer: [
         `Ja. ${company.legalName} är godkänt för F-skatt och försäkrat hos If.`,
         "Innan ett partnerföretag får jobb genom oss kontrollerar vi att det är godkänt för F-skatt hos Skatteverket och har en giltig försäkring. Företag utan godkänd F-skatt kan inte få jobb av oss.",
+        "I offerten ser du vad vi har kontrollerat: när F-skatten kontrollerades, vilken försäkring företaget har och hur länge det har funnits.",
+      ],
+    },
+    {
+      id: "aldrig-forskott",
+      group: "trygghet",
+      question: "Måste jag betala något i förväg?",
+      answer: [
+        "Nej, aldrig. Du får fakturan när jobbet är klart och betalar då med kort, Swish eller överföring.",
+        "Offertens pris är hela priset: resor, framkörning och material som behövs står i offerten. Behövs mer arbete får du en ny offert att godkänna först. Ingen ska sälja något till dig på plats, och ingen ska ta betalt i dörren. Händer det, ring oss.",
+      ],
+    },
+    {
+      id: "boka-at-anhorig",
+      group: "bokning",
+      question: "Kan jag boka åt min mamma eller pappa?",
+      answer: [
+        "Ja. Kryssa i ”Jag bokar åt någon annan” när du fyller i dina kontaktuppgifter. Du får offerten och kan följa bokningen, och den som bor i bostaden får ett sms med företagets namn och tid inför besöket.",
+        "Den som får avdraget måste själv stå som köpare och betala fakturan. För RUT kan du också köpa tjänsten till dina föräldrars hem och få avdraget själv. Välj då ”Mina föräldrars hem”.",
+      ],
+      links: [{ href: "/boka", label: "Gör en förfrågan" }],
+    },
+    {
+      id: "flyttpaket",
+      group: "bokning",
+      question: "Kan jag boka flytthjälp och flyttstädning på en gång?",
+      answer: [
+        "Ja. Välj flyttstädning eller flytthjälp och kryssa i flyttpaketet. Du får ett pris för varje del och godkänner offerterna var för sig.",
+        "Flyttstädningen har besiktningsgaranti: blir något underkänt städar vi om utan kostnad, till och med besiktningsdagen och alltid minst 7 dagar efter städningen.",
+      ],
+      links: [{ href: "/flyttstadning-checklista", label: "Checklista inför besiktningen" }],
+    },
+    {
+      id: "bostadens-logg",
+      group: "trygghet",
+      question: "Var ser jag vad som har gjorts i min bostad?",
+      answer: [
+        "På din bokningssida, samma länk som offerten. Där finns bostadens logg med alla jobb vi har bokat åt dig på samma adress: företaget, priset, avdraget, fakturan, bilder från jobbet och sista dag att reklamera.",
+        "Du kan skriva ut loggen, till exempel när du ska sälja bostaden.",
       ],
     },
     {

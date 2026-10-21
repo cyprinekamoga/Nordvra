@@ -9,3 +9,5 @@ export { FaqList, type FaqListProps } from "./FaqList";
 export { LegalDocumentView, formatEffectiveDate } from "./LegalDocumentView";
 export { BookCta, type BookCtaProps } from "./BookCta";
 export { CompanyFacts } from "./CompanyFacts";
+export { Promises, type PromisesProps } from "./Promises";
+export { DeductionRules } from "./DeductionRules";

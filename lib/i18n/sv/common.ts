@@ -37,6 +37,7 @@ const common = {
       book: "Boka en tjänst",
       howItWorks: "Så fungerar RUT och ROT",
       notDeductible: "Vad ger inte avdrag?",
+      checklist: "Checklista flyttstädning",
       faq: "Vanliga frågor",
       about: "Om oss",
       contact: "Kontakt",
@@ -208,6 +209,56 @@ const common = {
       checkboxPlain: "Jag godkänner villkoren och integritetspolicyn.",
     },
     requestFree: "Förfrågan är gratis och inte bindande. Du får en offert som du godkänner innan något bokas.",
+    deductionGuarantee: {
+      title: "Avdragsgaranti",
+      body: "Om Skatteverket nekar avdraget för att vi eller företaget har gjort fel, till exempel angett fel typ av arbete, skickat begäran för sent eller räknat fel, betalar vi mellanskillnaden. Du betalar bara om nekandet beror på dina egna förutsättningar, till exempel att du har för lite skatt eller redan har använt ditt tak.",
+    },
+    inspectionGuarantee: {
+      title: "Besiktningsgaranti",
+      body: "Blir något underkänt vid besiktningen städar vi om det utan kostnad. Garantin gäller till och med besiktningsdagen, och alltid minst 7 dagar efter städningen.",
+      checklistLink: "Se vad besiktningen brukar kontrollera",
+    },
+  },
+
+  /** "Reglerna för 2026": a short plain-language summary built from lib/taxRules.ts. */
+  rulesBox: {
+    title: "Reglerna för {year}, kort och enkelt",
+    rates: "RUT-avdraget är {rutRate} % och ROT-avdraget {rotRate} % på arbetskostnaden.",
+    rotBack2026:
+      "ROT är tillbaka på 30 % sedan 1 januari 2026. Den tillfälliga höjningen till 50 % gällde bara jobb som betalades mellan 12 maj och 31 december 2025.",
+    cap: "Taket är {combined} per person och år för RUT och ROT tillsammans, varav högst {rot} för ROT.",
+    paymentYear:
+      "Avdraget räknas på det år du betalar fakturan. Betalar du i januari räknas det alltså på det nya året.",
+    payYourself: "Du måste själv betala, elektroniskt. Kontant betalning ger inget avdrag.",
+    share: "Bor ni flera i bostaden kan ni dela på arbetskostnaden och få avdrag var för sig.",
+  },
+
+  /** "Våra löften": shown on the homepage, in the price summary and on the quote page. */
+  promises: {
+    title: "Våra löften till dig",
+    lead: "Det här gäller varje jobb du bokar hos oss.",
+    items: {
+      payAfter: {
+        title: "Du betalar när jobbet är klart",
+        body: "Aldrig i förskott. Fakturan kommer när arbetet är utfört, och du betalar med kort, Swish eller överföring.",
+      },
+      allIn: {
+        title: "Offertens pris är hela priset",
+        body: "Resor, framkörning och det material som behövs står i offerten. Inga avgifter tillkommer i efterhand.",
+      },
+      noUpsell: {
+        title: "Inget extra arbete utan ditt ja",
+        body: "Behövs mer än det som står i offerten får du en ny offert att godkänna först. Ingen ska sälja något till dig på plats.",
+      },
+      checked: {
+        title: "Kontrollerade företag",
+        body: "Vi kontrollerar F-skatt, försäkring och hur länge företaget har funnits, och visar det för dig i offerten.",
+      },
+      deduction: {
+        title: "Avdragsgaranti",
+        body: "Nekar Skatteverket avdraget på grund av ett fel från oss eller företaget betalar vi mellanskillnaden.",
+      },
+    },
   },
 
   /** Swedish labels for `booking_status`. */

@@ -103,8 +103,9 @@ export async function submitRequest(_previous: SubmitState, formData: FormData):
   }
 
   let bookingNumber: string;
+  const client = createAnonClient();
   try {
-    const { data, error } = await createAnonClient().rpc("submit_request", {
+    const { data, error } = await client.rpc("submit_request", {
       p: built.payload as unknown as Json,
     });
     if (error) {
@@ -126,17 +127,37 @@ export async function submitRequest(_previous: SubmitState, formData: FormData):
     return failure(fmt(m.generic, { phone }));
   }
 
+  // Flyttpaket: the second booking. The first one is already sent, so a failure here never
+  // undoes it; the owner sees the package note on the first booking and can add the other half.
+  let companionNumber: string | null = null;
+  if (built.companion) {
+    try {
+      const { data, error } = await client.rpc("submit_request", {
+        p: built.companion.payload as unknown as Json,
+      });
+      if (error) console.warn(`[booking] package submit_request failed: ${rpcErrorCode(error.message)}`);
+      else if (typeof data === "string" && BOOKING_NUMBER_RE.test(data)) companionNumber = data;
+    } catch (error) {
+      console.warn(`[booking] package submit_request threw: ${error instanceof Error ? error.name : "unknown"}`);
+    }
+  }
+
   // Emails/SMS go out after the response so a slow provider never delays or breaks the booking.
   const payload = built.payload;
-  const serviceName = built.service.name;
+  const serviceName =
+    built.companion && companionNumber
+      ? fmt(t.booking.package.bothServices, { main: built.service.name, extra: built.companion.service.name })
+      : built.service.name;
+  const numbers = companionNumber ? `${bookingNumber}, ${companionNumber}` : bookingNumber;
   after(async () => {
     try {
-      await notify(payload, bookingNumber, serviceName);
+      await notify(payload, numbers, serviceName);
     } catch (error) {
       const name = error instanceof Error ? error.name : "unknown";
       console.warn(`[booking] notification failed: ${name}`);
     }
   });
 
-  redirect(`/boka/klart?nr=${encodeURIComponent(bookingNumber)}`);
+  const extra = companionNumber ? `&nr2=${encodeURIComponent(companionNumber)}` : "";
+  redirect(`/boka/klart?nr=${encodeURIComponent(bookingNumber)}${extra}`);
 }

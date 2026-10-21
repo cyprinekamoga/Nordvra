@@ -1,5 +1,6 @@
 "use client";
 
+import { DeductionRules } from "@/components/content/DeductionRules";
 import { ChipGroup, InfoBox, YesNo, booleanToYesNo, yesNoToBoolean, type ChipOption } from "@/components/ui";
 import { eligibilityKeys, type EligibilityKey } from "@/lib/booking/state";
 import type { UsedThisYear } from "@/lib/eligibility";
@@ -114,6 +115,8 @@ export function StepEligibility({ draft, derived, errors, update }: StepProps) {
           </InfoBox>
         ) : null}
       </div>
+
+      <DeductionRules rules={derived.rules} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Promises } from "@/components/content/Promises";
 import { FaqList, JsonLd, TextLink } from "@/components/content";
 import { PhotoChip, PhotoFrame, PhotoSplit } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
@@ -423,6 +424,16 @@ function Trust() {
   );
 }
 
+function PromisesSection() {
+  return (
+    <section className="py-12 sm:py-16">
+      <Container>
+        <Promises />
+      </Container>
+    </section>
+  );
+}
+
 function FaqPreview() {
   return (
     <section aria-labelledby="fragor-rubrik" className="py-12 sm:py-16">
@@ -466,6 +477,7 @@ export default function HomePage() {
       <About />
       <Comparison />
       <Trust />
+      <PromisesSection />
       <FaqPreview />
       <FinalCta />
     </>

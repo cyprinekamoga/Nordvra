@@ -12,7 +12,10 @@ import { t } from "@/lib/i18n";
 import { Card } from "@/components/ui";
 import { Flash, ModelBadge, PageHeader, StatusBadge, selectClasses, tableClasses, tdClasses, thClasses } from "@/components/admin/bits";
 import { QuoteEditor } from "@/components/admin/QuoteEditor";
+import { PhotoUploader } from "@/components/admin/PhotoUploader";
 import { addNoteAction, saveClaimAction, sendConfirmationAction, setStatusAction } from "@/lib/admin/booking-actions";
+import { cancelReminderAction, deletePhotoAction, sendReminderAction } from "@/lib/admin/trust-actions";
+import { photoUrl } from "@/lib/quote/photoUrl";
 
 export const metadata = { title: "Bokning" };
 
@@ -56,8 +59,16 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
   if (!/^[0-9a-f-]{36}$/.test(id)) notFound();
 
   const supabase = await createServerSupabase();
-  const [{ data: b }, { data: buyers }, { data: events }, { data: notes }, { data: partners }, { data: overridesRaw }, catalog] =
-    await Promise.all([
+  const [
+    { data: b },
+    { data: buyers },
+    { data: events },
+    { data: notes },
+    { data: partners },
+    { data: overridesRaw },
+    catalog,
+    { data: photos },
+  ] = await Promise.all([
       supabase.from("bookings").select("*").eq("id", id).maybeSingle(),
       supabase.from("booking_buyers").select("*").eq("booking_id", id).order("position"),
       supabase.from("booking_events").select("*").eq("booking_id", id).order("at", { ascending: false }),
@@ -65,8 +76,18 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
       supabase.from("partners").select("*").order("name"),
       supabase.from("tax_rule_overrides").select("*"),
       getCatalog(),
+      supabase.from("booking_photos").select("*").eq("booking_id", id).order("created_at"),
     ]);
   if (!b) notFound();
+  const pkg = obj(obj(b.details).package);
+  const packageId = typeof pkg.id === "string" ? pkg.id : null;
+  const { data: packageBookings } = packageId
+    ? await supabase
+        .from("bookings")
+        .select("id,booking_number,service_name,status")
+        .eq("details->package->>id", packageId)
+        .neq("id", id)
+    : { data: [] };
 
   const overrides: TaxRuleOverride[] = (overridesRaw ?? []).map((o) => ({
     year: o.year,
@@ -171,6 +192,38 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
               <Row label="Vitvaror">{details.appliances.join(", ")}</Row>
             )}
             {b.customer_note && <Row label="Kundens meddelande">{b.customer_note}</Row>}
+            {b.resident_name && (
+              <Row label="Bokat åt">
+                <strong>{b.resident_name}</strong>
+                {b.resident_phone && (
+                  <>
+                    {", "}
+                    <a className="link" href={`tel:${b.resident_phone}`}>{b.resident_phone}</a>
+                  </>
+                )}
+                <span className="block text-sm text-muted">
+                  Bokat av en anhörig. Den som bor i bostaden får SMS när du skickar bekräftelsen.
+                </span>
+              </Row>
+            )}
+            {packageId && (
+              <Row label="Flyttpaket">
+                {(packageBookings ?? []).length === 0
+                  ? "Den andra delen saknas, kontakta kunden."
+                  : (packageBookings ?? []).map((x) => (
+                      <Link key={x.id} href={`/admin/bokningar/${x.id}`} className="link mr-3">
+                        {x.booking_number} {x.service_name} ({t.common.status[x.status]})
+                      </Link>
+                    ))}
+              </Row>
+            )}
+            {details.recurring === "season" && <Row label="Abonnemang">Säsongsabonnemang, kunden vill ha återkommande besök</Row>}
+            {b.redo_requested_at && (
+              <Row label="Omstädning">
+                <strong className="text-danger">Begärd {formatDateTime(b.redo_requested_at)}</strong>
+                {b.redo_message && <span className="block whitespace-pre-wrap">{b.redo_message}</span>}
+              </Row>
+            )}
             <Row label="Skapad">{formatDateTime(b.created_at)}</Row>
           </dl>
         </Card>
@@ -367,6 +420,72 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
           </div>
         </form>
       </Card>
+
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Card as="section" aria-labelledby="fotorapport">
+          <h2 id="fotorapport" className="mb-3 text-xl font-bold">Fotorapport</h2>
+          {(photos ?? []).length > 0 ? (
+            <ul className="mb-4 grid grid-cols-2 gap-3">
+              {(photos ?? []).map((photo) => {
+                const src = photoUrl(photo.path);
+                return (
+                  <li key={photo.id} className="space-y-1">
+                    {src && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={src} alt={photo.caption ?? ""} className="aspect-[4/3] w-full rounded-control object-cover" />
+                    )}
+                    <p className="text-sm">
+                      <strong>{photo.kind === "fore" ? "Före" : "Efter"}</strong>
+                      {photo.caption ? `: ${photo.caption}` : ""}
+                    </p>
+                    <form action={deletePhotoAction}>
+                      <input type="hidden" name="bookingId" value={b.id} />
+                      <input type="hidden" name="photoId" value={photo.id} />
+                      <button type="submit" className="min-h-12 font-semibold text-danger underline">
+                        Ta bort
+                      </button>
+                    </form>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="mb-4 text-muted">Inga bilder ännu. Be utföraren skicka före- och efterbilder.</p>
+          )}
+          <PhotoUploader bookingId={b.id} />
+        </Card>
+
+        <Card as="section" aria-labelledby="paminnelse">
+          <h2 id="paminnelse" className="mb-3 text-xl font-bold">Påminnelse</h2>
+          {b.remind_on ? (
+            <>
+              <p className="mb-3">
+                Kunden vill bli påmind {formatDateLong(b.remind_on)}.
+                {b.reminder_sent_at && <strong> Skickad {formatDateTime(b.reminder_sent_at)}.</strong>}
+              </p>
+              {!b.reminder_sent_at && (
+                <div className="flex flex-wrap gap-3">
+                  <form action={sendReminderAction}>
+                    <input type="hidden" name="bookingId" value={b.id} />
+                    <input type="hidden" name="from" value="detail" />
+                    <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
+                      Skicka påminnelsen nu
+                    </button>
+                  </form>
+                  <form action={cancelReminderAction}>
+                    <input type="hidden" name="bookingId" value={b.id} />
+                    <button type="submit" className="min-h-12 px-3 font-semibold text-danger underline">
+                      Ta bort påminnelsen
+                    </button>
+                  </form>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-muted">Kunden har inte bett om någon påminnelse.</p>
+          )}
+        </Card>
+      </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card as="section" aria-labelledby="anteckningar">

@@ -115,6 +115,9 @@ describe("requestDraftSchema", () => {
       addonIds: [],
       appliances: [],
       flexible: false,
+      packageAdd: false,
+      forRelative: false,
+      remind: false,
       eligibility: {},
       contact: {},
     });

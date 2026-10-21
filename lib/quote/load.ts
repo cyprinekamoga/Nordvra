@@ -2,6 +2,7 @@ import "server-only";
 import { hashToken } from "@/lib/crypto/pii";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
+import { parseHomeLog, type HomeLogEntry } from "./homeLog";
 import { isPlausibleToken, parseQuote, type QuoteData } from "./quote";
 
 export type QuoteLookup =
@@ -37,5 +38,20 @@ export async function loadQuote(token: string): Promise<QuoteLookup> {
   } catch (error) {
     console.warn(`[quote] get_quote threw: ${error instanceof Error ? error.name : "unknown"}`);
     return { kind: "unavailable" };
+  }
+}
+
+/** "Bostadens logg" for the home of this booking. Empty when unavailable (never blocks the page). */
+export async function loadHomeLog(tokenHash: string): Promise<HomeLogEntry[]> {
+  try {
+    const { data, error } = await createAnonClient().rpc("get_home_log", { p_token_hash: tokenHash });
+    if (error) {
+      console.warn(`[quote] get_home_log failed (${error.code ?? "no code"})`);
+      return [];
+    }
+    return parseHomeLog(data);
+  } catch (error) {
+    console.warn(`[quote] get_home_log threw: ${error instanceof Error ? error.name : "unknown"}`);
+    return [];
   }
 }

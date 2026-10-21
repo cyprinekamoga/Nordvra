@@ -27,6 +27,7 @@ const partner = (over: Partial<PartnerRow>): PartnerRow => ({
   employer_registered: true,
   f_skatt_checked_at: "2026-10-01",
   f_skatt_verified: true,
+  founded_on: null,
   id: "p",
   insurance_company: null,
   insurance_valid_to: null,

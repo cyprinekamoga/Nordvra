@@ -42,6 +42,7 @@ import {
   type Contact,
   type RequestDraft,
 } from "./schema";
+import { packageCompanion, reminderDate, seasonalService, type RecurringChoice } from "./extras";
 
 /**
  * Pure logic for the request flow `/boka`: the draft in sessionStorage, which answers each
@@ -237,6 +238,11 @@ export interface DerivedRequest {
   estimate: Estimate | null;
   /** The estimate rounded for display (whole hundreds, rates to 5 kr). */
   display: PriceRange | null;
+  /** Flyttpaket: the other half of the move, when the service has one (offered in step 3). */
+  companion: Service | null;
+  /** Set only when the customer added the companion to the request. */
+  companionEstimate: Estimate | null;
+  companionDisplay: PriceRange | null;
 }
 
 export function effectiveWindows(draft: RequestDraft): number {
@@ -255,38 +261,85 @@ export function deriveRequest(draft: RequestDraft, catalog: Catalog): DerivedReq
   const rules = getTaxRules(taxYear, catalog.config.taxOverrides);
 
   if (!service) {
-    return { category, services, service, questions: null, eligibility: null, rules, taxYear, estimate: null, display: null };
+    return {
+      category,
+      services,
+      service,
+      questions: null,
+      eligibility: null,
+      rules,
+      taxYear,
+      estimate: null,
+      display: null,
+      companion: null,
+      companionEstimate: null,
+      companionDisplay: null,
+    };
   }
 
-  const questions = homeQuestions(catalog, service);
+  const companion = packageCompanion(catalog, service);
+  const packaged = draft.packageAdd && companion !== null;
+  const questions = packaged ? packageQuestions(homeQuestions(catalog, service), companion) : homeQuestions(catalog, service);
   const eligibility = evaluateEligibility({
     deductionType: service.deductionType,
     rotKind: service.rotKind,
     housingType: draft.housingType,
     answers: relevantEligibilityAnswers(service, draft),
   });
-  const estimate = estimateForRequest({
-    catalog,
-    service,
-    answers: {
-      sizeBand: draft.sizeBand,
-      floors: effectiveFloors(draft),
-      pets: draft.pets ?? false,
-      addonIds: draft.addonIds,
-      windows: effectiveWindows(draft),
-    },
-    rules,
-    eligible: eligibility.eligible,
-    buyerCount: draft.eligibility.buyerCount ?? 1,
-  });
-  const display =
-    estimate.kind === "total"
-      ? displayRange(estimate.range)
-      : estimate.kind === "rate"
-        ? displayRate(estimate.range)
-        : null;
+  const estimateFor = (target: Service, addonIds: string[]) =>
+    estimateForRequest({
+      catalog,
+      service: target,
+      answers: {
+        sizeBand: draft.sizeBand,
+        floors: effectiveFloors(draft),
+        pets: draft.pets ?? false,
+        addonIds,
+        windows: effectiveWindows(draft),
+      },
+      rules,
+      eligible: eligibility.eligible,
+      buyerCount: draft.eligibility.buyerCount ?? 1,
+    });
+  const estimate = estimateFor(service, draft.addonIds);
+  const companionEstimate = packaged ? estimateFor(companion, []) : null;
 
-  return { category, services, service, questions, eligibility, rules, taxYear, estimate, display };
+  return {
+    category,
+    services,
+    service,
+    questions,
+    eligibility,
+    rules,
+    taxYear,
+    estimate,
+    display: displayFor(estimate),
+    companion,
+    companionEstimate,
+    companionDisplay: companionEstimate ? displayFor(companionEstimate) : null,
+  };
+}
+
+function displayFor(estimate: Estimate): PriceRange | null {
+  return estimate.kind === "total"
+    ? displayRange(estimate.range)
+    : estimate.kind === "rate"
+      ? displayRate(estimate.range)
+      : null;
+}
+
+/**
+ * Step 3 for a move-out package: the questions of both services (the size, floors and pets of a
+ * move-out cleaning, and its inspection date in step 4). Add-ons stay those of the main service.
+ */
+function packageQuestions(main: HomeQuestions, companion: Service): HomeQuestions {
+  const companionSize = companion.usesSizeBand ? "required" : companion.askHomeDetails ? "optional" : null;
+  return {
+    ...main,
+    size: main.size === "required" || companionSize === "required" ? "required" : (main.size ?? companionSize),
+    homeDetails: main.homeDetails || companion.askHomeDetails,
+    inspection: main.inspection || companion.formKind === "flyttstad",
+  };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -441,6 +494,9 @@ function clearServiceSpecific(draft: RequestDraft): RequestDraft {
     appliances: [],
     inspection: undefined,
     inspectionDate: undefined,
+    packageAdd: false,
+    recurring: undefined,
+    remind: false,
   };
 }
 
@@ -550,6 +606,10 @@ export interface SubmitRequestPayload {
     windows: number | null;
     frequency: Frequency | null;
     appliances: Appliance[];
+    /** Säsongsabonnemang (only for seasonal services). */
+    recurring: RecurringChoice | null;
+    /** Flyttpaket: both bookings share the id; "main" is the service the customer chose. */
+    package: { id: string; role: "main" | "extra"; withServiceId: string } | null;
   };
   preferred_date: string;
   time_window: TimeWindow;
@@ -562,6 +622,11 @@ export interface SubmitRequestPayload {
   contact_phone: string;
   contact_email: string;
   customer_note: string | null;
+  /** When someone books for the person who lives there. */
+  resident_name: string | null;
+  resident_phone: string | null;
+  /** Opt-in "påminn mig nästa gång" ("YYYY-MM-DD"). */
+  remind_on: string | null;
   eligibility: {
     answers: EligibilityAnswers;
     eligible: boolean;
@@ -574,7 +639,13 @@ export interface SubmitRequestPayload {
 }
 
 export type BuildPayloadResult =
-  | { ok: true; payload: SubmitRequestPayload; service: Service }
+  | {
+      ok: true;
+      payload: SubmitRequestPayload;
+      service: Service;
+      /** Flyttpaket: the second booking (same home, date and answers). */
+      companion: { payload: SubmitRequestPayload; service: Service } | null;
+    }
   | { ok: false; step: Step };
 
 /**
@@ -588,6 +659,8 @@ export function buildSubmitPayload(params: {
   catalog: Catalog;
   today: string;
   termsVersion?: string;
+  /** Id shared by the two bookings of a move-out package. */
+  newId?: () => string;
 }): BuildPayloadResult {
   const { contact, catalog, today } = params;
   // The postcode typed in step 8 wins over the one from step 5.
@@ -602,6 +675,9 @@ export function buildSubmitPayload(params: {
   }
 
   const addonIds = new Set(questions.addons.map((a) => a.id));
+  const companion = derived.companionEstimate ? derived.companion : null;
+  const packageId = companion ? (params.newId ?? (() => crypto.randomUUID()))() : null;
+  const recurring = seasonalService(service) ? (draft.recurring ?? "once") : null;
   const payload: SubmitRequestPayload = {
     service_id: service.id,
     housing_type: draft.housingType,
@@ -613,6 +689,8 @@ export function buildSubmitPayload(params: {
       windows: questions.windows ? effectiveWindows(draft) : null,
       frequency: questions.frequency ? (draft.frequency ?? null) : null,
       appliances: questions.appliances ? draft.appliances : [],
+      recurring,
+      package: companion && packageId ? { id: packageId, role: "main", withServiceId: companion.id } : null,
     },
     preferred_date: draft.preferredDate,
     time_window: draft.timeWindow,
@@ -626,6 +704,9 @@ export function buildSubmitPayload(params: {
     contact_phone: contact.phone,
     contact_email: contact.email,
     customer_note: contact.note ? contact.note : null,
+    resident_name: contact.residentName,
+    resident_phone: contact.residentPhone,
+    remind_on: contact.remind && recurring !== "season" ? reminderDate(service, draft.preferredDate) : null,
     eligibility: {
       answers: relevantEligibilityAnswers(service, draft),
       eligible: eligibility.eligible,
@@ -636,5 +717,35 @@ export function buildSubmitPayload(params: {
     estimate: estimateSnapshot(draft, { ...derived, service }),
     terms_version: params.termsVersion ?? company.termsVersion,
   };
-  return { ok: true, payload, service };
+
+  if (!companion || !packageId || !derived.companionEstimate) {
+    return { ok: true, payload, service, companion: null };
+  }
+  const companionQuestions = homeQuestions(catalog, companion);
+  const companionPayload: SubmitRequestPayload = {
+    ...payload,
+    service_id: companion.id,
+    size_band: companion.usesSizeBand || companion.askHomeDetails ? (draft.sizeBand ?? null) : null,
+    floors: companion.askHomeDetails ? effectiveFloors(draft) : null,
+    pets: companion.askHomeDetails ? (draft.pets ?? null) : null,
+    details: {
+      addonIds: [],
+      windows: null,
+      frequency: null,
+      appliances: [],
+      recurring: null,
+      package: { id: packageId, role: "extra", withServiceId: service.id },
+    },
+    inspection_date: companionQuestions.inspection && draft.inspection === "date" ? (draft.inspectionDate ?? null) : null,
+    remind_on: null,
+    estimate: estimateSnapshot(draft, {
+      ...derived,
+      service: companion,
+      estimate: derived.companionEstimate,
+      display: derived.companionDisplay,
+    }),
+  };
+  // The cleaning's inspection date belongs to the cleaning booking only.
+  if (!questions.inspection || service.formKind !== "flyttstad") payload.inspection_date = null;
+  return { ok: true, payload, service, companion: { payload: companionPayload, service: companion } };
 }

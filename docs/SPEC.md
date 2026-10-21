@@ -67,7 +67,7 @@ insurance: "If Skadeförsäkring"  (copy: "Försäkrade hos If")
 hasFSkatt: true (copy: "Godkänd för F-skatt")
 No org.nr and no postal address are shown (Nordvra works online).
 hometown: "Stockholm", coverage: "Hela Sverige"
-termsVersion: "2026-10-15"
+termsVersion: "2026-10-21"
 ```
 "Hellre ringa? Ring oss på 072-222 88 00" must be visible on every customer page (header button +
 in-flow card).
@@ -452,3 +452,48 @@ the DB; masked in lists; full value only on booking detail and in the CSV export
 URLs, logs, analytics or browser storage. RLS: customers can't read data. Retention: anonymise
 automatically (cron) 7 years after claim settled (editable; TODO confirm with accountant);
 cancelled/declined/agent jobs after 90 days. Cookie banner: only necessary cookies.
+
+---------------------------------------------------------------------------------------------------
+## 14. Trust features (October 2026)
+
+Built from the demand and competitor research (most RUT money goes to cleaning, then garden and
+moving; 41 % of RUT buyers are over 65; the most common complaints are unchecked firms, prices
+that grow and move-out cleanings that fail the inspection). Migration
+`20261019090000_trust_features.sql`.
+
+* **Flyttpaket** (`lib/booking/extras.ts`): flyttstädning ↔ bära, lasta och lossa, and packning →
+  flyttstädning. Step 3 offers "Lägg till … i samma förfrågan"; the cleaning's size, floors, pets and
+  inspection date are then asked too. Submitting creates **two bookings** (two `submit_request`
+  calls) that share `details.package.id` (roles `main`/`extra`); each gets its own quote. Admin shows
+  the other half. Flyttstädning is also listed under Flytt.
+* **Besiktningsgaranti**: free re-clean up to and including the inspection date, and at least 7
+  days after the cleaning (`redo_last_day()`). The customer asks on the booking page
+  (`request_redo` RPC → `redo_requested_at`, event, owner email). Checklist page
+  `/flyttstadning-checklista` (`lib/content/moveOutChecklist.ts`, printable).
+* **Kontrollerat företag**: `get_quote` returns `partner_checks` (F-skatt check date when verified,
+  employer registration, insurance + valid to, `partners.founded_on`, agreement). Shown on the quote
+  and booking page; expired insurance is not shown.
+* **Boka åt en anhörig**: step 8 checkbox; `bookings.resident_name` / `resident_phone`. The quote page
+  explains that the buyer must pay; "Skicka bekräftelse" also texts the resident who is coming and
+  that nobody may take payment or sell extra work at the door (no names in SMS).
+* **Avdragsgaranti**: Nordvra pays the difference when Skatteverket denies the deduction because of
+  an error by us or the partner (terms §5). Shown in step 7, on the quote page and in the FAQ.
+* **Våra löften** (`components/content/Promises.tsx`): pay after the job, never in advance; the
+  quote price is the whole price (travel, call-out, material); no extra work without a new approved
+  quote; checked firms; avdragsgaranti. Homepage, step 7 and the quote/booking page.
+* **Bostadens logg**: the booking page (`/offert/[token]` after approval) lists every approved job
+  for the same email + postcode + street (`get_home_log` RPC): company, price, paid, granted
+  deduction, invoice, photos, last day to complain (3 years after completion). Printable.
+* **Fotorapport**: `booking_photos` + public storage bucket `fotorapporter`. Objects are named
+  `<booking id>/<random uuid>.<ext>`, so a photo is only reachable through the booking link (like
+  the token); only admins may list, upload or delete. Admin uploads from the booking page (browser →
+  storage with the admin session, then `addPhotoAction`).
+* **Säsongsabonnemang** for fönsterputs, gräsklippning and snöskottning (`details.recurring`), and
+  **påminnelser**: opt-in in step 8 for jobs people repeat (`remind_on` = job date + 6 or 12 months −
+  14 days). `/admin` lists reminders due within two weeks; the owner sends them ("Skicka
+  påminnelse", `reminder_sent_at`).
+* **Reglerna för 2026** box (`components/content/DeductionRules.tsx`), from `lib/taxRules.ts`: step 6
+  and /sa-fungerar-rut-och-rot.
+* Terms and privacy policy updated (version 2026-10-21): guarantees, booking for someone else,
+  photo reports, reminders (consent). **These new sections must be reviewed by the lawyer before
+  real customers use them.**

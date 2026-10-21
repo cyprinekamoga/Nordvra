@@ -1,25 +1,43 @@
+import { Promises } from "@/components/content/Promises";
 import { Icon } from "@/components/ui";
-import { formatDateTime } from "@/lib/format";
+import { formatDateLong, formatDateTime } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
 import type { PriceBreakdown } from "@/lib/pricing/calculate";
-import type { QuoteData } from "@/lib/quote/quote";
+import type { QuoteAction } from "@/lib/quote/form";
+import type { HomeLogEntry } from "@/lib/quote/homeLog";
+import { redoState, type QuoteData } from "@/lib/quote/quote";
+import { HomeLog } from "./HomeLog";
+import { QuoteChecks } from "./QuoteChecks";
 import { QuoteCounterparty } from "./QuoteCounterparty";
 import { QuoteDetails } from "./QuoteDetails";
+import { QuoteGuarantees } from "./QuoteGuarantees";
+import { QuotePhotos } from "./QuotePhotos";
 import { QuotePriceCard } from "./QuotePriceCard";
+import { RedoPanel } from "./RedoPanel";
 
 const a = t.quote.states.approved;
 
-/** Confirmation after "Godkänn och boka" (and for later statuses: utförd, betald …). */
+/**
+ * The booking page after "Godkänn och boka" (and for later statuses: utförd, betald …): the
+ * booking, price, company checks, photo report, besiktningsgaranti, our promises and the home log.
+ */
 export function QuoteApproved({
   quote,
   breakdown,
   ratePct,
+  today,
+  redoAction,
+  homeLog,
 }: {
   quote: QuoteData;
   breakdown: PriceBreakdown;
   ratePct: number;
+  today: string;
+  redoAction: QuoteAction;
+  homeLog: HomeLogEntry[];
 }) {
   const statusLabel = quote.status === "godkand" ? undefined : t.common.status[quote.status];
+  const redo = redoState(quote, today);
   return (
     <div className="space-y-8">
       <header className="space-y-4">
@@ -43,7 +61,29 @@ export function QuoteApproved({
 
       <QuotePriceCard quote={quote} breakdown={breakdown} ratePct={ratePct} headingId="offert-pris-rubrik" />
 
+      <QuotePhotos photos={quote.photos} />
+
+      {redo !== "none" ? (
+        <RedoPanel
+          state={redo}
+          lastDay={quote.redoLastDay ? formatDateLong(quote.redoLastDay) : null}
+          requestedAt={quote.redoRequestedAt ? formatDateTime(quote.redoRequestedAt) : null}
+          action={redoAction}
+        />
+      ) : null}
+
+      <QuoteChecks quote={quote} today={today} />
+
       <QuoteCounterparty quote={quote} />
+
+      <QuoteGuarantees
+        quote={{ ...quote, formKind: redo === "none" ? quote.formKind : null }}
+        withDeduction={breakdown.eligible && breakdown.deduction > 0}
+      />
+
+      <Promises compact />
+
+      <HomeLog quote={quote} entries={homeLog} />
     </div>
   );
 }

@@ -165,7 +165,48 @@ const booking = {
       noteHint:
         "Till exempel portkod, parkering eller något som är extra viktigt. Skriv inte ditt personnummer här. Vi frågar efter det först när du godkänner offerten.",
       termsLegend: "Villkor",
+      forRelativeLabel: "Jag bokar åt någon annan, till exempel en förälder",
+      forRelativeDescription:
+        "Du får offerten och kan följa bokningen. Vi hör av oss till den som bor i bostaden inför besöket.",
+      residentName: "Namn på den som bor i bostaden",
+      residentPhone: "Mobilnummer till den som bor i bostaden",
+      residentPhoneHint:
+        "Valfritt. Vi skickar ett SMS med företagets namn och tid, så att ingen okänd står i dörren.",
+      relativeInfoTitle: "Vem får avdraget?",
+      relativeInfo: [
+        "Den som får avdraget måste själv stå som köpare och betala fakturan.",
+        "Ska din anhörig få avdraget skickar du offertlänken vidare, eller ringer oss så hjälper vi er att godkänna den tillsammans.",
+        "Gäller det RUT kan du också själv betala och få avdraget, om du valde ”Mina föräldrars hem” i steg 3.",
+      ],
+      remindLabel: "Påminn mig när det är dags igen",
+      remindDescription: "Vi mejlar dig {when}. Du kan tacka nej till fler påminnelser när du vill.",
+      remindWhen6: "om ungefär ett halvår",
+      remindWhen12: "om ungefär ett år",
     },
+  },
+
+  /** Flyttpaket: moving help and move-out cleaning in one request. */
+  package: {
+    legend: "Flyttpaket",
+    label: "Lägg till {service} i samma förfrågan",
+    hint: "Du får ett pris för varje del. Vi planerar så att städningen görs när allt är utburet.",
+    bothServices: "{main} och {extra}",
+    summaryTitle: "Ingår i flyttpaketet: {service}",
+    summaryNote: "Flyttpaketet skickas som två förfrågningar med var sin offert, så att du kan godkänna dem var för sig.",
+  },
+
+  /** Säsongsabonnemang for seasonal services. */
+  recurring: {
+    legend: "Hur ofta?",
+    hint: "Med abonnemang slipper du boka varje gång. Du kan säga upp det när du vill.",
+    once: "En gång",
+    season: {
+      fonsterputs: "Vår och höst, varje år",
+      grasklippning: "Varannan vecka, maj till september",
+      snoskottning: "Hela vintern, när det snöar",
+    },
+    perVisitNote: "Priset gäller per gång.",
+    summaryValue: "Abonnemang: {plan}",
   },
 
   warnings: {
@@ -213,6 +254,7 @@ const booking = {
     noteTooLong: "Texten får vara högst 2 000 tecken.",
     notePersonnummer:
       "Ta bort personnumret från texten. Vi frågar efter det först när du godkänner offerten.",
+    residentNameRequired: "Skriv namnet på den som bor i bostaden.",
     termsRequired: "Du behöver godkänna villkoren och integritetspolicyn för att skicka förfrågan.",
   },
 
@@ -244,6 +286,7 @@ const booking = {
       "Inget är bokat förrän du har godkänt offerten. Passar den inte tackar du bara nej. Det kostar ingenting.",
     ],
     newRequest: "Skicka en ny förfrågan",
+    packageNumberLabel: "Förfrågan för den andra delen av flyttpaketet",
   },
 } as const;
 

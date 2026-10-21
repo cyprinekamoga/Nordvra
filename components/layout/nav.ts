@@ -18,6 +18,7 @@ export const footerPages: readonly NavItem[] = [
   { href: "/boka", label: t.common.footer.links.book },
   { href: "/sa-fungerar-rut-och-rot", label: t.common.footer.links.howItWorks },
   { href: "/vad-ger-inte-avdrag", label: t.common.footer.links.notDeductible },
+  { href: "/flyttstadning-checklista", label: t.common.footer.links.checklist },
   { href: "/vanliga-fragor", label: t.common.footer.links.faq },
   { href: "/om-oss", label: t.common.footer.links.about },
   { href: "/kontakt", label: t.common.footer.links.contact },

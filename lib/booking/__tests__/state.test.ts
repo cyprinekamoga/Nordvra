@@ -75,6 +75,10 @@ const contact: Contact = {
   postcode: "11453",
   city: "Stockholm",
   note: "",
+  forRelative: false,
+  residentName: null,
+  residentPhone: null,
+  remind: false,
   acceptTerms: true,
 };
 

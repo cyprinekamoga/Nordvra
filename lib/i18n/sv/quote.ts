@@ -209,6 +209,78 @@ const quote = {
     cancel: "Nej, gå tillbaka",
   },
 
+  /** "Kontrollerat företag": what Nordvra checked about the company. */
+  checks: {
+    title: "Kontrollerat företag",
+    lead: "Det här har vi kontrollerat om {partner} innan vi valde företaget åt dig.",
+    leadNoName: "Det här har vi kontrollerat om företaget innan vi valde det åt dig.",
+    fSkatt: "Godkänt för F-skatt, kontrollerat hos Skatteverket {date}",
+    fSkattMissing: "F-skatt kontrolleras innan arbetet börjar",
+    employer: "Registrerat som arbetsgivare",
+    insurance: "Ansvarsförsäkring hos {company}, giltig till {date}",
+    insuranceNoDate: "Ansvarsförsäkring hos {company}",
+    founded: "Har funnits sedan {year} ({age})",
+    ageYears: "{years} år",
+    ageOne: "1 år",
+    ageNew: "nystartat",
+    agreement: "Har skrivit avtal med Nordvra om hur jobbet ska göras",
+    orgNr: "Org.nr {orgNr}",
+    verifyLink: "Kontrollera själv hos Skatteverket",
+    verifyUrl: "https://www.skatteverket.se/foretag/skatterochavdrag/fskatt",
+  },
+
+  /** Booked by a relative for the person who lives in the home. */
+  relative: {
+    title: "Bokat åt {name}",
+    body: "Den som ska få avdraget måste själv stå som köpare och betala fakturan. Fyll i köparens namn och personnummer nedan, eller ring oss så hjälper vi er att godkänna offerten tillsammans.",
+  },
+
+  /** Säsongsabonnemang. */
+  subscription: {
+    title: "Säsongsabonnemang",
+    body: "Du har valt abonnemang. Priset gäller per gång, och vi hör av oss inför varje besök. Du kan säga upp abonnemanget när du vill.",
+  },
+
+  /** The booking page after approval. */
+  booking: {
+    promisesTitle: "Det här gäller din bokning",
+    photosTitle: "Fotorapport",
+    photosLead: "Bilder från jobbet, tagna av företaget som gjorde det.",
+    photoBefore: "Före",
+    photoAfter: "Efter",
+    redo: {
+      title: "Besiktningsgaranti",
+      open: "Blev något underkänt vid besiktningen, eller ser du något som inte är rent? Anmäl det här senast {date} så städar vi om utan kostnad.",
+      notYet: "Garantin gäller från städdagen till och med besiktningsdagen, och alltid minst 7 dagar efter städningen.",
+      requested: "Du har anmält omstädning ({date}). Vi hör av oss så snart vi kan, senast nästa vardag.",
+      closed: "Garantitiden gick ut {date}. Ring oss om du ändå har frågor om städningen.",
+      messageLabel: "Vad behöver göras om?",
+      messageHint: "Till exempel ”ugnen och badrumsgolvet”. Skriv gärna vad besiktningen anmärkte på.",
+      submit: "Anmäl omstädning",
+      submitting: "Skickar …",
+      checklistLink: "Se vad besiktningen brukar kontrollera",
+      errorNotAvailable: "Garantin kan inte anmälas här just nu. Ring oss på {phone} så hjälper vi dig.",
+      errorGeneric: "Något gick fel. Försök igen, eller ring oss på {phone}.",
+    },
+    log: {
+      title: "Bostadens logg",
+      lead: "Alla jobb vi har bokat åt dig på {address}: vem som gjorde jobbet, vad det kostade och hur länge du kan reklamera. Spara eller skriv ut den, till exempel inför en försäljning.",
+      empty: "Här samlas dina jobb när de är utförda.",
+      print: "Skriv ut loggen",
+      date: "Datum",
+      company: "Företag",
+      price: "Pris före avdrag",
+      paid: "Betalt",
+      deduction: "Beviljat avdrag",
+      invoice: "Faktura",
+      complaintUntil: "Reklamera senast",
+      dateToBeAgreed: "Inte bestämt än",
+      photos: "{count} bilder",
+      photoOne: "1 bild",
+      current: "Den här bokningen",
+    },
+  },
+
   states: {
     newRequest: "Gör en ny förfrågan",
     notFound: {

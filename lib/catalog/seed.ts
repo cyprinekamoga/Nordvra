@@ -125,6 +125,8 @@ export const services: Service[] = [
       homeDetails: true,
       skv: "Städning",
       warnings: ["rut-byggstadning", "rut-gemensamma-utrymmen"],
+      // Also under Flytt, so the whole move-out package is in one place.
+      extraCategories: ["flytt"],
     },
     {
       id: "tvatt-strykning",

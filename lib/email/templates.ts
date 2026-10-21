@@ -302,3 +302,32 @@ export function ownerQuoteAnswered(p: {
     button: { label: m.button, href: p.adminUrl },
   });
 }
+
+/** To the owner when a customer asks for a free re-clean (besiktningsgaranti). */
+export function ownerRedoRequested(p: { bookingNumber: string; adminUrl: string }): RenderedEmail {
+  const m = s.ownerRedoRequested;
+  const vars = { bookingNumber: p.bookingNumber };
+  return render({
+    audience: "owner",
+    subject: fmt(m.subject, vars),
+    preheader: m.preheader,
+    heading: m.heading,
+    paragraphs: [fmt(m.intro, vars)],
+    button: { label: m.button, href: p.adminUrl },
+  });
+}
+
+/** "Dags igen?": the reminder the customer asked for when booking. */
+export function reminderDue(p: { name: string; serviceName: string; link: string }): RenderedEmail {
+  const m = s.reminder;
+  const service = p.serviceName.toLocaleLowerCase("sv-SE");
+  return render({
+    audience: "customer",
+    subject: fmt(m.subject, { service }),
+    preheader: m.preheader,
+    heading: fmt(m.heading, { service }),
+    greeting: fmt(m.greeting, { name: p.name }),
+    paragraphs: [fmt(m.intro, { service }), m.stop],
+    button: { label: m.button, href: p.link },
+  });
+}

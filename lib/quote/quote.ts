@@ -55,6 +55,25 @@ export interface StoredEligibility {
   warnings: EligibilityWarning[];
 }
 
+/** What Nordvra checked about the company (from the partner register). */
+export interface PartnerChecks {
+  /** Date F-skatt was last checked; null when not verified. */
+  fSkattCheckedAt: string | null;
+  employerRegistered: boolean;
+  insuranceCompany: string | null;
+  insuranceValidTo: string | null;
+  /** Registration date at Bolagsverket. */
+  foundedOn: string | null;
+  agreementSigned: boolean;
+}
+
+export interface QuotePhoto {
+  /** Object path in the public "fotorapporter" bucket. */
+  path: string;
+  caption: string | null;
+  kind: "fore" | "efter";
+}
+
 export interface QuoteData {
   bookingNumber: string;
   status: BookingStatus;
@@ -86,6 +105,20 @@ export interface QuoteData {
   partnerOrgNr: string | null;
   approvedAt: string | null;
   declinedAt: string | null;
+  /** "flyttstad" for move-out cleaning (besiktningsgaranti). */
+  formKind: string | null;
+  inspectionDate: string | null;
+  completedAt: string | null;
+  /** Set when someone booked for the person who lives in the home. */
+  residentName: string | null;
+  partnerChecks: PartnerChecks | null;
+  redoRequestedAt: string | null;
+  /** Last day of the besiktningsgaranti (move-out cleaning with a date). */
+  redoLastDay: string | null;
+  photos: QuotePhoto[];
+  /** Säsongsabonnemang and flyttpaket answers from the request. */
+  recurring: "once" | "season" | null;
+  inPackage: boolean;
 }
 
 export const MIN_BUYERS = 1;
@@ -141,6 +174,35 @@ function parseEligibility(raw: unknown): StoredEligibility {
   return { eligible, reasons, warnings };
 }
 
+function record(value: unknown): Record<string, unknown> | null {
+  return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : null;
+}
+
+export const PHOTO_PATH_RE = /^[0-9a-f-]{36}\/[0-9a-f-]{36}\.(jpg|png|webp)$/;
+
+export function parsePhotos(raw: unknown): QuotePhoto[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((item) => {
+    const r = record(item);
+    const path = str(r?.path);
+    if (!r || !PHOTO_PATH_RE.test(path)) return [];
+    return [{ path, caption: nullableStr(r.caption), kind: r.kind === "fore" ? "fore" : "efter" } as QuotePhoto];
+  });
+}
+
+function parsePartnerChecks(raw: unknown): PartnerChecks | null {
+  const r = record(raw);
+  if (!r) return null;
+  return {
+    fSkattCheckedAt: isoDate(r.f_skatt_checked_at),
+    employerRegistered: r.employer_registered === true,
+    insuranceCompany: nullableStr(r.insurance_company),
+    insuranceValidTo: isoDate(r.insurance_valid_to),
+    foundedOn: isoDate(r.founded_on),
+    agreementSigned: r.agreement_signed === true,
+  };
+}
+
 /** `get_quote` JSON → `QuoteData`, or null when the RPC found nothing or the shape is unusable. */
 export function parseQuote(raw: unknown): QuoteData | null {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
@@ -187,7 +249,42 @@ export function parseQuote(raw: unknown): QuoteData | null {
     partnerOrgNr: nullableStr(r.partner_org_nr),
     approvedAt: timestamp(r.approved_at),
     declinedAt: timestamp(r.declined_at),
+    formKind: nullableStr(r.form_kind),
+    inspectionDate: isoDate(r.inspection_date),
+    completedAt: isoDate(r.completed_at),
+    residentName: nullableStr(r.resident_name),
+    partnerChecks: parsePartnerChecks(r.partner_checks),
+    redoRequestedAt: timestamp(r.redo_requested_at),
+    redoLastDay: isoDate(r.redo_last_day),
+    photos: parsePhotos(r.photos),
+    recurring: oneOf(record(r.details)?.recurring, ["once", "season"] as const),
+    inPackage: record(record(r.details)?.package) !== null,
   };
+}
+
+/** Whole years since `foundedOn` ("YYYY-MM-DD") on `todayIso`. */
+export function companyAgeYears(foundedOn: string, todayIso: string): number {
+  const [fy, fm, fd] = foundedOn.split("-").map(Number);
+  const [ty, tm, td] = todayIso.split("-").map(Number);
+  return Math.max(0, ty - fy - (tm < fm || (tm === fm && td < fd) ? 1 : 0));
+}
+
+export type RedoState = "none" | "notYet" | "open" | "requested" | "closed";
+
+/**
+ * Besiktningsgaranti on the booking page: only for move-out cleaning, from the day of the
+ * cleaning up to and including the last day (same rule as the `request_redo` RPC).
+ */
+export function redoState(
+  quote: Pick<QuoteData, "formKind" | "redoRequestedAt" | "redoLastDay" | "completedAt" | "scheduledDate">,
+  todayIso: string,
+): RedoState {
+  if (quote.formKind !== "flyttstad") return "none";
+  if (quote.redoRequestedAt) return "requested";
+  const jobDate = quote.completedAt ?? quote.scheduledDate;
+  if (!jobDate || !quote.redoLastDay) return "notYet";
+  if (todayIso < jobDate) return "notYet";
+  return todayIso <= quote.redoLastDay ? "open" : "closed";
 }
 
 /** Which version of the page to show. */

@@ -13,7 +13,7 @@ describe("company constants", () => {
     expect(company.phoneDisplay).toBe("072-222 88 00");
     expect(company.phoneHref).toBe("tel:+46722228800");
     expect(company.email).toBe("info@nordvra.se");
-    expect(company.termsVersion).toBe("2026-10-15");
+    expect(company.termsVersion).toBe("2026-10-21");
   });
 });
 

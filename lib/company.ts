@@ -20,7 +20,7 @@ export const company = {
   hometown: "Stockholm",
   coverage: "Hela Sverige",
   /** Version of Villkor/Integritetspolicy the customer accepts (stored with each request). */
-  termsVersion: "2026-10-15",
+  termsVersion: "2026-10-21",
 } as const;
 
 export type Company = typeof company;

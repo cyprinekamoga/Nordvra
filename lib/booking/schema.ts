@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FREQUENCIES, HOUSING_TYPES, SIZE_BANDS, TIME_WINDOWS } from "@/lib/catalog/types";
+import { RECURRING_CHOICES } from "./extras";
 import { t } from "@/lib/i18n";
 import { normalizePhone, parsePersonnummer } from "@/lib/validation/identity";
 
@@ -63,6 +64,9 @@ export const contactDraftSchema = z.object({
   street: z.string().max(200).optional(),
   city: z.string().max(100).optional(),
   note: z.string().max(NOTE_MAX).optional(),
+  /** "Jag bokar åt någon annan": the person who lives in the home. */
+  residentName: z.string().max(200).optional(),
+  residentPhone: z.string().max(40).optional(),
 });
 export type ContactDraft = z.infer<typeof contactDraftSchema>;
 
@@ -86,6 +90,13 @@ export const requestDraftSchema = z.object({
   inspection: z.enum(INSPECTION_CHOICES).optional(),
   inspectionDate: isoDate.optional(),
   flexible: z.boolean().default(false),
+  /** Flyttpaket: also book the other half of the move (moving help or move-out cleaning). */
+  packageAdd: z.boolean().default(false),
+  /** Seasonal services: one visit or the whole season. */
+  recurring: z.enum(RECURRING_CHOICES).optional(),
+  /** Step 8: booking for someone else (e.g. a parent) and "remind me next time". */
+  forRelative: z.boolean().default(false),
+  remind: z.boolean().default(false),
   /** Digits only; may be incomplete while the customer types. */
   postcode: z.string().regex(/^\d{0,5}$/).optional(),
   eligibility: eligibilityAnswersSchema.default({}),
@@ -134,48 +145,70 @@ export const CONTACT_FIELDS = [
   "postcode",
   "city",
   "note",
+  "residentName",
+  "residentPhone",
   "acceptTerms",
 ] as const;
 export type ContactField = (typeof CONTACT_FIELDS)[number];
 
-export const contactSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, { error: e.nameRequired })
-    .max(200, { error: e.nameTooLong }),
-  phone: z
-    .string()
-    .trim()
-    .refine((value) => normalizePhone(value) !== null, { error: e.phoneInvalid })
-    .transform((value) => normalizePhone(value) ?? value),
-  email: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .max(254, { error: e.emailInvalid })
-    .regex(EMAIL_RE, { error: e.emailInvalid }),
-  street: z
-    .string()
-    .trim()
-    .min(2, { error: e.streetRequired })
-    .max(200, { error: e.streetTooLong }),
-  postcode: z
-    .string()
-    .transform((value) => value.replace(/\s/g, ""))
-    .pipe(z.string().regex(/^\d{5}$/, { error: e.postcodeInvalid })),
-  city: z
-    .string()
-    .trim()
-    .min(2, { error: e.cityRequired })
-    .max(100, { error: e.cityTooLong }),
-  note: z
-    .string()
-    .trim()
-    .max(NOTE_MAX, { error: e.noteTooLong })
-    .refine((value) => !containsPersonnummer(value), { error: e.notePersonnummer }),
-  acceptTerms: z.literal(true, { error: e.termsRequired }),
-});
+export const contactSchema = z
+  .object({
+    name: z
+      .string()
+      .trim()
+      .min(2, { error: e.nameRequired })
+      .max(200, { error: e.nameTooLong }),
+    phone: z
+      .string()
+      .trim()
+      .refine((value) => normalizePhone(value) !== null, { error: e.phoneInvalid })
+      .transform((value) => normalizePhone(value) ?? value),
+    email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .max(254, { error: e.emailInvalid })
+      .regex(EMAIL_RE, { error: e.emailInvalid }),
+    street: z
+      .string()
+      .trim()
+      .min(2, { error: e.streetRequired })
+      .max(200, { error: e.streetTooLong }),
+    postcode: z
+      .string()
+      .transform((value) => value.replace(/\s/g, ""))
+      .pipe(z.string().regex(/^\d{5}$/, { error: e.postcodeInvalid })),
+    city: z
+      .string()
+      .trim()
+      .min(2, { error: e.cityRequired })
+      .max(100, { error: e.cityTooLong }),
+    note: z
+      .string()
+      .trim()
+      .max(NOTE_MAX, { error: e.noteTooLong })
+      .refine((value) => !containsPersonnummer(value), { error: e.notePersonnummer }),
+    forRelative: z.boolean().default(false),
+    residentName: z.string().trim().max(200, { error: e.nameTooLong }).default(""),
+    residentPhone: z.string().trim().default(""),
+    remind: z.boolean().default(false),
+    acceptTerms: z.literal(true, { error: e.termsRequired }),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.forRelative) return;
+    if (value.residentName.length < 2) {
+      ctx.addIssue({ code: "custom", path: ["residentName"], message: e.residentNameRequired });
+    }
+    if (value.residentPhone !== "" && normalizePhone(value.residentPhone) === null) {
+      ctx.addIssue({ code: "custom", path: ["residentPhone"], message: e.phoneInvalid });
+    }
+  })
+  .transform(({ residentName, residentPhone, ...rest }) => ({
+    ...rest,
+    // Only kept when the customer books for someone else.
+    residentName: rest.forRelative ? residentName : null,
+    residentPhone: rest.forRelative && residentPhone !== "" ? normalizePhone(residentPhone) : null,
+  }));
 /** Raw values from the form (the terms box may still be unticked). */
 export type ContactFormValues = Omit<z.input<typeof contactSchema>, "acceptTerms"> & {
   acceptTerms: boolean;
@@ -197,12 +230,31 @@ export function contactErrors(error: z.ZodError): ContactErrors {
   return out;
 }
 
+/** The "bokar åt någon annan" fields, checked even while other fields still have errors. */
+function residentErrors(input: ContactFormValues): ContactErrors {
+  if (!input.forRelative) return {};
+  const out: ContactErrors = {};
+  if ((input.residentName ?? "").trim().length < 2) out.residentName = e.residentNameRequired;
+  const phone = (input.residentPhone ?? "").trim();
+  if (phone !== "" && normalizePhone(phone) === null) out.residentPhone = e.phoneInvalid;
+  return out;
+}
+
 /** Validates the step 8 fields. Never logs or echoes the values. */
 export function validateContact(
   input: ContactFormValues,
 ): { ok: true; data: Contact } | { ok: false; errors: ContactErrors } {
   const result = contactSchema.safeParse(input);
-  return result.success ? { ok: true, data: result.data } : { ok: false, errors: contactErrors(result.error) };
+  const resident = residentErrors(input);
+  if (result.success && Object.keys(resident).length === 0) return { ok: true, data: result.data };
+  const errors = result.success ? {} : contactErrors(result.error);
+  // Field order: the resident fields come after the note.
+  const merged: ContactErrors = {};
+  for (const field of CONTACT_FIELDS) {
+    const message = errors[field] ?? resident[field];
+    if (message) merged[field] = message;
+  }
+  return { ok: false, errors: merged };
 }
 
 /** Reads the step 8 fields from a submitted form. */
@@ -219,6 +271,10 @@ export function contactInputFromFormData(formData: FormData): ContactFormValues 
     postcode: text("postcode"),
     city: text("city"),
     note: text("note"),
+    forRelative: formData.get("forRelative") === "on",
+    residentName: text("residentName"),
+    residentPhone: text("residentPhone"),
+    remind: formData.get("remind") === "on",
     acceptTerms: formData.get("acceptTerms") === "on",
   };
 }

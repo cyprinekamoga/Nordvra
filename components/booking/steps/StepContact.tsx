@@ -5,6 +5,7 @@ import { startTransition, useActionState, useEffect, useRef, useState, type Form
 import { flushSync } from "react-dom";
 import { Button, Checkbox, InfoBox, TextArea, TextField } from "@/components/ui";
 import { submitRequest } from "@/lib/booking/actions";
+import { reminderMonths } from "@/lib/booking/extras";
 import {
   NOTE_MAX,
   validateContact,
@@ -26,7 +27,7 @@ const terms = t.common.legal.terms;
  * with the same zod schema as the server action (`submitRequest`), which recomputes the price,
  * calls the `submit_request` RPC and redirects to `/boka/klart`.
  */
-export function StepContact({ draft, update, onEdit }: StepProps & { onEdit: (step: Step) => void }) {
+export function StepContact({ draft, derived, update, onEdit }: StepProps & { onEdit: (step: Step) => void }) {
   const [state, formAction, pending] = useActionState(submitRequest, null);
   const [accepted, setAccepted] = useState(false);
   const [attempted, setAttempted] = useState(false);
@@ -42,8 +43,13 @@ export function StepContact({ draft, update, onEdit }: StepProps & { onEdit: (st
     postcode: draft.postcode ?? "",
     city: contact.city ?? "",
     note: contact.note ?? "",
+    forRelative: draft.forRelative,
+    residentName: contact.residentName ?? "",
+    residentPhone: contact.residentPhone ?? "",
+    remind: draft.remind,
     acceptTerms: accepted,
   };
+  const months = draft.recurring === "season" ? null : reminderMonths(derived.service);
   const validation = validateContact(values);
   const liveErrors: ContactErrors = attempted && !validation.ok ? validation.errors : {};
   const errors: ContactErrors = { ...(state?.fieldErrors ?? {}), ...liveErrors };
@@ -178,6 +184,65 @@ export function StepContact({ draft, update, onEdit }: StepProps & { onEdit: (st
         onChange={(event) => setField("note", event.currentTarget.value)}
         error={errors.note}
       />
+
+      <Checkbox
+        name="forRelative"
+        boxed
+        checked={draft.forRelative}
+        onChange={(event) => {
+          const checked = event.currentTarget.checked;
+          update((d) => ({ ...d, forRelative: checked }));
+        }}
+        label={s.forRelativeLabel}
+        description={s.forRelativeDescription}
+      />
+      {draft.forRelative ? (
+        <div className="space-y-6 border-l-4 border-brand-soft pl-4">
+          <TextField
+            label={s.residentName}
+            name="residentName"
+            autoComplete="off"
+            maxLength={200}
+            value={values.residentName}
+            onChange={(event) => setField("residentName", event.currentTarget.value)}
+            error={errors.residentName}
+          />
+          <TextField
+            label={s.residentPhone}
+            hint={s.residentPhoneHint}
+            name="residentPhone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="off"
+            maxLength={40}
+            optional
+            value={values.residentPhone}
+            onChange={(event) => setField("residentPhone", event.currentTarget.value)}
+            error={errors.residentPhone}
+          />
+          <InfoBox tone="info" title={s.relativeInfoTitle}>
+            <ul className="list-disc space-y-2 pl-5">
+              {s.relativeInfo.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </InfoBox>
+        </div>
+      ) : null}
+
+      {months ? (
+        <Checkbox
+          name="remind"
+          boxed
+          checked={draft.remind}
+          onChange={(event) => {
+            const checked = event.currentTarget.checked;
+            update((d) => ({ ...d, remind: checked }));
+          }}
+          label={s.remindLabel}
+          description={fmt(s.remindDescription, { when: months >= 12 ? s.remindWhen12 : s.remindWhen6 })}
+        />
+      ) : null}
 
       <Checkbox
         name="acceptTerms"

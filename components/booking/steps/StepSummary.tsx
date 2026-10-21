@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useId } from "react";
+import { Promises } from "@/components/content/Promises";
 import { Button, Card, InfoBox, PriceLine, PriceList } from "@/components/ui";
-import { priceView } from "@/lib/booking/price";
+import { seasonalService } from "@/lib/booking/extras";
+import { priceView, type PriceView } from "@/lib/booking/price";
 import {
   STEP_CATEGORY,
   STEP_ELIGIBILITY,
@@ -24,18 +27,66 @@ const p = t.common.price;
 const legal = t.common.legal;
 const el = t.common.eligibility;
 
+/** One indicative price card (the chosen service, or the other half of a move-out package). */
+function EstimateCard({ title, view, note }: { title: string; view: PriceView; note?: string }) {
+  const priceId = useId();
+  return (
+    <Card as="section" aria-labelledby={priceId} className="space-y-4">
+      <div className="space-y-2">
+        <h2 id={priceId} className="text-lg font-bold text-muted">
+          {title}
+        </h2>
+        {view.headline ? (
+          <p className="text-2xl leading-snug font-bold text-ink tabular-nums">{view.headline}</p>
+        ) : (
+          <p className="text-xl leading-snug font-bold text-ink">{view.quoteText}</p>
+        )}
+        {view.headline && !view.eligible ? <p className="font-semibold text-muted">{s.noDeductionNote}</p> : null}
+        {view.headline ? <p className="text-ink">{s.exactWithin24h}</p> : null}
+        {note ? <p className="font-semibold text-ink">{note}</p> : null}
+      </div>
+
+      <PriceList live>
+        {view.lines.map((line) => (
+          <PriceLine
+            key={line.key}
+            label={line.label}
+            hint={line.hint}
+            value={line.isAmount ? <span className="price">{line.value}</span> : line.value}
+            emphasis={line.emphasis}
+            accent={line.accent ?? (line.key === "fee" ? "brand" : undefined)}
+          />
+        ))}
+      </PriceList>
+
+      {view.headline ? (
+        <>
+          <p className="font-semibold text-ink">{p.preliminary}</p>
+          <p className="text-muted">{p.inclVat}</p>
+        </>
+      ) : null}
+    </Card>
+  );
+}
+
 /**
  * Step 7: indicative price card (before deduction, deduction, no booking fee, to pay), the
  * reasons when the deduction doesn't apply, warnings, the plain-Swedish legal boxes and a
  * summary of the answers with "Ändra" buttons.
  */
 export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (step: Step) => void }) {
-  const priceId = useId();
   const legalId = useId();
   const choicesId = useId();
   const view = priceView(derived);
-  const { service, eligibility } = derived;
+  const { service, eligibility, companion, companionEstimate, companionDisplay } = derived;
+  const companionView =
+    companion && companionEstimate
+      ? priceView({ ...derived, service: companion, estimate: companionEstimate, display: companionDisplay })
+      : null;
   if (!service || !view) return null;
+  const seasonal = seasonalService(service);
+  const subscription = seasonal && draft.recurring === "season" ? t.booking.recurring.season[seasonal] : null;
+  const withCleaning = service.formKind === "flyttstad" || (companionView !== null && companion?.formKind === "flyttstad");
 
 
   const housing = draft.housingType ? t.common.housing[draft.housingType] : "";
@@ -45,7 +96,13 @@ export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (s
     {
       key: "service",
       label: s.choices.service,
-      value: serviceLabel(draft, derived),
+      value: [
+        serviceLabel(draft, derived),
+        companionView && companion ? companion.name : "",
+        subscription ? fmt(t.booking.recurring.summaryValue, { plan: subscription.toLocaleLowerCase("sv-SE") }) : "",
+      ]
+        .filter(Boolean)
+        .join(", "),
       step: skipsServiceStep(derived) ? STEP_CATEGORY : STEP_SERVICE,
     },
     { key: "home", label: s.choices.home, value: [housing, size].filter(Boolean).join(", "), step: STEP_HOME },
@@ -68,42 +125,18 @@ export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (s
 
   return (
     <div className="space-y-8">
-      <Card as="section" aria-labelledby={priceId} className="space-y-4">
-        <div className="space-y-2">
-          <h2 id={priceId} className="text-lg font-bold text-muted">
-            {serviceLabel(draft, derived)}
-          </h2>
-          {view.headline ? (
-            <p className="text-2xl leading-snug font-bold text-ink tabular-nums">{view.headline}</p>
-          ) : (
-            <p className="text-xl leading-snug font-bold text-ink">{view.quoteText}</p>
-          )}
-          {view.headline && !view.eligible ? <p className="font-semibold text-muted">{s.noDeductionNote}</p> : null}
-          {view.headline ? <p className="text-ink">{s.exactWithin24h}</p> : null}
-        </div>
+      <EstimateCard
+        title={serviceLabel(draft, derived)}
+        view={view}
+        note={subscription ? t.booking.recurring.perVisitNote : undefined}
+      />
 
-        <PriceList live>
-          {view.lines.map((line) => (
-            <PriceLine
-              key={line.key}
-              label={line.label}
-              hint={line.hint}
-              value={
-                line.isAmount ? <span className="price">{line.value}</span> : line.value
-              }
-              emphasis={line.emphasis}
-              accent={line.accent ?? (line.key === "fee" ? "brand" : undefined)}
-            />
-          ))}
-        </PriceList>
-
-        {view.headline ? (
-          <>
-            <p className="font-semibold text-ink">{p.preliminary}</p>
-            <p className="text-muted">{p.inclVat}</p>
-          </>
-        ) : null}
-      </Card>
+      {companionView && companion ? (
+        <>
+          <EstimateCard title={fmt(t.booking.package.summaryTitle, { service: companion.name })} view={companionView} />
+          <p className="text-ink">{t.booking.package.summaryNote}</p>
+        </>
+      ) : null}
 
       {eligibility && eligibility.reasons.length > 0 ? (
         <InfoBox tone="warning" title={view.headline ? s.ineligibleTitle : el.notEligibleTitle} headingLevel={2}>
@@ -144,7 +177,22 @@ export function StepSummary({ draft, derived, onEdit }: StepProps & { onEdit: (s
         <InfoBox tone="legal" title={legal.payment.title} headingLevel={3}>
           <p>{legal.payment.body}</p>
         </InfoBox>
+        <InfoBox tone="success" title={legal.deductionGuarantee.title} headingLevel={3} icon="shield">
+          <p>{legal.deductionGuarantee.body}</p>
+        </InfoBox>
+        {withCleaning ? (
+          <InfoBox tone="success" title={legal.inspectionGuarantee.title} headingLevel={3} icon="shield">
+            <p>{legal.inspectionGuarantee.body}</p>
+            <p>
+              <Link href="/flyttstadning-checklista" className="link">
+                {legal.inspectionGuarantee.checklistLink}
+              </Link>
+            </p>
+          </InfoBox>
+        ) : null}
       </section>
+
+      <Promises headingLevel={2} compact />
 
       <section aria-labelledby={choicesId} className="space-y-3">
         <h2 id={choicesId} className="text-xl font-bold text-ink">

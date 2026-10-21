@@ -63,6 +63,7 @@ export async function savePartnerAction(formData: FormData): Promise<void> {
     employer_registered: bool(formData, "employer_registered"),
     insurance_company: str(formData, "insurance_company", 200),
     insurance_valid_to: date(formData, "insurance_valid_to"),
+    founded_on: date(formData, "founded_on"),
     service_ids: formData.getAll("service_ids").map(String).filter((s) => slug.safeParse(s).success),
     regions: formData.getAll("regions").map(String).slice(0, 25),
     postcode_prefixes: parsePostcodePrefixes(str(formData, "postcode_prefixes", 1000) ?? ""),

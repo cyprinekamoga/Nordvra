@@ -6,6 +6,7 @@ const PUBLIC_ROUTES = [
   "/boka",
   "/sa-fungerar-rut-och-rot",
   "/vad-ger-inte-avdrag",
+  "/flyttstadning-checklista",
   "/vanliga-fragor",
   "/om-oss",
   "/kontakt",

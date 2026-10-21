@@ -86,6 +86,26 @@ const email = {
     button: "Öppna ärendet",
   },
 
+  ownerRedoRequested: {
+    subject: "Omstädning begärd: {bookingNumber}",
+    preheader: "Kunden har anmält omstädning enligt besiktningsgarantin.",
+    heading: "Kunden vill ha omstädning",
+    intro:
+      "Kunden har anmält omstädning för {bookingNumber} enligt besiktningsgarantin. Kontakta kunden och utföraren i dag, så att städningen blir klar före besiktningen.",
+    button: "Öppna ärendet",
+  },
+
+  reminder: {
+    subject: "Dags för {service} igen?",
+    preheader: "Du bad oss påminna dig. Boka på 2 minuter, ingen bokningsavgift.",
+    heading: "Dags för {service} igen?",
+    greeting: "Hej {name}!",
+    intro:
+      "Du bad oss påminna dig när det började bli dags för {service} igen. Vill du boka gör du det på ett par minuter, och du ser priset före och efter avdrag direkt.",
+    stop: "Vill du inte ha fler påminnelser? Svara på det här mejlet så tar vi bort den.",
+    button: "Boka igen",
+  },
+
   sms: {
     requestReceived:
       "Nordvra: Tack för din förfrågan ({bookingNumber})! Du får pris och tid inom 24 timmar. Frågor? Ring {phone}.",
@@ -96,6 +116,10 @@ const email = {
     whenScheduled: "Datum: {date}.",
     whenScheduledWithTime: "Datum: {date}, {timeWindow}.",
     whenUnscheduled: "Vi hör av oss om dag och tid.",
+    resident:
+      "Nordvra: En anhörig har bokat {service} hos dig. {when} Företaget som kommer heter {partner}. Ingen ska ta betalt på plats eller sälja extra arbete. Frågor? Ring {phone}.",
+    residentNoPartner:
+      "Nordvra: En anhörig har bokat {service} hos dig. {when} Ingen ska ta betalt på plats eller sälja extra arbete. Frågor? Ring {phone}.",
   },
 } as const;
 

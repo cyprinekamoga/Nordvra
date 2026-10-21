@@ -7,6 +7,7 @@ import {
   TableOfContents,
   TextLink,
 } from "@/components/content";
+import { DeductionRules } from "@/components/content/DeductionRules";
 import { PhotoFrame } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import {
@@ -128,6 +129,8 @@ export default function HowItWorksPage() {
             })}
           />
         </ContentSection>
+
+        <DeductionRules />
 
         <ContentSection id="tak" title={s.cap.title}>
           <InfoBox tone="legal" title={legal.cap.title}>

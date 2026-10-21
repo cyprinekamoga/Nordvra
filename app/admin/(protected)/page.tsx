@@ -3,20 +3,26 @@ import { connection } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { computeStats } from "@/lib/admin/stats";
 import { BOOKING_STATUSES } from "@/lib/admin/filters";
-import { formatKr, formatNumber } from "@/lib/format";
+import { formatDateLong, formatKr, formatNumber } from "@/lib/format";
 import { t } from "@/lib/i18n";
 import { Card } from "@/components/ui";
-import { PageHeader, StatusBadge } from "@/components/admin/bits";
+import { Flash, PageHeader, StatusBadge } from "@/components/admin/bits";
+import { addDays, stockholmDate } from "@/components/ui/calendar-utils";
+import { sendReminderAction } from "@/lib/admin/trust-actions";
 import { WeeklyChart } from "@/components/admin/WeeklyChart";
 
 export const metadata = { title: "Översikt" };
 
-export default async function AdminDashboard() {
+export default async function AdminDashboard({ searchParams }: PageProps<"/admin">) {
+  const sp = await searchParams;
   await connection();
   const supabase = await createServerSupabase();
   const since = new Date();
   since.setUTCDate(since.getUTCDate() - 7 * 13);
-  const [{ data: recent }, { data: all }] = await Promise.all([
+  const today = stockholmDate(new Date());
+  const monthAgo = new Date();
+  monthAgo.setUTCDate(monthAgo.getUTCDate() - 30);
+  const [{ data: recent }, { data: all }, { data: reminders }, { data: redos }] = await Promise.all([
     supabase
       .from("bookings")
       .select("created_at")
@@ -27,6 +33,22 @@ export default async function AdminDashboard() {
         "created_at,status,model,labour_ore,material_ore,travel_ore,subcontractor_cost_ore,commission_pct,paid_amount_ore,claim_requested_ore",
       )
       .limit(10000),
+    // Reminders the customer asked for that are due within two weeks.
+    supabase
+      .from("bookings")
+      .select("id,booking_number,service_name,contact_name,remind_on")
+      .lte("remind_on", addDays(today, 14))
+      .is("reminder_sent_at", null)
+      .in("status", ["godkand", "utford", "betald", "rut_rot_begard", "avslutad"])
+      .order("remind_on")
+      .limit(50),
+    // Besiktningsgaranti requests from the last 30 days.
+    supabase
+      .from("bookings")
+      .select("id,booking_number,service_name,redo_requested_at")
+      .gte("redo_requested_at", monthAgo.toISOString())
+      .order("redo_requested_at", { ascending: false })
+      .limit(20),
   ]);
   const stats = computeStats(all ?? [], new Date());
   const newCount = stats.byStatus.ny_forfragan ?? 0;
@@ -51,6 +73,55 @@ export default async function AdminDashboard() {
           </p>
         )}
       </PageHeader>
+      <Flash params={sp} />
+
+      {(redos ?? []).length > 0 && (
+        <section aria-labelledby="omstadning" className="mb-8">
+          <h2 id="omstadning" className="mb-3 text-xl font-bold text-danger">
+            Omstädning begärd (besiktningsgaranti)
+          </h2>
+          <ul className="space-y-2">
+            {(redos ?? []).map((r) => (
+              <li key={r.id}>
+                <Link href={`/admin/bokningar/${r.id}`} className="link font-bold">
+                  {r.booking_number} {r.service_name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <section aria-labelledby="paminnelser" className="mb-8">
+        <h2 id="paminnelser" className="mb-3 text-xl font-bold">
+          Påminnelser att skicka
+        </h2>
+        {(reminders ?? []).length === 0 ? (
+          <p className="text-muted">Inga påminnelser de närmaste två veckorna.</p>
+        ) : (
+          <ul className="space-y-3">
+            {(reminders ?? []).map((r) => (
+              <li key={r.id} className="flex flex-wrap items-center gap-3">
+                <Link href={`/admin/bokningar/${r.id}`} className="link font-bold">
+                  {r.booking_number}
+                </Link>
+                <span>
+                  {r.service_name}, {r.contact_name}, {formatDateLong(r.remind_on)}
+                </span>
+                <form action={sendReminderAction}>
+                  <input type="hidden" name="bookingId" value={r.id} />
+                  <button
+                    type="submit"
+                    className="min-h-12 rounded-control border-2 border-brand bg-surface px-4 font-semibold text-brand"
+                  >
+                    Skicka påminnelse
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <ul className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {tiles.map((tile) => (

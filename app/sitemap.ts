@@ -17,6 +17,7 @@ const PUBLIC_ROUTES: readonly Entry[] = [
   { path: "/", priority: 1, changeFrequency: "weekly", lastModified: CONTENT_UPDATED },
   { path: "/boka", priority: 0.9, changeFrequency: "monthly", lastModified: CONTENT_UPDATED },
   { path: "/sa-fungerar-rut-och-rot", priority: 0.8, changeFrequency: "monthly", lastModified: CONTENT_UPDATED },
+  { path: "/flyttstadning-checklista", priority: 0.6, changeFrequency: "yearly", lastModified: "2026-10-21" },
   { path: "/vad-ger-inte-avdrag", priority: 0.7, changeFrequency: "monthly", lastModified: CONTENT_UPDATED },
   { path: "/vanliga-fragor", priority: 0.8, changeFrequency: "monthly", lastModified: CONTENT_UPDATED },
   { path: "/om-oss", priority: 0.5, changeFrequency: "yearly", lastModified: CONTENT_UPDATED },

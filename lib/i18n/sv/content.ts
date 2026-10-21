@@ -22,6 +22,11 @@ const content = {
       description:
         "RUT-avdraget är {rutRate} och ROT-avdraget {rotRate} på arbetskostnaden. Läs om tak, vem som har rätt till avdraget, betalning och hur vi sköter ansökan åt dig.",
     },
+    checklist: {
+      title: "Checklista inför besiktningen",
+      description:
+        "Det här brukar besiktningen kontrollera efter en flyttstädning, rum för rum. Med Nordvras besiktningsgaranti städar vi om utan kostnad om något blir underkänt.",
+    },
     notDeductible: {
       title: "Vad ger inte avdrag?",
       description:
@@ -365,6 +370,14 @@ const content = {
     },
   },
 
+  checklist: {
+    title: "Checklista inför besiktningen",
+    lead: "Det här brukar besiktningen kontrollera efter en flyttstädning. Allt ingår i flyttstädningen du bokar hos oss.",
+    tipsTitle: "Inför och efter besiktningen",
+    print: "Skriv ut checklistan",
+    ctaTitle: "Boka flyttstädning med besiktningsgaranti",
+    ctaBody: "Lägg gärna till flytthjälp i samma förfrågan. Du ser priset före och efter RUT-avdrag direkt.",
+  },
   notDeductible: {
     title: "Vad ger inte avdrag?",
     lead: "Det mesta som görs i hemmet ger RUT- eller ROT-avdrag, men inte allt. Här är vanliga saker som inte ger avdrag. Är du osäker? Ring oss, så kollar vi åt dig.",

@@ -11,8 +11,8 @@ import { getCatalog } from "@/lib/catalog/load";
 import { formatDateTime } from "@/lib/format";
 import { t } from "@/lib/i18n";
 import { PricingError } from "@/lib/pricing/calculate";
-import { acceptQuote, declineQuote } from "@/lib/quote/actions";
-import { loadQuote } from "@/lib/quote/load";
+import { acceptQuote, declineQuote, requestRedo } from "@/lib/quote/actions";
+import { loadHomeLog, loadQuote } from "@/lib/quote/load";
 import {
   quotePrice,
   quoteRules,
@@ -73,7 +73,17 @@ async function QuoteContent({ params }: { params: Params }) {
   }
 
   if (view === "approved") {
-    return <QuoteApproved quote={quote} breakdown={breakdown} ratePct={ratePct} />;
+    const homeLog = await loadHomeLog(lookup.tokenHash);
+    return (
+      <QuoteApproved
+        quote={quote}
+        breakdown={breakdown}
+        ratePct={ratePct}
+        today={today}
+        redoAction={requestRedo.bind(null, token)}
+        homeLog={homeLog}
+      />
+    );
   }
 
   return (

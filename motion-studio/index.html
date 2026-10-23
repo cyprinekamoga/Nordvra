@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Alla fyra</title>
+<style>
+  @font-face { font-family: Figtree; src: url(assets/fonts/Figtree-latin.woff2) format('woff2'); font-weight: 300 900; }
+  @font-face { font-family: Figtree; src: url(assets/fonts/Figtree-latin-ext.woff2) format('woff2'); font-weight: 300 900; unicode-range: U+0100-024F, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  html, body { margin: 0; background: #FAF7F2; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+<canvas id="c"></canvas>
+<script type="module">
+// "Alla fyra" – 20 s, 120 BPM. See docs/shotlist.md. Every frame is a pure function of t.
+// Query: ?hook=quiz|list|local&town=Sundsvall
+import { clamp, spring, track } from './lib/motion.js';
+import { ICONS } from './lib/icons.js';
+
+const C = {
+  canvas: '#FAF7F2', surface: '#FFFFFF', ink: '#1A2420', muted: '#4D5853', brand: '#0B5D4B',
+  brandStrong: '#084536', brandSoft: '#E1EFE9', border: '#DDD5C8',
+};
+const q = new URLSearchParams(location.search);
+const HOOK = q.get('hook') || 'quiz', TOWN = q.get('town') || 'Sundsvall';
+
+const c = document.getElementById('c'), g = c.getContext('2d');
+c.width = innerWidth; c.height = innerHeight;
+const W = c.width, H = c.height, S = W / 1080;
+const vertical = H / W > 1.5;
+// Reels covers the top 14 % and bottom 35 % of a 9:16 frame; the 4:5 feed has no overlay.
+const TOP = vertical ? 0.14 * H : 0.055 * H, BOTTOM = vertical ? 0.65 * H : 0.945 * H, X = 72 * S, CW = W - 2 * X;
+
+const sUI = (t) => spring(t, 260, 22), sType = (t) => spring(t, 170, 26);
+const lerp = (a, b, k) => a + (b - a) * k;
+const mix = (h1, h2, k) => {
+  const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const a = p(h1), b = p(h2);
+  return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], clamp(k)))).join(',')})`;
+};
+const font = (w, px) => `${w} ${px * S}px Figtree`;
+
+// ── assets ───────────────────────────────────────────────────────────
+const load = (src) => { const i = new Image(); i.src = src; return i.decode().then(() => i); };
+const [LOGO, PRICE] = await Promise.all([load('assets/logo.png'), load('assets/ui/price_tillsyn.png')]);
+await Promise.all(['800', '700', '600', '500'].map((w) => document.fonts.load(`${w} 40px Figtree`, 'åäö')));
+
+const ICON = {};
+for (const [name, svg] of Object.entries(ICONS)) {
+  const doc = new DOMParser().parseFromString(`<svg xmlns="http://www.w3.org/2000/svg">${svg}</svg>`, 'image/svg+xml');
+  ICON[name] = [...doc.documentElement.children].map((el) => {
+    const a = (k) => Number(el.getAttribute(k) || 0), p = new Path2D();
+    if (el.tagName === 'path') p.addPath(new Path2D(el.getAttribute('d')));
+    else if (el.tagName === 'rect') p.roundRect(a('x'), a('y'), a('width'), a('height'), a('rx'));
+    else if (el.tagName === 'circle') p.arc(a('cx'), a('cy'), a('r'), 0, Math.PI * 2);
+    else if (el.tagName === 'line') { p.moveTo(a('x1'), a('y1')); p.lineTo(a('x2'), a('y2')); }
+    else if (el.tagName === 'polyline') {
+      el.getAttribute('points').trim().split(/\s+/).map((pt) => pt.split(',').map(Number))
+        .forEach(([x, y], i) => (i ? p.lineTo(x, y) : p.moveTo(x, y)));
+    }
+    return p;
+  });
+}
+function icon(name, x, y, size, color) {
+  g.save(); g.translate(x, y); g.scale(size / 24, size / 24);
+  g.lineWidth = 2.25; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = color;
+  ICON[name].forEach((p) => g.stroke(p));
+  g.restore();
+}
+// Check mark drawn on from 0 to 1.
+function check(x, y, size, k, color) {
+  if (k <= 0) return;
+  g.save(); g.translate(x, y); g.scale(size / 24, size / 24);
+  g.lineWidth = 3; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = color;
+  const len = 4 * Math.SQRT2 + 8 * Math.SQRT2;
+  g.setLineDash([len * clamp(k), len]);
+  g.beginPath(); g.moveTo(6, 12.5); g.lineTo(10, 16.5); g.lineTo(18, 8.5); g.stroke();
+  g.restore();
+}
+
+function wrap(text, maxW) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line) { lines.push(line); line = w; } else line = test;
+  }
+  return [...lines, line];
+}
+
+// Headline lines slide up out of a mask and leave the same way.
+function headline(t, lines, tIn, tOut, y, px, color = C.ink, weight = 800) {
+  if (t < tIn - 0.05 || (tOut != null && t > tOut + 0.6)) return y;
+  g.font = font(weight, px);
+  const lh = px * S * 1.0;
+  lines.forEach((line, i) => {
+    const e = sType(t - (tIn + i * 0.07)), x = tOut == null ? 0 : sType(t - (tOut + i * 0.04));
+    const top = y + i * lh;
+    g.save(); g.beginPath(); g.rect(0, top - lh * 0.12, W, lh * 1.16); g.clip();
+    g.fillStyle = color; g.textBaseline = 'top';
+    g.fillText(line, X, top + (1 - e) * lh * 1.4 - x * lh * 1.4);
+    g.restore();
+  });
+  return y + lines.length * lh;
+}
+
+function rrect(x, y, w, h, r, fill, stroke, lw = 3 * S) {
+  g.beginPath(); g.roundRect(x, y, w, h, r);
+  if (fill) { g.fillStyle = fill; g.fill(); }
+  if (stroke) { g.lineWidth = lw; g.strokeStyle = stroke; g.stroke(); }
+}
+
+// ── content ──────────────────────────────────────────────────────────
+const HOOKS = {
+  quiz: { lines: ['Vilken ger', 'RUT-avdrag?'], px: 120 },
+  list: { lines: ['4 saker som ger', 'RUT-avdrag'], px: 112 },
+  local: { lines: [`Bor du i ${TOWN}?`, 'Vilken ger RUT-avdrag?'], px: 84 },
+};
+const TILES = [
+  { icon: 'washing-machine', label: 'Laga tvättmaskinen' },
+  { icon: 'snowflake', label: 'Skotta snö från taket' },
+  { icon: 'armchair', label: 'Köra soffan till second hand' },
+  { icon: 'flower-2', label: 'Vattna blommorna när du är bortrest' },
+];
+const LIST = [
+  { icon: 'wifi', label: 'Fixa wifi:n' },
+  { icon: 'shirt', label: 'Tvätt och strykning hemma' },
+  { icon: 'baby', label: 'Barnvakt' },
+  { icon: 'leaf', label: 'Kratta löv' },
+  { icon: 'sparkles', label: 'Putsa fönster' },
+  { icon: 'truck', label: 'Bära vid flytten' },
+];
+
+// ── layout ───────────────────────────────────────────────────────────
+const hook = HOOKS[HOOK];
+const GAP = 24 * S;
+const gridTop = TOP + hook.lines.length * hook.px * S + 36 * S;
+const tileW = (CW - GAP) / 2;
+const tileH = Math.min(300 * S, (BOTTOM - gridTop - 100 * S - GAP) / 2);
+const tileRect = (i) => ({ x: X + (i % 2) * (tileW + GAP), y: gridTop + Math.floor(i / 2) * (tileH + GAP), w: tileW, h: tileH, r: 30 * S });
+const cardTop = TOP + 2 * 112 * S + 56 * S;
+const listCard = { x: X, y: cardTop, w: CW, h: 480 * S, r: 40 * S };
+const CROP = { w: 1062, h: 1000 };
+const priceTop = TOP + 120 * S + 64 * S + 44 * S;
+const priceW = Math.min(CW, (BOTTOM - priceTop) * CROP.w / CROP.h);
+const priceCard = { x: X, y: priceTop, w: priceW, h: priceW * CROP.h / CROP.w, r: 34 * S };
+const logoH = 150 * S, ctaHead = TOP + logoH + 48 * S;
+const pill = { x: X, y: ctaHead + 2 * 120 * S + 48 * S, w: CW, h: 140 * S, r: 70 * S };
+const lerpRect = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k), r: lerp(a.r, b.r, k) });
+
+// ── scenes ───────────────────────────────────────────────────────────
+function quizTiles(t) {
+  if (t >= 6.05) return;
+  const merge = (i) => sUI(t - (5.6 + i * 0.04));
+  TILES.forEach((tile, i) => {
+    const pop = sUI(t - (-0.2 + i * 0.5));
+    if (pop <= 0) return;
+    const base = tileRect(i), m = merge(i);
+    const rect = lerpRect(base, listCard, m);
+    const s = lerp(0.62, 1, pop), cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
+    const f = sUI(t - (4.0 + i * 0.25));
+    g.save(); g.translate(cx, cy + (1 - pop) * 60 * S); g.scale(s, s); g.translate(-cx, -cy);
+    const fill = m > 0 ? mix(C.brand, C.surface, m) : mix(C.surface, C.brand, f);
+    rrect(rect.x, rect.y, rect.w, rect.h, rect.r, fill, m > 0 ? null : mix(C.border, C.brand, f));
+    // Contents leave as the tiles merge.
+    if (m < 0.35) {
+      g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
+      const dy = -m * 180 * S, pad = 28 * S, txt = mix(C.ink, C.surface, f);
+      icon(tile.icon, rect.x + pad, rect.y + pad + dy, 92 * S, f > 0.5 ? C.surface : C.brand);
+      g.font = font(700, 44); g.fillStyle = txt; g.textBaseline = 'alphabetic';
+      const lines = wrap(tile.label, rect.w - 2 * pad);
+      lines.forEach((l, j) => g.fillText(l, rect.x + pad, rect.y + rect.h - pad - (lines.length - 1 - j) * 50 * S + dy));
+      // Check badge after the reveal.
+      const b = sUI(t - (4.05 + i * 0.25));
+      if (b > 0) {
+        const r = 42 * S * b, bx = rect.x + rect.w - pad - 42 * S, by = rect.y + pad + 42 * S + dy;
+        g.beginPath(); g.arc(bx, by, r, 0, Math.PI * 2); g.fillStyle = C.surface; g.fill();
+        check(bx - 30 * S, by - 30 * S, 60 * S, (t - (4.12 + i * 0.25)) / 0.22, C.brand);
+      }
+      g.restore();
+    }
+    g.restore();
+  });
+}
+
+// "Gissa!", a draining bar and 3 · 2 · 1 on the beats, in one row under the grid.
+function timer(t) {
+  if (t < 1.95 || t > 4.6) return;
+  const h = 72 * S, y = gridTop + 2 * tileH + GAP + 24 * S;
+  const dy = (1 - sUI(t - 2.0)) * h * 1.2 + sUI(t - 4.0) * h * 1.2;
+  g.save(); g.beginPath(); g.rect(0, y, W, h); g.clip();
+  g.font = font(800, 54); g.fillStyle = C.brand; g.textBaseline = 'middle';
+  g.fillText('Gissa!', X, y + h / 2 + dy);
+  const n = t < 2.5 ? '' : t < 3.0 ? '3' : t < 3.5 ? '2' : '1';
+  if (n) {
+    const p = sUI(t - (2.5 + 0.5 * (3 - Number(n))));
+    g.font = font(800, 64); g.textAlign = 'right'; g.fillStyle = C.ink;
+    g.fillText(n, X + CW, y + h / 2 + dy + (1 - p) * h);
+    g.textAlign = 'left';
+  }
+  const k = track(t, [[0, 1], [2.5, 0.75], [3.0, 0.5], [3.5, 0.25], [4.0, 0]], 300, 26);
+  const bx = X + 210 * S, bw = CW - 210 * S - 80 * S, by = y + h / 2 - 8 * S + dy;
+  rrect(bx, by, bw, 16 * S, 8 * S, C.brandSoft);
+  if (k > 0.001) rrect(bx, by, bw * clamp(k), 16 * S, 8 * S, C.brand);
+  g.restore();
+}
+
+function listCardScene(t) {
+  if (t < 6.0 || t >= 12.0) return;
+  const rect = listCard;
+  const bump = LIST.reduce((acc, _, j) => acc + (sUI(t - (6.0 + j)) - sUI(t - (6.12 + j))) * 0.035, 0);
+  const cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
+  g.save(); g.translate(cx, cy); g.scale(1 + bump, 1 + bump); g.translate(-cx, -cy);
+  rrect(rect.x, rect.y, rect.w, rect.h, rect.r, C.surface, C.border);
+  g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
+  const pad = 48 * S;
+  // Item j enters from below on beat 6 + j and leaves upwards just before the next one.
+  LIST.forEach((item, j) => {
+    if (t < 5.9 + j || t > 7.4 + j) return;
+    const out = sUI(t - (6.9 + j)), inn = 1 - sUI(t - (5.9 + j));
+    const k = out > 0 ? out : inn, dy = (out > 0 ? -1 : 1) * k * rect.h * 0.85;
+    g.save(); g.filter = `blur(${Math.round(Math.min(1, Math.abs(k)) * 10 * S)}px)`;
+    const ic = 190 * S, icx = rect.x + pad, icy = rect.y + (rect.h - ic) / 2 + dy;
+    g.beginPath(); g.arc(icx + ic / 2, icy + ic / 2, ic / 2, 0, Math.PI * 2); g.fillStyle = C.brandSoft; g.fill();
+    icon(item.icon, icx + ic * 0.22, icy + ic * 0.22, ic * 0.56, C.brand);
+    const tx = icx + ic + 40 * S;
+    g.font = font(800, 78); g.fillStyle = C.ink; g.textBaseline = 'alphabetic';
+    const lines = wrap(item.label, rect.x + rect.w - pad - tx);
+    const ty = rect.y + rect.h / 2 - (lines.length - 1) * 40 * S + dy;
+    lines.forEach((l, i) => g.fillText(l, tx, ty + i * 80 * S));
+    const cy2 = ty + (lines.length - 1) * 80 * S + 66 * S;
+    check(tx - 6 * S, cy2 - 34 * S, 44 * S, 1, C.brand);
+    g.font = font(700, 40); g.fillStyle = C.brand;
+    g.fillText('Ger RUT-avdrag', tx + 44 * S, cy2);
+    g.restore();
+  });
+  g.restore();
+  // Progress dots under the card.
+  LIST.forEach((_, j) => {
+    const on = sUI(t - (6.0 + j));
+    g.beginPath(); g.arc(X + 14 * S + j * 40 * S, rect.y + rect.h + 46 * S, 9 * S, 0, Math.PI * 2);
+    g.fillStyle = mix(C.border, C.brand, on); g.fill();
+  });
+  g.restore();
+}
+
+function priceScene(t) {
+  if (t < 12.0) return;
+  const grow = sUI(t - 12.0), shrink = sUI(t - 16.0);
+  const rect = lerpRect(lerpRect(listCard, priceCard, grow), pill, shrink);
+  const fill = mix(C.surface, C.brand, shrink);
+  rrect(rect.x, rect.y, rect.w, rect.h, rect.r, fill, shrink < 0.5 ? C.border : null);
+  if (shrink < 0.4) {
+    g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
+    const reveal = sUI(t - 12.12);
+    const scale = priceCard.w / CROP.w;
+    g.drawImage(PRICE, 0, 0, CROP.w, CROP.h, priceCard.x, priceCard.y + (1 - reveal) * 120 * S - shrink * 300 * S, priceCard.w, priceCard.h);
+    // Underline sweep under the price line.
+    const u = sUI(t - 13.0);
+    if (u > 0) {
+      g.fillStyle = C.brand;
+      g.fillRect(priceCard.x + 58 * scale, priceCard.y + 515 * scale - shrink * 300 * S, 640 * scale * clamp(u), 12 * scale);
+    }
+    g.restore();
+  }
+}
+
+function cta(t) {
+  if (t < 15.95) return;
+  const l = sUI(t - 16.0);
+  const lw = logoH * LOGO.width / LOGO.height;
+  g.save(); g.beginPath(); g.rect(0, TOP - 10 * S, W, logoH + 20 * S); g.clip();
+  g.drawImage(LOGO, X - 6 * S, TOP + (1 - l) * logoH * 1.2, lw, logoH);
+  g.restore();
+  headline(t, ['Se ditt pris', 'efter avdrag.'], 16.1, null, ctaHead, 120);
+  const p = sUI(t - 16.0);
+  if (p > 0.55) {
+    const k = sType(t - 16.35);
+    g.save(); g.beginPath(); g.roundRect(pill.x, pill.y, pill.w, pill.h, pill.r); g.clip();
+    g.font = font(700, 46); g.fillStyle = C.surface; g.textBaseline = 'middle';
+    const ty = pill.y + pill.h / 2 + (1 - k) * 80 * S;
+    g.fillText('Gör en förfrågan – 2 minuter', pill.x + 52 * S, ty);
+    const ax = pill.x + pill.w - 92 * S;
+    g.strokeStyle = C.surface; g.lineWidth = 6 * S; g.lineCap = 'round'; g.lineJoin = 'round';
+    g.beginPath(); g.moveTo(ax, ty); g.lineTo(ax + 44 * S, ty); g.moveTo(ax + 26 * S, ty - 18 * S);
+    g.lineTo(ax + 44 * S, ty); g.lineTo(ax + 26 * S, ty + 18 * S); g.stroke();
+    g.restore();
+  }
+  const chips = ['Ingen bokningsavgift', 'Hela Sverige'];
+  let cx = X;
+  g.font = font(600, 36);
+  chips.forEach((txt, i) => {
+    const k = sUI(t - (16.75 + i * 0.25));
+    if (k <= 0) return;
+    const w = g.measureText(txt).width + 64 * S, h = 70 * S, y = pill.y + pill.h + 36 * S;
+    g.save(); g.translate(cx + w / 2, y + h / 2); g.scale(k, k); g.translate(-(cx + w / 2), -(y + h / 2));
+    rrect(cx, y, w, h, h / 2, C.brandSoft);
+    g.fillStyle = C.brandStrong; g.textBaseline = 'middle';
+    g.fillText(txt, cx + 32 * S, y + h / 2);
+    g.restore();
+    cx += w + 16 * S;
+  });
+  const f = sType(t - 17.25);
+  if (f > 0) {
+    const y = pill.y + pill.h + 36 * S + 70 * S + 40 * S;
+    g.save(); g.beginPath(); g.rect(0, y - 4 * S, W, 90 * S); g.clip();
+    g.font = font(500, 30); g.fillStyle = C.muted; g.textBaseline = 'top';
+    ['RUT-avdrag 50 % på arbetskostnaden.', 'Avdraget förutsätter att du har rätt till det.']
+      .forEach((l, j) => g.fillText(l, X, y + j * 40 * S + (1 - f) * 90 * S));
+    g.restore();
+  }
+}
+
+window.seek = (t) => {
+  g.filter = 'none';
+  g.fillStyle = C.canvas; g.fillRect(0, 0, W, H);
+  headline(t, hook.lines, -0.35, 3.9, TOP, hook.px);
+  headline(t, ['Alla fyra.'], 4.0, 5.6, TOP, 128, C.brand);
+  headline(t, ['RUT-avdrag: 50 % på arbetskostnaden.'], 4.2, 5.6, TOP + 140 * S, 40, C.muted, 600);
+  headline(t, ['Och det här', 'också.'], 5.75, 11.85, TOP, 112);
+  headline(t, ['Bortrest i jul?'], 12.0, 15.85, TOP, 120);
+  headline(t, ['Vi bokar någon som vattnar blommorna.'], 12.2, 15.85, TOP + 136 * S, 40, C.muted, 600);
+  quizTiles(t);
+  timer(t);
+  listCardScene(t);
+  priceScene(t);
+  cta(t);
+};
+window.seek(0);
+</script>
+</html>

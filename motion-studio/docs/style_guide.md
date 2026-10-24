@@ -37,6 +37,13 @@ Taken from the live site (nordvra.netlify.app, October 2026), not invented.
 ## Icons
 Lucide (`lib/icons.js`), the same line icons the app uses, 2.25 px stroke at 24 px, drawn large.
 
+## Photos
+- Real stock photos, CC0 only (free for ads, no attribution needed), credited in `assets/photos/CREDITS.md`.
+- No recognisable faces (no implied endorsement), no readable brand logos or labels: blur them.
+- Homes and objects over people: the job, not a smiling worker. Warm, daylight, Nordic where possible.
+- Cover-cropped around a focal point (`assets/photos/photos.json`), slow push-in, light grade
+  (saturation 0.92, contrast 1.04). Labels sit on solid plates, never on a gradient scrim.
+
 ## Banned here (on top of CLAUDE.md)
-Stock photos of smiling cleaners, gradients, glow, confetti, "halva priset", a "−50 %" on items
+Posed stock photos of smiling cleaners, gradients, glow, confetti, "halva priset", a "−50 %" on items
 where the deduction is smaller (second-hand transport), and plain TV installation as a RUT example.

@@ -1,9 +1,10 @@
-# Shot list – "Alla fyra" (concept C, version 2)
+# Shot list – "Alla fyra" (concept C, version 3: real photos)
 
 20 s, 120 BPM (beat = 0.5 s, bar = 2 s, 10 bars). 9:16 first, then 4:5 from the same timeline.
 Works with the sound off: every idea is on screen as text.
 
-Storyboards: `docs/storyboard_9x16.png`, `docs/storyboard_4x5.png` (frames at 1.5, 4.5, 7.5, 13.5 and 18.5 s).
+Storyboards: `docs/storyboard_9x16.png`, `docs/storyboard_4x5.png`. Every job is shown with a real CC0 stock photo
+(`assets/photos/CREDITS.md`); a job without a photo falls back to its icon.
 
 **The idea:** a quiz instead of a list. "Vilken ger RUT-avdrag?" over four surprising everyday
 jobs. The viewer guesses, the answer is "Alla fyra." Then more surprises, one real price from the
@@ -13,11 +14,11 @@ live app, and the call to action.
 
 | Time | Bars | On screen | Motion | Sound |
 |---|---|---|---|---|
-| 0.0–2.0 | 1 | **"Vilken ger RUT-avdrag?"** (already on screen at frame 0). Four white tiles pop in on beats 0.5 / 1.0 / 1.5 / 2.0: *Laga tvättmaskinen* · *Skotta snö från taket* · *Köra soffan till second hand* · *Vattna blommorna när du är bortrest* | Words slide up out of a mask; tiles spring in (UI spring) | Tick on each tile |
+| 0.0–2.0 | 1 | **"Vilken ger RUT-avdrag?"** (already on screen at frame 0). Four photo tiles with white label plates pop in at 0.0 / 0.5 / 1.0 / 1.5: *Laga tvättmaskinen* · *Skotta snö från taket* · *Köra soffan till second hand* · *Vattna blommorna när du är bortrest* | Words slide up out of a mask; tiles spring in (UI spring) | Tick on each tile |
 | 2.0–4.0 | 2 | One row under the grid: **"Gissa!"**, a draining bar, **3 · 2 · 1** on the beats | Bar steps down a quarter per beat on springs | Soft clock ticks, riser |
-| 4.0–5.6 | 3 | Hook swaps to **"Alla fyra."** and "RUT-avdrag: 50 % på arbetskostnaden." Each tile flips to brand green with a drawn check (4.0 / 4.25 / 4.5 / 4.75) | Checks draw on; fills morph | Thump on 4.0, four rising plucks |
-| 5.6–12.0 | 3–6 | **"Och det här också."** The four tiles merge into one card (5.6–6.0) that rolls to a new job on every second beat: *Fixa wifi:n* · *Tvätt och strykning hemma* · *Barnvakt* · *Kratta löv* · *Putsa fönster* · *Bära vid flytten* | One container; content rolls like a slot reel with a short blur; progress dots | Pop per swap on the beat |
-| 12.0–16.0 | 7–8 | **"Bortrest i jul?"** + "Vi bokar någon som vattnar blommorna." The card grows into the real price card from the app: *Tillsyn av bostaden – Vanligtvis 200–400 kr per tillfälle efter RUT-avdrag* (before: 400–700 kr) | Card morphs and settles; the price line gets an underline sweep | Whoosh, settle chord |
+| 4.0–5.6 | 3 | Hook swaps to **"Alla fyra."** and "RUT-avdrag: 50 % på arbetskostnaden." Each tile gets a green frame, a green label plate and a drawn check (4.0 / 4.25 / 4.5 / 4.75) | Checks draw on; plates morph | Thump on 4.0, four rising plucks |
+| 5.45–12.0 | 3–6 | **"Och det här också."** The four photos collapse and dissolve into one large photo card (5.45–5.9) that rolls to a new job every second: *Fixa wifi:n* · *Tvätt och strykning hemma* · *Barnvakt* · *Kratta löv* · *Putsa fönster* · *Bära vid flytten* | One container; content rolls like a slot reel with a short blur; progress dots | Pop per swap on the beat |
+| 12.0–16.0 | 7–8 | **"Bortrest i jul?"** + "Vi bokar någon som vattnar blommorna." Cut to a photo of warm windows in the snow; at 12.9 the real price card from the app rises over it: *Tillsyn av bostaden – Vanligtvis 200–400 kr per tillfälle efter RUT-avdrag* (before: 400–700 kr) | Card morphs and settles; the price line gets an underline sweep (13.6) | Bell on the cut, whoosh, half-time groove |
 | 16.0–20.0 | 9–10 | Logo, **"Se ditt pris efter avdrag."** The price card shrinks into a green button: *Gör en förfrågan – 2 minuter →*. Chips: *Ingen bokningsavgift* · *Hela Sverige*. Fine print: *RUT-avdrag 50 % på arbetskostnaden. Avdraget förutsätter att du har rätt till det.* | Logo springs in, chips stagger, holds 2 s | Closing chord |
 
 ## Fact check (every on-screen claim)

@@ -26,10 +26,14 @@ One sentence: `/motion-reel for [URL], 20s, vertical, reference ./refs/frame.png
 | File | What it is |
 |---|---|
 | `CLAUDE.md` | House rules: render contract, banned looks, sound, critique loop |
-| `render.mjs` | `node render.mjs --fps 60 --dur 15 --sub 4 [--w 1080 --h 1920] [--page index.html] [--out out/silent.mp4]` |
+| `render.mjs` | `node render.mjs --fps 60 --dur 15 --sub 4 [--w 1080 --h 1920] [--page index.html] [--out out/silent.mp4] [--start 0]` |
 | `lib/motion.js` | Closed-form springs: `spring(t)` and `track(t, keys)` |
 | `beats.py` | `python beats.py song.wav > beats.json`: BPM, beats, downbeats, hits |
 | `review.sh` | `./review.sh out/final.mp4 4.2`: contact sheet, glitch strip, phone test, loop check |
+| `mux.sh` | `./mux.sh out/silent.mp4 out/score_raw.wav out/final.mp4`: mix to −14 LUFS and add the sound |
+| `audio/score.py` | The current film's music and sound effects, synthesized in code |
+| `index.html`, `docs/` | The current film ("Alla fyra" RUT ad), its shot list, style guide and storyboards |
+| `assets/` | Logo, Figtree (OFL), live UI captures and CC0 photos (`assets/photos/CREDITS.md`) |
 | `prompts/` | The guide's prompts: setup test, launch video, reference, state list, springs, sound, critique, director's brief |
 
 `--sub 4` renders 4 sub-steps per frame and blends them for real motion blur. Outputs go to `out/`

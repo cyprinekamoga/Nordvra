@@ -42,6 +42,10 @@ const font = (w, px) => `${w} ${px * S}px Figtree`;
 const load = (src) => { const i = new Image(); i.src = src; return i.decode().then(() => i); };
 const [LOGO, PRICE] = await Promise.all([load('assets/logo.png'), load('assets/ui/price_tillsyn.png')]);
 await Promise.all(['800', '700', '600', '500'].map((w) => document.fonts.load(`${w} 40px Figtree`, 'åäö')));
+// Stock photos (CC0, see assets/photos/CREDITS.md). A scene without a photo falls back to its icon.
+const MANIFEST = await fetch('assets/photos/photos.json').then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+const PHOTO = Object.fromEntries(await Promise.all(Object.entries(MANIFEST).map(async ([k, m]) =>
+  [k, { img: await load(`assets/photos/${m.file}`), fx: m.fx ?? 0.5, fy: m.fy ?? 0.5 }])));
 
 const ICON = {};
 for (const [name, svg] of Object.entries(ICONS)) {
@@ -108,6 +112,36 @@ function rrect(x, y, w, h, r, fill, stroke, lw = 3 * S) {
   if (stroke) { g.lineWidth = lw; g.strokeStyle = stroke; g.stroke(); }
 }
 
+// Cover-crop a photo into a rounded rect around its focal point; zoom > 1 pushes in.
+function photo(p, rect, zoom = 1, extra = '') {
+  const { img, fx, fy } = p;
+  const s = Math.max(rect.w / img.width, rect.h / img.height) * zoom;
+  const w = img.width * s, h = img.height * s;
+  const x = rect.x + clamp(rect.w / 2 - fx * w, rect.w - w, 0), y = rect.y + clamp(rect.h / 2 - fy * h, rect.h - h, 0);
+  g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
+  g.filter = `saturate(0.92) contrast(1.04) ${extra}`;
+  g.drawImage(img, x, y, w, h);
+  g.restore();
+}
+
+// White label plate in the bottom-left corner of a photo; turns brand green when `on` → 1.
+function plate(rect, lines, px, lh, on = 0, sub = null) {
+  const pp = 18 * S;
+  g.font = font(700, px);
+  const tw = Math.max(...lines.map((l) => g.measureText(l).width), sub ? g.measureText(sub).width * 0.62 + 50 * S : 0);
+  const h = lines.length * lh * S + (sub ? 50 * S : 0) + 2 * pp - (lh - px) * S;
+  const x = rect.x + 18 * S, y = rect.y + rect.h - 18 * S - h;
+  rrect(x, y, tw + 2 * pp, h, 18 * S, mix(C.surface, C.brand, on));
+  g.fillStyle = mix(C.ink, C.surface, on); g.textBaseline = 'top';
+  lines.forEach((l, j) => g.fillText(l, x + pp, y + pp + j * lh * S));
+  if (sub) {
+    const sy = y + pp + lines.length * lh * S + 6 * S;
+    check(x + pp - 6 * S, sy - 6 * S, 40 * S, 1, C.brand);
+    g.font = font(700, px * 0.6); g.fillStyle = C.brand;
+    g.fillText(sub, x + pp + 40 * S, sy);
+  }
+}
+
 // ── content ──────────────────────────────────────────────────────────
 const HOOKS = {
   quiz: { lines: ['Vilken ger', 'RUT-avdrag?'], px: 120 },
@@ -115,18 +149,18 @@ const HOOKS = {
   local: { lines: [`Bor du i ${TOWN}?`, 'Vilken ger RUT-avdrag?'], px: 84 },
 };
 const TILES = [
-  { icon: 'washing-machine', label: 'Laga tvättmaskinen' },
-  { icon: 'snowflake', label: 'Skotta snö från taket' },
-  { icon: 'armchair', label: 'Köra soffan till second hand' },
-  { icon: 'flower-2', label: 'Vattna blommorna när du är bortrest' },
+  { icon: 'washing-machine', photo: 'wash', label: 'Laga tvättmaskinen' },
+  { icon: 'snowflake', photo: 'snow', label: 'Skotta snö från taket' },
+  { icon: 'armchair', photo: 'sofa', label: 'Köra soffan till second hand' },
+  { icon: 'flower-2', photo: 'plants', label: 'Vattna blommorna när du är bortrest' },
 ];
 const LIST = [
-  { icon: 'wifi', label: 'Fixa wifi:n' },
-  { icon: 'shirt', label: 'Tvätt och strykning hemma' },
-  { icon: 'baby', label: 'Barnvakt' },
-  { icon: 'leaf', label: 'Kratta löv' },
-  { icon: 'sparkles', label: 'Putsa fönster' },
-  { icon: 'truck', label: 'Bära vid flytten' },
+  { icon: 'wifi', photo: 'wifi', label: 'Fixa wifi:n' },
+  { icon: 'shirt', photo: 'laundry', label: 'Tvätt och strykning hemma' },
+  { icon: 'baby', photo: 'kids', label: 'Barnvakt' },
+  { icon: 'leaf', photo: 'leaves', label: 'Kratta löv' },
+  { icon: 'sparkles', photo: 'window', label: 'Putsa fönster' },
+  { icon: 'truck', photo: 'moving', label: 'Bära vid flytten' },
 ];
 
 // ── layout ───────────────────────────────────────────────────────────
@@ -137,7 +171,7 @@ const tileW = (CW - GAP) / 2;
 const tileH = Math.min(300 * S, (BOTTOM - gridTop - 100 * S - GAP) / 2);
 const tileRect = (i) => ({ x: X + (i % 2) * (tileW + GAP), y: gridTop + Math.floor(i / 2) * (tileH + GAP), w: tileW, h: tileH, r: 30 * S });
 const cardTop = TOP + 2 * 112 * S + 56 * S;
-const listCard = { x: X, y: cardTop, w: CW, h: 480 * S, r: 40 * S };
+const listCard = { x: X, y: cardTop, w: CW, h: 600 * S, r: 40 * S };
 const CROP = { w: 1062, h: 1000 };
 const priceTop = TOP + 120 * S + 64 * S + 44 * S;
 const priceW = Math.min(CW, (BOTTOM - priceTop) * CROP.w / CROP.h);
@@ -148,8 +182,8 @@ const lerpRect = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: 
 
 // ── scenes ───────────────────────────────────────────────────────────
 function quizTiles(t) {
-  if (t >= 6.05) return;
-  const merge = (i) => sUI(t - (5.6 + i * 0.04));
+  if (t >= 5.9) return;
+  const merge = (i) => sUI(t - (5.45 + i * 0.03));
   TILES.forEach((tile, i) => {
     const pop = sUI(t - (-0.2 + i * 0.5));
     if (pop <= 0) return;
@@ -158,10 +192,29 @@ function quizTiles(t) {
     const s = lerp(0.62, 1, pop), cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
     const f = sUI(t - (4.0 + i * 0.25));
     g.save(); g.translate(cx, cy + (1 - pop) * 60 * S); g.scale(s, s); g.translate(-cx, -cy);
-    const fill = m > 0 ? mix(C.brand, C.surface, m) : mix(C.surface, C.brand, f);
-    rrect(rect.x, rect.y, rect.w, rect.h, rect.r, fill, m > 0 ? null : mix(C.border, C.brand, f));
+    // As the tiles merge they dissolve into the list card drawn underneath.
+    g.globalAlpha = 1 - clamp(m * 1.25);
+    const pic = PHOTO[tile.photo];
+    if (pic) {
+      photo(pic, rect, 1 + 0.06 * clamp(t / 6));
+      if (m === 0 && f > 0) rrect(rect.x, rect.y, rect.w, rect.h, rect.r, null, C.brand, 8 * S * clamp(f));
+    } else {
+      const fill = m > 0 ? mix(C.brand, C.surface, m) : mix(C.surface, C.brand, f);
+      rrect(rect.x, rect.y, rect.w, rect.h, rect.r, fill, m > 0 ? null : mix(C.border, C.brand, f));
+    }
     // Contents leave as the tiles merge.
-    if (m < 0.35) {
+    if (m < 0.35 && pic) {
+      g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
+      g.font = font(700, 38);
+      plate(rect, wrap(tile.label, rect.w - 72 * S), 38, 44, f);
+      const b = sUI(t - (4.05 + i * 0.25)), pad = 22 * S;
+      if (b > 0) {
+        const r = 42 * S * b, bx = rect.x + rect.w - pad - 42 * S, by = rect.y + pad + 42 * S;
+        g.beginPath(); g.arc(bx, by, r, 0, Math.PI * 2); g.fillStyle = C.brand; g.fill();
+        check(bx - 30 * S, by - 30 * S, 60 * S, (t - (4.12 + i * 0.25)) / 0.22, C.surface);
+      }
+      g.restore();
+    } else if (m < 0.35) {
       g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
       const dy = -m * 180 * S, pad = 28 * S, txt = mix(C.ink, C.surface, f);
       icon(tile.icon, rect.x + pad, rect.y + pad + dy, 92 * S, f > 0.5 ? C.surface : C.brand);
@@ -204,7 +257,7 @@ function timer(t) {
 }
 
 function listCardScene(t) {
-  if (t < 6.0 || t >= 12.0) return;
+  if (t < 5.45 || t >= 12.0) return;
   const rect = listCard;
   const bump = LIST.reduce((acc, _, j) => acc + (sUI(t - (6.0 + j)) - sUI(t - (6.12 + j))) * 0.035, 0);
   const cx = rect.x + rect.w / 2, cy = rect.y + rect.h / 2;
@@ -214,10 +267,22 @@ function listCardScene(t) {
   const pad = 48 * S;
   // Item j enters from below on beat 6 + j and leaves upwards just before the next one.
   LIST.forEach((item, j) => {
-    if (t < 5.9 + j || t > 7.4 + j) return;
-    const out = sUI(t - (6.9 + j)), inn = 1 - sUI(t - (5.9 + j));
+    const start = j === 0 ? 5.5 : 5.9 + j;
+    if (t < start || t > 7.4 + j) return;
+    const out = sUI(t - (6.9 + j)), inn = 1 - sUI(t - start);
     const k = out > 0 ? out : inn, dy = (out > 0 ? -1 : 1) * k * rect.h * 0.85;
-    g.save(); g.filter = `blur(${Math.round(Math.min(1, Math.abs(k)) * 10 * S)}px)`;
+    const blur = `blur(${Math.round(Math.min(1, Math.abs(k)) * 10 * S)}px)`;
+    const pic = PHOTO[item.photo];
+    if (pic) {
+      const r = { ...rect, y: rect.y + dy };
+      photo(pic, r, 1 + 0.05 * clamp(t - (6.0 + j)), blur);
+      g.save(); g.filter = blur;
+      g.font = font(700, 60);
+      plate(r, wrap(item.label, rect.w - 120 * S), 60, 66, 0, 'Ger RUT-avdrag');
+      g.restore();
+      return;
+    }
+    g.save(); g.filter = blur;
     const ic = 190 * S, icx = rect.x + pad, icy = rect.y + (rect.h - ic) / 2 + dy;
     g.beginPath(); g.arc(icx + ic / 2, icy + ic / 2, ic / 2, 0, Math.PI * 2); g.fillStyle = C.brandSoft; g.fill();
     icon(item.icon, icx + ic * 0.22, icy + ic * 0.22, ic * 0.56, C.brand);
@@ -250,11 +315,13 @@ function priceScene(t) {
   rrect(rect.x, rect.y, rect.w, rect.h, rect.r, fill, shrink < 0.5 ? C.border : null);
   if (shrink < 0.4) {
     g.save(); g.beginPath(); g.roundRect(rect.x, rect.y, rect.w, rect.h, rect.r); g.clip();
-    const reveal = sUI(t - 12.12);
+    if (PHOTO.winter) photo(PHOTO.winter, rect, 1 + 0.05 * clamp((t - 12.0) / 1.5));
+    const reveal = PHOTO.winter ? sUI(t - 12.9) : sUI(t - 12.12);
     const scale = priceCard.w / CROP.w;
-    g.drawImage(PRICE, 0, 0, CROP.w, CROP.h, priceCard.x, priceCard.y + (1 - reveal) * 120 * S - shrink * 300 * S, priceCard.w, priceCard.h);
+    const rise = PHOTO.winter ? priceCard.h * 1.05 : 120 * S;
+    g.drawImage(PRICE, 0, 0, CROP.w, CROP.h, priceCard.x, priceCard.y + (1 - reveal) * rise - shrink * 300 * S, priceCard.w, priceCard.h);
     // Underline sweep under the price line.
-    const u = sUI(t - 13.0);
+    const u = sUI(t - (PHOTO.winter ? 13.6 : 13.0));
     if (u > 0) {
       g.fillStyle = C.brand;
       g.fillRect(priceCard.x + 58 * scale, priceCard.y + 515 * scale - shrink * 300 * S, 640 * scale * clamp(u), 12 * scale);
@@ -313,14 +380,14 @@ window.seek = (t) => {
   g.filter = 'none';
   g.fillStyle = C.canvas; g.fillRect(0, 0, W, H);
   headline(t, hook.lines, -0.35, 3.9, TOP, hook.px);
-  headline(t, ['Alla fyra.'], 4.0, 5.6, TOP, 128, C.brand);
-  headline(t, ['RUT-avdrag: 50 % på arbetskostnaden.'], 4.2, 5.6, TOP + 140 * S, 40, C.muted, 600);
-  headline(t, ['Och det här', 'också.'], 5.75, 11.85, TOP, 112);
+  headline(t, ['Alla fyra.'], 4.0, 5.45, TOP, 128, C.brand);
+  headline(t, ['RUT-avdrag: 50 % på arbetskostnaden.'], 4.2, 5.45, TOP + 140 * S, 40, C.muted, 600);
+  headline(t, ['Och det här', 'också.'], 5.6, 11.85, TOP, 112);
   headline(t, ['Bortrest i jul?'], 12.0, 15.85, TOP, 120);
   headline(t, ['Vi bokar någon som vattnar blommorna.'], 12.2, 15.85, TOP + 136 * S, 40, C.muted, 600);
+  listCardScene(t);
   quizTiles(t);
   timer(t);
-  listCardScene(t);
   priceScene(t);
   cta(t);
 };

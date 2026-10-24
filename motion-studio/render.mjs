@@ -1,4 +1,4 @@
-// node render.mjs --fps 60 --dur 15 --sub 4 [--w 1080 --h 1920] [--page index.html] [--out out/silent.mp4]
+// node render.mjs --fps 60 --dur 15 --sub 4 [--w 1080 --h 1920] [--page index.html] [--out out/silent.mp4] [--start 0]
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
 import { mkdirSync, readFileSync } from 'node:fs';
@@ -8,7 +8,7 @@ import { dirname, extname, join } from 'node:path';
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
 const FPS = Number(arg('fps', 60)), DUR = Number(arg('dur', 15)), SUB = Number(arg('sub', 4));
 const W = Number(arg('w', 1080)), H = Number(arg('h', 1920));
-const PAGE = arg('page', 'index.html'), OUT = arg('out', 'out/silent.mp4');
+const PAGE = arg('page', 'index.html'), OUT = arg('out', 'out/silent.mp4'), START = Number(arg('start', 0));
 mkdirSync(dirname(OUT), { recursive: true });
 
 // Serve this folder over http: Chromium blocks module scripts and fonts on file:// pages.
@@ -43,10 +43,10 @@ const ff = spawn('ffmpeg', ['-y', '-f', 'image2pipe', '-framerate', String(FPS *
 
 const total = Math.round(DUR * FPS * SUB);
 for (let i = 0; i < total; i++) {
-  await page.evaluate((t) => window.seek(t), i / (FPS * SUB));
+  await page.evaluate((t) => window.seek(t), START + i / (FPS * SUB));
   const png = await page.locator('#c').screenshot({ type: 'png' });
   if (!ff.stdin.write(png)) await new Promise((r) => ff.stdin.once('drain', r));
-  if (i % (FPS * SUB) === 0) console.log(`rendered ${i / (FPS * SUB)}s / ${DUR}s`);
+  if (i % (FPS * SUB) === 0) console.log(`rendered ${START + i / (FPS * SUB)}s / ${START + DUR}s`);
 }
 ff.stdin.end();
 const code = await new Promise((r) => ff.on('close', r));

@@ -3,7 +3,8 @@
 20 s, 120 BPM (beat = 0.5 s, bar = 2 s, 10 bars). 9:16 first, then 4:5 from the same timeline.
 Works with the sound off: every idea is on screen as text.
 
-Storyboards: `docs/storyboard_9x16.png`, `docs/storyboard_4x5.png`. Every job is shown with a real CC0 stock photo
+Storyboards (frames from the final render at 1.5, 4.7, 7.5, 13.5 and 18.7 s): `docs/storyboard_9x16.png`,
+`docs/storyboard_4x5.png`. Every job is shown with a real CC0 stock photo
 (`assets/photos/CREDITS.md`); a job without a photo falls back to its icon.
 
 **The idea:** a quiz instead of a list. "Vilken ger RUT-avdrag?" over four surprising everyday

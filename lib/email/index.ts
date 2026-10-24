@@ -23,14 +23,16 @@ const RESEND_ENDPOINT = "https://api.resend.com/emails";
 /**
  * Sends through Resend (https://resend.com/docs/api-reference/emails/send-email).
  *
- * TODO(före lansering): UNTESTED. Enable deliberately with EMAIL_PROVIDER=resend after
- * verifying the sending domain in Resend (SPF/DKIM), setting RESEND_API_KEY and EMAIL_FROM
- * (e.g. "Nordvra <info@nordvra.se>"), and sending a test to an internal address.
+ * Setup (docs/EMAIL.md): verify the sending domain in Resend (SPF/DKIM), then set
+ * EMAIL_PROVIDER=resend, RESEND_API_KEY, EMAIL_FROM ("Nordvra <info@nordvra.se>") and optionally
+ * EMAIL_REPLY_TO, and use "Skicka testmejl" in admin settings.
  */
 export class ResendEmailProvider implements EmailProvider {
   constructor(
     private readonly apiKey: string,
     private readonly from: string,
+    /** Where customer replies go (a monitored inbox), when it differs from the sender. */
+    private readonly replyTo?: string,
   ) {}
 
   async send(msg: EmailMessage): Promise<{ ok: boolean; id?: string; error?: string }> {
@@ -46,6 +48,7 @@ export class ResendEmailProvider implements EmailProvider {
         subject: msg.subject,
         text: msg.text,
         ...(msg.html ? { html: msg.html } : {}),
+        ...(this.replyTo ? { reply_to: this.replyTo } : {}),
       }),
       signal: AbortSignal.timeout(10_000),
       cache: "no-store",
@@ -65,12 +68,23 @@ export function getEmailProvider(): EmailProvider {
   if (kind === "resend") {
     const apiKey = process.env.RESEND_API_KEY?.trim();
     const from = process.env.EMAIL_FROM?.trim();
-    if (apiKey && from) return new ResendEmailProvider(apiKey, from);
+    const replyTo = process.env.EMAIL_REPLY_TO?.trim() || undefined;
+    if (apiKey && from) return new ResendEmailProvider(apiKey, from, replyTo);
     console.warn("[email] EMAIL_PROVIDER=resend but RESEND_API_KEY/EMAIL_FROM is missing – using console");
   } else if (kind !== "console" && kind !== "") {
     console.warn(`[email] Unknown EMAIL_PROVIDER "${scrubForLog(kind)}" – using console`);
   }
   return new ConsoleEmailProvider();
+}
+
+/** What the admin settings page shows about email (never the API key). */
+export function emailStatus(): { provider: "console" | "resend"; from: string | null; replyTo: string | null } {
+  const provider = getEmailProvider() instanceof ResendEmailProvider ? "resend" : "console";
+  return {
+    provider,
+    from: process.env.EMAIL_FROM?.trim() || null,
+    replyTo: process.env.EMAIL_REPLY_TO?.trim() || null,
+  };
 }
 
 /**

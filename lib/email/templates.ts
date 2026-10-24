@@ -331,3 +331,9 @@ export function reminderDue(p: { name: string; serviceName: string; link: string
     button: { label: m.button, href: p.link },
   });
 }
+
+/** "Skicka testmejl" in admin settings: checks that the provider and domain work. */
+export function testEmail(): RenderedEmail {
+  const m = s.testEmail;
+  return render({ audience: "owner", subject: m.subject, preheader: m.preheader, heading: m.heading, paragraphs: [m.intro] });
+}

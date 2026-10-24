@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { updateTag } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth/admin";
+import { sendEmailSafe } from "@/lib/email";
+import { testEmail } from "@/lib/email/templates";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { CATALOG_TAG } from "@/lib/catalog/load";
 import { parseKrToOre } from "@/lib/format";
@@ -256,4 +258,11 @@ export async function removeAdminAction(formData: FormData): Promise<void> {
   if (email === admin.email.toLowerCase() || (count ?? 0) <= 1) redirect("/admin/installningar?fel=sista");
   const { error } = await supabase.from("admin_users").delete().eq("email", email);
   redirect(`/admin/installningar?${error ? "fel=fel" : "ok=borttagen"}`);
+}
+
+/** Sends a test email to the signed-in admin, to check the provider, domain and DNS. */
+export async function sendTestEmailAction(): Promise<void> {
+  const admin = await requireAdmin();
+  const sent = await sendEmailSafe({ to: admin.email, ...testEmail() });
+  redirect(`/admin/installningar?${sent ? "ok=testmejl" : "fel=testmejlfel"}`);
 }

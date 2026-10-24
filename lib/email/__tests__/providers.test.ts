@@ -163,3 +163,55 @@ describe("console providers", () => {
     vi.unstubAllGlobals();
   });
 });
+
+describe("ResendEmailProvider", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  it("posts the message with the key, sender and reply-to", async () => {
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({ id: "msg_1" }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const res = await new ResendEmailProvider("re_test", "Nordvra <info@nordvra.se>", "hej@exempel.se").send({
+      to: "anna@example.se",
+      subject: "Hej",
+      text: "Text",
+      html: "<p>Text</p>",
+    });
+    expect(res).toEqual({ ok: true, id: "msg_1" });
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("https://api.resend.com/emails");
+    expect((init.headers as Record<string, string>).Authorization).toBe("Bearer re_test");
+    expect(JSON.parse(String(init.body))).toEqual({
+      from: "Nordvra <info@nordvra.se>",
+      to: ["anna@example.se"],
+      subject: "Hej",
+      text: "Text",
+      html: "<p>Text</p>",
+      reply_to: "hej@exempel.se",
+    });
+  });
+
+  it("reports only the HTTP status on errors", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response("domain not verified for anna@example.se", { status: 403 })));
+    const res = await new ResendEmailProvider("re_test", "Nordvra <info@nordvra.se>").send({
+      to: "anna@example.se",
+      subject: "Hej",
+      text: "Text",
+    });
+    expect(res).toEqual({ ok: false, error: "resend_http_403" });
+  });
+
+  it("picks up EMAIL_REPLY_TO from the environment", async () => {
+    vi.stubEnv("EMAIL_PROVIDER", "resend");
+    vi.stubEnv("RESEND_API_KEY", "re_test");
+    vi.stubEnv("EMAIL_FROM", "Nordvra <info@nordvra.se>");
+    vi.stubEnv("EMAIL_REPLY_TO", "hej@exempel.se");
+    const fetchMock = vi.fn(async () => new Response("{}", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await getEmailProvider().send({ to: "a@example.se", subject: "S", text: "T" });
+    const init = (fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1];
+    expect(JSON.parse(String(init.body)).reply_to).toBe("hej@exempel.se");
+  });
+});

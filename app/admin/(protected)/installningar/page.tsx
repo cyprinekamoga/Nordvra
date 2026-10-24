@@ -5,7 +5,8 @@ import { TAX_RULES, getTaxRules, knownTaxYears, type TaxRuleOverride } from "@/l
 import { formatDateShort, formatKr } from "@/lib/format";
 import { Card, InfoBox } from "@/components/ui";
 import { Flash, PageHeader, selectClasses } from "@/components/admin/bits";
-import { addAdminAction, removeAdminAction, saveSettingsAction, saveTaxOverrideAction } from "@/lib/admin/config-actions";
+import { addAdminAction, removeAdminAction, saveSettingsAction, saveTaxOverrideAction, sendTestEmailAction } from "@/lib/admin/config-actions";
+import { emailStatus } from "@/lib/email";
 import { requireAdmin } from "@/lib/auth/admin";
 
 export const metadata = { title: "Inställningar" };
@@ -17,6 +18,40 @@ function NumField({ label, name, value, hint }: { label: string; name: string; v
       <input name={name} defaultValue={String(value)} inputMode="decimal" required className={selectClasses} />
       {hint && <span className="mt-1 block text-sm text-muted">{hint}</span>}
     </label>
+  );
+}
+
+/** Which email provider is active, and a button that sends a test email to the admin. */
+function EmailCard({ adminEmail }: { adminEmail: string }) {
+  const status = emailStatus();
+  const live = status.provider === "resend";
+  return (
+    <Card as="section" aria-labelledby="epost" className="mb-6 space-y-3">
+      <h2 id="epost" className="text-xl font-bold">E-post</h2>
+      {live ? (
+        <p>
+          Skickas via <strong>Resend</strong> från <strong>{status.from}</strong>
+          {status.replyTo ? (
+            <>
+              , svar går till <strong>{status.replyTo}</strong>
+            </>
+          ) : null}
+          .
+        </p>
+      ) : (
+        <InfoBox tone="warning" title="E-post skickas inte ännu">
+          <p>
+            Testläge: kunderna får inga mejl och du får inga notiser. Sätt EMAIL_PROVIDER=resend, RESEND_API_KEY och
+            EMAIL_FROM i Netlify (se docs/EMAIL.md).
+          </p>
+        </InfoBox>
+      )}
+      <form action={sendTestEmailAction}>
+        <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
+          Skicka testmejl till {adminEmail}
+        </button>
+      </form>
+    </Card>
   );
 }
 
@@ -37,6 +72,8 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
     <>
       <PageHeader title="Inställningar" />
       <Flash params={sp} />
+
+      <EmailCard adminEmail={admin.email} />
 
       <Card as="section" aria-labelledby="allmant" className="mb-6">
         <h2 id="allmant" className="mb-3 text-xl font-bold">Allmänt</h2>

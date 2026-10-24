@@ -95,6 +95,13 @@ const email = {
     button: "Öppna ärendet",
   },
 
+  testEmail: {
+    subject: "Testmejl från Nordvra",
+    preheader: "E-posten fungerar.",
+    heading: "E-posten fungerar",
+    intro: "Det här är ett testmejl från adminsidan. Kommer det fram skickas bekräftelser, offerter och notiser till kunderna som de ska.",
+  },
+
   reminder: {
     subject: "Dags för {service} igen?",
     preheader: "Du bad oss påminna dig. Boka på 2 minuter, ingen bokningsavgift.",

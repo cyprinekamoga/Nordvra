@@ -43,6 +43,7 @@ export function PhotoFrame({
     <div className={cx("frame", `frame-${shape}`, aspect, "w-full max-w-full", reveal && "reveal", className)}>
       <div className="frame-clip">
         <Image
+          quality={85}
           src={p.src}
           alt={decorative ? "" : p.alt}
           fill

@@ -15,11 +15,11 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   poweredByHeader: false,
   images: {
-    // The photos are stored in 4K; serve every size at quality 85 (the default 75 is coerced to
-    // the closest allowed value) so they stay sharp on large and high-density screens.
-    qualities: [85],
-    // AVIF first (about a third smaller than WebP at the same quality), WebP as the fallback.
-    formats: ["image/avif", "image/webp"],
+    // The photos are stored in 4K and served at quality 85 (set on each <Image>) so they stay sharp
+    // on large and high-density screens.
+    // 70 for the big photo halves (PhotoSplit), where it is about 40 % smaller with no visible
+    // difference. (Netlify's image CDN serves WebP; its AVIF came out larger for our photos.)
+    qualities: [70, 85],
   },
   turbopack: {
     rules: {

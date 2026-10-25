@@ -26,6 +26,7 @@ export function Logo({ link = true, size = "header", className }: LogoProps) {
   const { px, className: height } = sizes[size];
   const image = (
     <Image
+      quality={85}
       src={LOGO_SRC}
       alt={link ? t.common.brand.homeLinkLabel : t.common.brand.name}
       // CSS sets the rendered height; width/height give the aspect ratio and the 1x/2x srcset.

@@ -139,6 +139,7 @@ function PhotoTile({
       </span>
       <span className="relative order-first block w-[7.5rem] shrink-0 self-stretch overflow-hidden bg-surface-muted sm:aspect-[16/9] sm:w-full">
         <Image
+          quality={85}
           src={p.src}
           alt=""
           fill

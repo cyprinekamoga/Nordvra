@@ -5,8 +5,10 @@ import { TAX_RULES, getTaxRules, knownTaxYears, type TaxRuleOverride } from "@/l
 import { formatDateShort, formatKr } from "@/lib/format";
 import { Card, InfoBox } from "@/components/ui";
 import { Flash, PageHeader, selectClasses } from "@/components/admin/bits";
-import { addAdminAction, removeAdminAction, saveSettingsAction, saveTaxOverrideAction, sendTestEmailAction } from "@/lib/admin/config-actions";
+import { removeAdminAction, saveSettingsAction, saveTaxOverrideAction, sendTestEmailAction } from "@/lib/admin/config-actions";
 import { emailStatus } from "@/lib/email";
+import { CreateAdminForm } from "@/components/admin/CreateAdminForm";
+import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/admin";
 
 export const metadata = { title: "Inställningar" };
@@ -197,16 +199,16 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
             </li>
           ))}
         </ul>
-        <form action={addAdminAction} className="flex flex-wrap items-end gap-3">
-          <label className="block grow">
-            <span className="mb-1 block font-bold">Lägg till administratör (e-post)</span>
-            <input name="email" type="email" required className={selectClasses} />
-          </label>
-          <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-brand px-5 font-semibold text-on-brand">
-            Lägg till
-          </button>
-        </form>
-        <p className="mt-2 text-sm text-muted">Personen skapar sedan ett konto via ”Skapa konto första gången” på inloggningssidan.</p>
+        <p className="mb-4 text-muted">
+          Ingen kan registrera sig själv. Bara konton som skapas här kommer in. Tar du bort någon slutar
+          lösenordet att fungera direkt.
+        </p>
+        <CreateAdminForm />
+        <p className="mt-4">
+          <Link href="/admin/nytt-losenord" className="link font-semibold">
+            Byt ditt eget lösenord
+          </Link>
+        </p>
       </Card>
     </>
   );

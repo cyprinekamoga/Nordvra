@@ -1,12 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { updateTag } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth/admin";
 import { sendEmailSafe } from "@/lib/email";
 import { testEmail } from "@/lib/email/templates";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { supabaseEnv } from "@/lib/supabase/env";
+import { ADMIN_PASSWORD_MIN } from "@/lib/admin/password";
 import { CATALOG_TAG } from "@/lib/catalog/load";
 import { parseKrToOre } from "@/lib/format";
 import { parseOrgNr } from "@/lib/validation/identity";
@@ -241,23 +243,73 @@ export async function saveTaxOverrideAction(formData: FormData): Promise<void> {
   redirect(`/admin/installningar?${error ? "fel=fel" : "ok=sparad"}`);
 }
 
-export async function addAdminAction(formData: FormData): Promise<void> {
-  const admin = await requireAdmin();
-  const email = z.string().trim().toLowerCase().email().safeParse(formData.get("email"));
-  if (!email.success) redirect("/admin/installningar?fel=ogiltig");
+/** Calls the "admin-users" Edge Function with the signed-in admin's own session. */
+async function callAdminUsers(body: Record<string, string>): Promise<{ ok: boolean; error?: string }> {
+  const env = supabaseEnv();
+  if (!env) return { ok: false, error: "not_configured" };
   const supabase = await createServerSupabase();
-  const { error } = await supabase.from("admin_users").upsert({ email: email.data, added_by: admin.email });
-  redirect(`/admin/installningar?${error ? "fel=fel" : "ok=sparad"}`);
+  const { data } = await supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) return { ok: false, error: "not_signed_in" };
+  try {
+    const response = await fetch(`${env.url.replace(/\/$/, "")}/functions/v1/admin-users`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, apikey: env.key, "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store",
+      signal: AbortSignal.timeout(15_000),
+    });
+    const json = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+    return response.ok && json?.ok ? { ok: true } : { ok: false, error: json?.error ?? `http_${response.status}` };
+  } catch {
+    return { ok: false, error: "network" };
+  }
 }
 
+const ADMIN_ERRORS: Record<string, string> = {
+  user_exists: "Det finns redan ett konto med den e-postadressen.",
+  weak_password: `Lösenordet måste ha minst ${ADMIN_PASSWORD_MIN} tecken.`,
+  invalid_email: "Ange en giltig e-postadress.",
+  cannot_remove_self: "Du kan inte ta bort dig själv.",
+  last_admin: "Du kan inte ta bort den sista administratören.",
+};
+
+export interface AdminUserFormState {
+  ok?: boolean;
+  message?: string;
+}
+
+/**
+ * Creates an admin login (email + password) that the owner hands over personally. Nobody can
+ * sign up themselves; the account is created already confirmed.
+ */
+export async function createAdminUserAction(_prev: AdminUserFormState, formData: FormData): Promise<AdminUserFormState> {
+  await requireAdmin();
+  const email = z.string().trim().toLowerCase().email().safeParse(formData.get("email"));
+  if (!email.success) return { message: ADMIN_ERRORS.invalid_email };
+  const password = String(formData.get("password") ?? "");
+  if (password.length < ADMIN_PASSWORD_MIN || password.length > 72) return { message: ADMIN_ERRORS.weak_password };
+  const result = await callAdminUsers({ action: "create", email: email.data, password });
+  if (!result.ok) {
+    return { message: ADMIN_ERRORS[result.error ?? ""] ?? "Kontot kunde inte skapas. Försök igen." };
+  }
+  refresh();
+  return {
+    ok: true,
+    message: `Kontot för ${email.data} är skapat. Ge e-post och lösenord till personen själv, till exempel muntligt eller via ett krypterat meddelande. Be personen byta lösenord efter första inloggningen.`,
+  };
+}
+
+/** Removes an admin: their access and their login. */
 export async function removeAdminAction(formData: FormData): Promise<void> {
   const admin = await requireAdmin();
   const email = String(formData.get("email") ?? "").toLowerCase();
-  const supabase = await createServerSupabase();
-  const { count } = await supabase.from("admin_users").select("email", { count: "exact", head: true });
-  if (email === admin.email.toLowerCase() || (count ?? 0) <= 1) redirect("/admin/installningar?fel=sista");
-  const { error } = await supabase.from("admin_users").delete().eq("email", email);
-  redirect(`/admin/installningar?${error ? "fel=fel" : "ok=borttagen"}`);
+  if (email === admin.email.toLowerCase()) redirect("/admin/installningar?fel=sista");
+  const result = await callAdminUsers({ action: "delete", email });
+  if (!result.ok && (result.error === "last_admin" || result.error === "cannot_remove_self")) {
+    redirect("/admin/installningar?fel=sista");
+  }
+  redirect(`/admin/installningar?${result.ok ? "ok=borttagen" : "fel=fel"}`);
 }
 
 /** Sends a test email to the signed-in admin, to check the provider, domain and DNS. */

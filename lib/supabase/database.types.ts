@@ -780,7 +780,6 @@ export type Database = {
         }
         Returns: string
       }
-      admin_email_allowed: { Args: { p_email: string }; Returns: boolean }
       anonymise_expired_pnr: { Args: never; Returns: number }
       current_actor: { Args: never; Returns: string }
       decline_quote: {

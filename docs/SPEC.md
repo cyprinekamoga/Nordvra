@@ -232,7 +232,7 @@ DB-enforced: partner without verified F-skatt can't be assigned (trigger, error 
   `quote_not_open`, `quote_expired`, `invalid_buyers`, `invalid_shares`, `missing_consent`,
   `missing_withdrawal_waiver`, `missing_property`.
 * `decline_quote(p_token_hash, p_reason)` → booking number.
-* `is_admin()`, `admin_email_allowed(email)`.
+* `is_admin()`. (`admin_email_allowed` was removed in October 2026.)
 Token handling: app generates token with `createQuoteToken()`, stores only `hashToken(token)` in
 `bookings.quote_token_hash`; the RPCs take the hash.
 
@@ -370,8 +370,12 @@ Routes: `/`, `/boka`, `/boka/klart`, `/offert/[token]`, `/sa-fungerar-rut-och-ro
 ---------------------------------------------------------------------------------------------------
 ## 11. Admin requirements
 
-* Login (email + password; first-time "Skapa konto" only for allow-listed emails via
-  `admin_email_allowed`; email confirmation link → `/admin/auth/confirm`). Logout.
+* Login (email + password). **No self sign-up**: accounts are created only by an admin in
+  /admin/installningar ("Skapa konto": email + password, created already confirmed) through the
+  Supabase Edge Function `admin-users` (`supabase/functions/admin-users`), which holds the
+  service-role key inside Supabase and checks `is_admin()` with the caller's own token.
+  Removing an admin deletes the login too. Public sign-ups are switched off in Supabase Auth.
+  "Glömt lösenordet?" → reset link → `/admin/auth/confirm?next=/admin/nytt-losenord`. Logout.
 * **Bookings list** with filters (status, service, date range, postcode prefix/area), masked
   personnummer (`YYMMDD-XXXX`) only if buyers exist, model badge, status badge.
 * **Booking detail**: all answers, eligibility result, indicative estimate snapshot, contact,

@@ -5,12 +5,11 @@ import { SubmitButton, TextField, InfoBox } from "@/components/ui";
 import {
   resetPasswordAction,
   signInAction,
-  signUpAction,
   updatePasswordAction,
   type AuthFormState,
 } from "@/lib/admin/auth-actions";
 
-type Mode = "login" | "signup" | "reset";
+type Mode = "login" | "reset";
 
 function Message({ state }: { state: AuthFormState }) {
   if (!state.message) return null;
@@ -24,7 +23,6 @@ function Message({ state }: { state: AuthFormState }) {
 export function LoginForms() {
   const [mode, setMode] = useState<Mode>("login");
   const [loginState, login] = useActionState(signInAction, {});
-  const [signupState, signup] = useActionState(signUpAction, {});
   const [resetState, reset] = useActionState(resetPasswordAction, {});
 
   return (
@@ -36,25 +34,6 @@ export function LoginForms() {
           <Message state={loginState} />
           <SubmitButton fullWidth pendingText="Loggar in …">
             Logga in
-          </SubmitButton>
-        </form>
-      )}
-      {mode === "signup" && (
-        <form action={signup} className="space-y-4">
-          <p>Första gången? Skapa ett konto med den e-postadress som är godkänd för administrationen.</p>
-          <TextField label="E-post" name="email" type="email" autoComplete="username" required />
-          <TextField
-            label="Välj lösenord"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            hint="Minst 10 tecken."
-            minLength={10}
-            required
-          />
-          <Message state={signupState} />
-          <SubmitButton fullWidth pendingText="Skapar konto …">
-            Skapa konto
           </SubmitButton>
         </form>
       )}
@@ -71,11 +50,6 @@ export function LoginForms() {
         {mode !== "login" && (
           <button type="button" className="link min-h-12" onClick={() => setMode("login")}>
             Logga in
-          </button>
-        )}
-        {mode !== "signup" && (
-          <button type="button" className="link min-h-12" onClick={() => setMode("signup")}>
-            Skapa konto första gången
           </button>
         )}
         {mode !== "reset" && (
@@ -97,8 +71,8 @@ export function NewPasswordForm() {
         name="password"
         type="password"
         autoComplete="new-password"
-        hint="Minst 10 tecken."
-        minLength={10}
+        hint="Minst 12 tecken."
+        minLength={12}
         required
       />
       <Message state={state} />

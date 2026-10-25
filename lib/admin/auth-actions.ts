@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { siteUrl } from "@/lib/site";
+import { ADMIN_PASSWORD_MIN } from "./password";
 
 export interface AuthFormState {
   ok?: boolean;
@@ -12,7 +13,10 @@ export interface AuthFormState {
 }
 
 const emailSchema = z.string().trim().toLowerCase().email();
-const passwordSchema = z.string().min(10, "Lösenordet måste ha minst 10 tecken.");
+const passwordSchema = z
+  .string()
+  .min(ADMIN_PASSWORD_MIN, `Lösenordet måste ha minst ${ADMIN_PASSWORD_MIN} tecken.`)
+  .max(72, "Lösenordet får vara högst 72 tecken.");
 
 const NOT_CONFIGURED: AuthFormState = { message: "Inloggningen är inte konfigurerad (Supabase saknas)." };
 
@@ -37,30 +41,6 @@ export async function signInAction(_prev: AuthFormState, formData: FormData): Pr
     return { message: "Kontot har inte behörighet till administrationen." };
   }
   redirect("/admin");
-}
-
-/** First-time account creation, only for allow-listed admin emails. Same answer either way. */
-export async function signUpAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
-  if (!isSupabaseConfigured()) return NOT_CONFIGURED;
-  const email = emailSchema.safeParse(formData.get("email"));
-  if (!email.success) return { message: "Ange en giltig e-postadress." };
-  const password = passwordSchema.safeParse(formData.get("password"));
-  if (!password.success) return { message: password.error.issues[0]?.message ?? "Ogiltigt lösenord." };
-
-  const generic: AuthFormState = {
-    ok: true,
-    message: "Om adressen är godkänd för administrationen har vi skickat ett mejl med en bekräftelselänk.",
-  };
-  const supabase = await createServerSupabase();
-  const { data: allowed } = await supabase.rpc("admin_email_allowed", { p_email: email.data });
-  if (allowed !== true) return generic;
-
-  await supabase.auth.signUp({
-    email: email.data,
-    password: password.data,
-    options: { emailRedirectTo: siteUrl("/admin/auth/confirm") },
-  });
-  return generic;
 }
 
 export async function resetPasswordAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {

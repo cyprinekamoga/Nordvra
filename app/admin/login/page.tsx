@@ -17,6 +17,9 @@ export default function AdminLoginPage() {
       <Card>
         <h1 className="mb-4 text-2xl font-bold">Administration</h1>
         <LoginForms />
+        <p className="mt-6 text-sm text-muted">
+          Konton skapas bara av en administratör. Har du inget konto kan du inte registrera dig här.
+        </p>
       </Card>
     </Container>
   );

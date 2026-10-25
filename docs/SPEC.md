@@ -232,7 +232,7 @@ DB-enforced: partner without verified F-skatt can't be assigned (trigger, error 
   `quote_not_open`, `quote_expired`, `invalid_buyers`, `invalid_shares`, `missing_consent`,
   `missing_withdrawal_waiver`, `missing_property`.
 * `decline_quote(p_token_hash, p_reason)` → booking number.
-* `is_admin()`. (`admin_email_allowed` was removed in October 2026.)
+* `is_admin()`. (`admin_email_allowed` is no longer callable since October 2026.)
 Token handling: app generates token with `createQuoteToken()`, stores only `hashToken(token)` in
 `bookings.quote_token_hash`; the RPCs take the hash.
 

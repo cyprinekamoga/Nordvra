@@ -130,7 +130,7 @@ export const photos = {
     width: 3840,
     height: 2560,
     alt: "En fönsterputsare tvättar fönstren på ett hus med en lång stång",
-    focus: "40% 50%",
+    focus: "18% 45%",
     photographer: "Joshua Bowers",
     sourceUrl: "https://unsplash.com/photos/a-man-holding-a-large-metal-pole-in-front-of-a-house-J4i2xrPmcm0",
   },

@@ -39,9 +39,9 @@ export function PhotoSplit({ photo, side = "end", eager = false, className, chil
           src={p.src}
           alt=""
           fill
-          // The cell is half the screen wide but often taller than the photo's ratio, so object-cover
-          // scales the photo to about the full screen width: ask for that, or it comes out blurry.
-          sizes="100vw"
+          // From lg the cell is half the screen wide; object-cover may enlarge the photo a little
+          // to fill the height, so ask for 60vw (sharp, but not the full 4K file).
+          sizes="(min-width: 1024px) 60vw, 100vw"
           loading={eager ? "eager" : "lazy"}
           fetchPriority={eager ? "high" : undefined}
           className="object-cover"

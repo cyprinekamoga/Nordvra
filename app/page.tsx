@@ -57,7 +57,7 @@ function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <PhotoSplit photo="windowCleaner" eager aria-labelledby="hero-rubrik">
+    <PhotoSplit photo="facadePainter" eager aria-labelledby="hero-rubrik">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-2">
           <DeductionBadge type="rut" />
@@ -234,7 +234,7 @@ function About() {
     <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
       <Container className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
         <PhotoFrame
-          photo="facadePainter"
+          photo="windowCleaner"
           shape="square"
           aspect="aspect-[3/2]"
           reveal

@@ -1,6 +1,7 @@
 /**
- * Photos in public/bilder. All from Unsplash under the Unsplash License (free for commercial use,
- * no credit required; https://unsplash.com/license). People in them are models, never our
+ * Photos in public/bilder. From Unsplash under the Unsplash License (https://unsplash.com/license)
+ * and, for the hero, from Pexels under the Pexels License (https://www.pexels.com/license/); both
+ * are free for commercial use with no credit required. People in them are models, never our
  * customers or staff, so show them as illustrations only.
  *
  * Every photo shows the work we book: cleaning, moving, painting and building (RUT and ROT), never
@@ -31,6 +32,16 @@ export interface Photo {
 }
 
 export const photos = {
+  // Hero: a professional cleaning team at work (Pexels; sharp studio-quality original, 5851 px).
+  cleaningTeam: {
+    src: "/bilder/stadteam.jpg",
+    width: 3840,
+    height: 2560,
+    alt: "Två städare i arbetskläder dammsuger och moppar ett ljust vardagsrum",
+    focus: "32% 50%",
+    photographer: "Tima Miroshnichenko",
+    sourceUrl: "https://www.pexels.com/photo/women-in-orange-uniform-cleaning-the-floor-6195277/",
+  },
   // Cleaning (RUT).
   kitchenWipe: {
     src: "/bilder/stadning-kok.jpg",

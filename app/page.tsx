@@ -57,7 +57,7 @@ function Hero() {
   const example = flyttstadExample();
   const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
   return (
-    <PhotoSplit photo="facadePainter" eager aria-labelledby="hero-rubrik">
+    <PhotoSplit photo="cleaningTeam" eager aria-labelledby="hero-rubrik">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-2">
           <DeductionBadge type="rut" />

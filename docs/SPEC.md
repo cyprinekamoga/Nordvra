@@ -430,7 +430,7 @@ interactive parts in `components/story`):
   least 4K (3840 × 2160).
 * Hero: split in two (`PhotoSplit`): white text on solid deep green (`forest` token) with "Boka på
   2 minuter" and "Så går det till", the example price, no booking fee and phone; beside it, shown in
-  full, a photo of a craftsman on a ladder painting the facade of a white house (on phones a strip above the text). The six benefits
+  full, a sharp photo of two professional cleaners at work in a bright living room (Pexels) (on phones a strip above the text). The six benefits
   sit in a band under the hero.
 * Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
   linking to /boka.

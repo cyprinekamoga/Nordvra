@@ -118,7 +118,9 @@ docs/SPEC.md             product, legal and data specification
 ## Photos
 
 The photos in `public/bilder` come from [Unsplash](https://unsplash.com) under the
-[Unsplash License](https://unsplash.com/license): free for commercial use, no credit required.
+[Unsplash License](https://unsplash.com/license), and the hero (`stadteam.jpg`) from
+[Pexels](https://www.pexels.com) under the [Pexels License](https://www.pexels.com/license/):
+both free for commercial use, no credit required.
 `lib/content/photos.ts` lists each file with its Swedish alt text, photographer and source page.
 People in them are models: show them as illustrations, never as Nordvra customers or staff.
 To swap a photo, replace the file and update its entry (width, height, alt).
@@ -131,6 +133,7 @@ names and number plates.
 
 | File | Shows | Photographer |
 | --- | --- | --- |
+| stadteam.jpg | Hero: two cleaners in work clothes in a bright living room (Pexels, not graded) | Tima Miroshnichenko |
 | stadning-kok.jpg | Wiping a kitchen sink | everdrop GmbH |
 | stadning.jpg | Vacuuming | Giorgio Trovato |
 | angtvatt.jpg | Steam-cleaning bathroom tiles | Aurum Gebäudereinigung Kassel |

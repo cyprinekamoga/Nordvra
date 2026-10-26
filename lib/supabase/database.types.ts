@@ -190,6 +190,50 @@ export type Database = {
           },
         ]
       }
+      booking_reviews: {
+        Row: {
+          booking_id: string
+          body: string
+          created_at: string
+          display_name: string
+          id: string
+          published_at: string | null
+          rating: number
+          service_name: string
+          status: string
+        }
+        Insert: {
+          booking_id: string
+          body: string
+          created_at?: string
+          display_name: string
+          id?: string
+          published_at?: string | null
+          rating: number
+          service_name: string
+          status?: string
+        }
+        Update: {
+          booking_id?: string
+          body?: string
+          created_at?: string
+          display_name?: string
+          id?: string
+          published_at?: string | null
+          rating?: number
+          service_name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
           approved_at: string | null
@@ -246,6 +290,7 @@ export type Database = {
           reminder_sent_at: string | null
           resident_name: string | null
           resident_phone: string | null
+          review_token_hash: string | null
           rot_kind: Database["public"]["Enums"]["rot_kind"] | null
           rot_property: Json | null
           scheduled_date: string | null
@@ -319,6 +364,7 @@ export type Database = {
           reminder_sent_at?: string | null
           resident_name?: string | null
           resident_phone?: string | null
+          review_token_hash?: string | null
           rot_kind?: Database["public"]["Enums"]["rot_kind"] | null
           rot_property?: Json | null
           scheduled_date?: string | null
@@ -392,6 +438,7 @@ export type Database = {
           reminder_sent_at?: string | null
           resident_name?: string | null
           resident_phone?: string | null
+          review_token_hash?: string | null
           rot_kind?: Database["public"]["Enums"]["rot_kind"] | null
           rot_property?: Json | null
           scheduled_date?: string | null
@@ -788,11 +835,17 @@ export type Database = {
       }
       expire_quotes: { Args: never; Returns: number }
       get_home_log: { Args: { p_token_hash: string }; Returns: Json }
+      get_published_reviews: { Args: never; Returns: Json }
       get_quote: { Args: { p_token_hash: string }; Returns: Json }
+      get_review_state: { Args: { p_token_hash: string }; Returns: Json }
       is_admin: { Args: never; Returns: boolean }
       public_config: { Args: never; Returns: Json }
       request_redo: {
         Args: { p_message: string; p_token_hash: string }
+        Returns: string
+      }
+      submit_review: {
+        Args: { p_body: string; p_display_name: string; p_rating: number; p_token_hash: string }
         Returns: string
       }
       submit_request: { Args: { p: Json }; Returns: string }

@@ -158,6 +158,8 @@ export function nameError(input: string): string | null {
   const name = input.trim().replace(/\s+/g, " ");
   if (name === "") return e.nameRequired;
   if (name.length > NAME_MAX) return e.nameTooLong;
+  // Same rule as the database: a name never starts like a spreadsheet formula.
+  if (/^[=+@-]/.test(name)) return e.nameFull;
   const parts = name.split(" ").filter((part) => /\p{L}/u.test(part));
   return parts.length >= 2 ? null : e.nameFull;
 }

@@ -134,7 +134,7 @@ export function getFaq({
       question: "Hur betalar jag?",
       answer: [
         "Du betalar efter att jobbet är gjort, mot en faktura från din avtalspart. Avdraget är redan draget på fakturan.",
-        "För att du ska få avdraget måste du betala elektroniskt, med kort, Swish eller banköverföring, och själv vara den som betalar. Kontant betalning ger inte avdrag.",
+        "För att du ska få avdraget betalar du fakturan med Swish eller banköverföring, och du måste själv vara den som betalar. Kontant betalning ger inte avdrag.",
       ],
     },
     {
@@ -229,7 +229,7 @@ export function getFaq({
       group: "trygghet",
       question: "Måste jag betala något i förväg?",
       answer: [
-        "Nej, aldrig. Du får fakturan när jobbet är klart och betalar då med kort, Swish eller överföring.",
+        "Nej, aldrig. Du får fakturan när jobbet är klart och betalar den med Swish eller banköverföring.",
         "Offertens pris är hela priset: resor, framkörning och material som behövs står i offerten. Behövs mer arbete får du en ny offert att godkänna först. Ingen ska sälja något till dig på plats, och ingen ska ta betalt i dörren. Händer det, ring oss.",
       ],
     },

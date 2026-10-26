@@ -100,7 +100,7 @@ describe("email templates", () => {
 
   it("bookingConfirmed shows date/time and payment rule; handles an open date", () => {
     expect(emails.bookingConfirmed.text).toContain("Förmiddag");
-    expect(emails.bookingConfirmed.text).toContain("elektroniskt");
+    expect(emails.bookingConfirmed.text).toContain("Swish eller banköverföring");
     const open = bookingConfirmed({
       name: "",
       bookingNumber: "NV-2026-00013",

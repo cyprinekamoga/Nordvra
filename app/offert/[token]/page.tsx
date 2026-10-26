@@ -13,6 +13,8 @@ import { t } from "@/lib/i18n";
 import { PricingError } from "@/lib/pricing/calculate";
 import { acceptQuote, declineQuote, requestRedo } from "@/lib/quote/actions";
 import { loadHomeLog, loadQuote } from "@/lib/quote/load";
+import { submitReview } from "@/lib/reviews/actions";
+import { loadReviewState } from "@/lib/reviews/load";
 import {
   quotePrice,
   quoteRules,
@@ -73,7 +75,10 @@ async function QuoteContent({ params }: { params: Params }) {
   }
 
   if (view === "approved") {
-    const homeLog = await loadHomeLog(lookup.tokenHash);
+    const [homeLog, reviewState] = await Promise.all([
+      loadHomeLog(lookup.tokenHash),
+      loadReviewState(lookup.tokenHash),
+    ]);
     return (
       <QuoteApproved
         quote={quote}
@@ -82,6 +87,11 @@ async function QuoteContent({ params }: { params: Params }) {
         today={today}
         redoAction={requestRedo.bind(null, token)}
         homeLog={homeLog}
+        review={
+          reviewState?.canReview && !reviewState.reviewed
+            ? { action: submitReview.bind(null, token), suggestedName: reviewState.suggestedName }
+            : null
+        }
       />
     );
   }

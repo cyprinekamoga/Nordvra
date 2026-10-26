@@ -1,8 +1,9 @@
 import "server-only";
 
 /*
- * Betalning för RUT/ROT: köparen måste själv betala, och betalningen måste ske elektroniskt
- * (kort, Swish eller banköverföring). Kontant betalning, eller betalning från någon annan än den
+ * Betalning för RUT/ROT: köparen måste själv betala, och betalningen måste ske elektroniskt.
+ * Nordvra tar bara betalt mot faktura, med Swish eller banköverföring (inget kort, ingen
+ * onlinebetalning). "kort" finns kvar som typ bara för äldre bokningar. Kontant betalning, eller betalning från någon annan än den
  * som ska få avdraget, gör att Skatteverket nekar avdraget. Därför stödjer vi bara elektroniska
  * betalsätt och sparar alltid betalsätt, belopp och datum på bokningen.
  *
@@ -59,11 +60,10 @@ export class ManualPaymentProvider implements PaymentProvider {
   }
 }
 
-// TODO(senare): SwishHandelPaymentProvider (Swish Handel/Commerce API with certificate from the
-// bank; payment request to payerPhone, callback URL → mark booking paid) and a card provider
-// (e.g. a PSP with Checkout). Both must confirm that the payer is the buyer.
-
-/** Only the manual provider exists today. */
+/**
+ * Only the manual provider: Nordvra invoices and the customer pays the invoice with Swish or a
+ * bank transfer; the owner marks it paid in admin. No card or online payment, by decision.
+ */
 export function getPaymentProvider(): PaymentProvider {
   return new ManualPaymentProvider();
 }

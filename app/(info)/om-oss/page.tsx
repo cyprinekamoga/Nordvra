@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BookCta, CheckList, CompanyFacts, ContentSection, PageIntro } from "@/components/content";
+import { BookCta, CheckList, CompanyFacts, ContentSection, PageIntro, TextLink } from "@/components/content";
 import { PhotoFrame } from "@/components/media";
 import { Card, Container, Icon } from "@/components/ui";
 import { company } from "@/lib/company";
@@ -49,7 +49,10 @@ export default function AboutPage() {
         <ContentSection id="omdomen" title={c.reviews.title}>
           <Card tone="muted" padding="md" className="flex items-center gap-3">
             <Icon name="users" size={26} className="shrink-0 text-muted" />
-            <p>{c.reviews.body}</p>
+            <div className="space-y-1">
+              <p>{c.reviews.body}</p>
+              <TextLink href="/#omdomen-rubrik">{c.reviews.link}</TextLink>
+            </div>
           </Card>
         </ContentSection>
 

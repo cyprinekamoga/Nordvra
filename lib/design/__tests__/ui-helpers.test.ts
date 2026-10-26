@@ -108,7 +108,7 @@ describe("shared strings", () => {
       "Max 75\u00a0000\u00a0kr per person och år för RUT och ROT tillsammans, varav max 50\u00a0000\u00a0kr för ROT.",
     );
     expect(l.payment.body).toBe(
-      "Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar.",
+      "Du betalar fakturan med Swish eller banköverföring och måste själv vara den som betalar.",
     );
     expect(l.withdrawal.body).toBe("Du har 14 dagars ångerrätt.");
     expect(l.withdrawal.waiverCheckbox).toBe(

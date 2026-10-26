@@ -65,7 +65,7 @@ the public RPCs, cron jobs, the service catalogue and the admin allow-list.
 - **Partners without verified F-skatt can't be assigned** (database trigger).
 - **Cron:** quotes expire hourly (`expire_quotes`); personnummer are anonymised daily
   (`anonymise_expired_pnr`) – 7 years after the RUT/ROT claim is settled for our own jobs
-  (TODO: confirm with the accountant), 90 days for cancelled/declined/partner jobs. Both periods are editable in the admin.
+  (confirmed), 90 days for cancelled/declined/partner jobs. Both periods are editable in the admin.
 
 For a new project: run the migrations in order, then `supabase/seed.sql`.
 
@@ -109,7 +109,7 @@ lib/eligibility.ts       eligibility questions and evaluation
 lib/catalog/             service catalogue types, seed, loader
 lib/crypto/pii.ts        personnummer encryption, quote tokens
 lib/email, lib/sms       provider interfaces (console placeholders)
-lib/payments             payment interface (manual placeholder; Swish/card TODO)
+lib/payments             payment interface (manual: invoice paid by Swish or transfer)
 lib/i18n/sv/             Swedish strings (add `en/` later)
 supabase/                migrations and seed
 docs/SPEC.md             product, legal and data specification

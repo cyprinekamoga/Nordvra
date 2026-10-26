@@ -337,3 +337,32 @@ export function testEmail(): RenderedEmail {
   const m = s.testEmail;
   return render({ audience: "owner", subject: m.subject, preheader: m.preheader, heading: m.heading, paragraphs: [m.intro] });
 }
+
+/** To the owner when a customer leaves a review (it waits for the owner to publish it). */
+export function ownerNewReview(p: { bookingNumber: string; rating: number; adminUrl: string }): RenderedEmail {
+  const m = s.ownerNewReview;
+  const vars = { bookingNumber: p.bookingNumber, rating: p.rating };
+  return render({
+    audience: "owner",
+    subject: fmt(m.subject, vars),
+    preheader: m.preheader,
+    heading: m.heading,
+    paragraphs: [fmt(m.intro, vars)],
+    button: { label: m.button, href: p.adminUrl },
+  });
+}
+
+/** "Hur blev det?": asks the customer for a review after the job, with a review link. */
+export function reviewRequest(p: { name: string; serviceName: string; link: string }): RenderedEmail {
+  const m = s.reviewRequest;
+  const service = p.serviceName.toLocaleLowerCase("sv-SE");
+  return render({
+    audience: "customer",
+    subject: fmt(m.subject, { service }),
+    preheader: m.preheader,
+    heading: m.heading,
+    greeting: fmt(m.greeting, { name: p.name }),
+    paragraphs: [fmt(m.intro, { service })],
+    button: { label: m.button, href: p.link },
+  });
+}

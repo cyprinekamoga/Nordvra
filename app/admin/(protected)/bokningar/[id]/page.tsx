@@ -15,6 +15,7 @@ import { QuoteEditor } from "@/components/admin/QuoteEditor";
 import { PhotoUploader } from "@/components/admin/PhotoUploader";
 import { addNoteAction, saveClaimAction, sendConfirmationAction, setStatusAction } from "@/lib/admin/booking-actions";
 import { cancelReminderAction, deletePhotoAction, sendReminderAction } from "@/lib/admin/trust-actions";
+import { requestReviewAction } from "@/lib/admin/review-actions";
 import { photoUrl } from "@/lib/quote/photoUrl";
 
 export const metadata = { title: "Bokning" };
@@ -323,6 +324,14 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
               </button>
             </form>
           )}
+          {["utford", "betald", "rut_rot_begard", "avslutad"].includes(b.status) && (
+            <form action={requestReviewAction} className="mt-4">
+              <input type="hidden" name="bookingId" value={b.id} />
+              <button type="submit" className="min-h-12 rounded-control border-2 border-brand bg-surface px-5 font-semibold text-brand">
+                {b.review_token_hash ? "Be om omdöme igen" : "Be kunden om ett omdöme"}
+              </button>
+            </form>
+          )}
           {b.declined_at && (
             <p className="mt-4">
               Kunden tackade nej {formatDateShort(b.declined_at)}
@@ -406,7 +415,6 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
             <select name="paymentMethod" defaultValue={b.payment_method ?? ""} className={selectClasses}>
               <option value="">–</option>
               <option value="swish">Swish</option>
-              <option value="kort">Kort</option>
               <option value="overforing">Överföring</option>
             </select>
           </label>

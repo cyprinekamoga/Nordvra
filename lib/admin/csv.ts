@@ -58,8 +58,14 @@ export const CSV_COLUMNS = [
 
 const PAYMENT_LABELS: Record<string, string> = { kort: "Kort", swish: "Swish", overforing: "Överföring" };
 
+/**
+ * One CSV cell. Text that a spreadsheet would run as a formula (starting with = + - @, tab or
+ * CR) gets a leading apostrophe, so a customer-entered name can never become a formula that
+ * sends the personnummer next to it somewhere (CSV injection). Numbers are left as they are.
+ */
 export function csvEscape(value: string | number | null | undefined): string {
-  const s = value == null ? "" : String(value);
+  let s = value == null ? "" : String(value);
+  if (typeof value === "string" && /^[=+\-@\t\r]/.test(s)) s = `'${s}`;
   return /[";\r\n]/.test(s) || /^\s|\s$/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 

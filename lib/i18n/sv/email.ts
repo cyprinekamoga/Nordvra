@@ -68,7 +68,7 @@ const email = {
     heading: "Din bokning är bekräftad",
     intro: "Tack! Nu är {serviceName} bokat. Här är det viktigaste:",
     payment:
-      "Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar. Annars kan avdraget nekas.",
+      "Du betalar fakturan med Swish eller banköverföring och måste själv vara den som betalar. Annars kan avdraget nekas.",
     change: "Behöver du ändra eller avboka? Ring oss så hjälper vi dig.",
   },
 
@@ -93,6 +93,23 @@ const email = {
     intro:
       "Kunden har anmält omstädning för {bookingNumber} enligt besiktningsgarantin. Kontakta kunden och utföraren i dag, så att städningen blir klar före besiktningen.",
     button: "Öppna ärendet",
+  },
+
+  ownerNewReview: {
+    subject: "Nytt omdöme: {bookingNumber} ({rating} av 5)",
+    preheader: "En kund har lämnat ett omdöme som väntar på granskning.",
+    heading: "Nytt omdöme att granska",
+    intro: "Kunden för {bookingNumber} har lämnat ett omdöme, {rating} av 5. Det syns inte på webbplatsen förrän du publicerar det.",
+    button: "Granska omdömen",
+  },
+
+  reviewRequest: {
+    subject: "Hur blev {service}?",
+    preheader: "Berätta gärna hur det gick. Det tar en minut.",
+    heading: "Hur blev det?",
+    greeting: "Hej {name}!",
+    intro: "Tack för att du bokade {service} via Nordvra. Vi vill gärna veta hur det gick. Ditt omdöme hjälper andra att välja, och oss att bli bättre.",
+    button: "Lämna ett omdöme",
   },
 
   testEmail: {

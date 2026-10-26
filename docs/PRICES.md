@@ -89,7 +89,6 @@ Jourpartner, Täby VVS, Rörfiness, Nordgren & Partners VVS, Boio.
 
 * No range yet (the partner quotes): tak, plåt, fönsterbyte, fasadtvätt, murning, mark och
   dränering, rengöring av ventilation och avlopp, byggstädning.
-* A wall-mounted laddbox is usually covered by the tax reduction for grön teknik rather than ROT;
-  the catalogue still lists it under El with the ROT rate. Check before launch.
+* Wall-mounted laddbox: listed under El with ROT, as decided by the owner (October 2026).
 * Thin data (few published prices): transport to second hand, tillsyn, strykning, the 160+ m²
   cleaning bands and tapetsering.

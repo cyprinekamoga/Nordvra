@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Promises } from "@/components/content/Promises";
+import { ReviewsSection } from "@/components/reviews/ReviewsSection";
 import { FaqList, JsonLd, TextLink } from "@/components/content";
 import { PhotoChip, PhotoFrame, PhotoSplit } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
@@ -409,15 +410,6 @@ function Trust() {
               </div>
             </Card>
           ))}
-          <Card as="li" tone="outline" padding="md" className="flex items-start gap-4">
-            <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-surface-muted text-muted">
-              <Icon name="users" size={26} />
-            </span>
-            <div className="min-w-0 space-y-1">
-              <h3 className="text-lg text-ink">{k.reviewsTitle}</h3>
-              <p className="text-muted">{k.reviewsBody}</p>
-            </div>
-          </Card>
         </ul>
       </Container>
     </section>
@@ -477,6 +469,7 @@ export default function HomePage() {
       <About />
       <Comparison />
       <Trust />
+      <ReviewsSection />
       <PromisesSection />
       <FaqPreview />
       <FinalCta />

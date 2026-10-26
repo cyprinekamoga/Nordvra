@@ -180,7 +180,7 @@ const common = {
     },
     payment: {
       title: "Betalning",
-      body: "Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar.",
+      body: "Du betalar fakturan med Swish eller banköverföring och måste själv vara den som betalar.",
     },
     withdrawal: {
       title: "Ångerrätt",
@@ -233,6 +233,46 @@ const common = {
     share: "Bor ni flera i bostaden kan ni dela på arbetskostnaden och få avdrag var för sig.",
   },
 
+  /** Customer reviews (only real customers with a completed job, published by the owner). */
+  reviews: {
+    title: "Vad våra kunder säger",
+    lead: "Omdömen från kunder som har fått jobbet gjort. Vi publicerar dem som de är skrivna.",
+    average: "{average} av 5 i snitt, {count} omdömen",
+    averageOne: "{average} av 5, 1 omdöme",
+    stars: "{rating} av 5 stjärnor",
+    empty: "Omdömen kommer snart. Vi visar bara omdömen från riktiga kunder efter utfört jobb.",
+    form: {
+      title: "Hur blev det?",
+      lead: "Berätta gärna hur {service} gick. Ditt omdöme hjälper andra att välja, och oss att bli bättre.",
+      ratingLegend: "Ditt betyg",
+      ratingOption: "{rating} av 5",
+      bodyLabel: "Ditt omdöme",
+      bodyHint: "Till exempel om tiden höll, hur resultatet blev och hur bemötandet var.",
+      nameLabel: "Visas som",
+      nameHint: "Förnamn och ort räcker, till exempel ”Anna, Eskilstuna”.",
+      consent: "Omdömet kan visas på nordvra.se med det namn du har skrivit ovan. Vi visar aldrig din adress, e-post eller telefon.",
+      submit: "Skicka omdöme",
+      submitting: "Skickar …",
+      thanksTitle: "Tack för ditt omdöme!",
+      thanksBody: "Vi läser alla omdömen. Det visas på webbplatsen när vi har gått igenom det.",
+      notYet: "Du kan lämna ett omdöme när jobbet är utfört.",
+      errors: {
+        rating: "Välj ett betyg mellan 1 och 5.",
+        bodyShort: "Skriv några ord, minst 10 tecken.",
+        bodyLong: "Omdömet får vara högst 1 000 tecken.",
+        name: "Skriv hur namnet ska visas, till exempel ”Anna, Eskilstuna”.",
+        personnummer: "Ta bort personnumret från texten.",
+        notAvailable: "Omdömet kan inte skickas just nu. Ring oss på {phone} om du vill berätta hur det gick.",
+        exists: "Du har redan lämnat ett omdöme för den här bokningen. Tack!",
+        generic: "Något gick fel. Försök igen, eller ring oss på {phone}.",
+      },
+    },
+    page: {
+      metaTitle: "Lämna ett omdöme",
+      notFound: "Vi hittar inte bokningen. Kopiera hela länken från mejlet, eller ring oss.",
+    },
+  },
+
   /** "Våra löften": shown on the homepage, in the price summary and on the quote page. */
   promises: {
     title: "Våra löften till dig",
@@ -240,7 +280,7 @@ const common = {
     items: {
       payAfter: {
         title: "Du betalar när jobbet är klart",
-        body: "Aldrig i förskott. Fakturan kommer när arbetet är utfört, och du betalar med kort, Swish eller överföring.",
+        body: "Aldrig i förskott. Fakturan kommer när arbetet är utfört, och du betalar den med Swish eller banköverföring.",
       },
       allIn: {
         title: "Offertens pris är hela priset",

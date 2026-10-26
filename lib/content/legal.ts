@@ -9,7 +9,7 @@ import { CURRENT_RULES, type TaxYearRules } from "@/lib/taxRules";
  *
  * Reviewed by a lawyer in October 2026 and published as is. Have any change reviewed again
  * before it goes live.
- * TODO(revisor): confirm retention periods (pnr_retention_years / pnr_unused_retention_days).
+ * Retention periods (pnr_retention_years 7 / pnr_unused_retention_days 90) confirmed October 2026.
  *
  * Server-side module (imports lib/settings for retention and quote validity defaults).
  */
@@ -169,7 +169,7 @@ export function termsOfService({
         title: "6. Betalning",
         blocks: [
           p("Vi tar aldrig betalt i förskott. Du får en faktura när jobbet är gjort. Fakturan visar arbetskostnad, material, resor, avdraget och vad du ska betala."),
-          p("Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som betalar. Är ni flera köpare betalar var och en sin andel. Kontant betalning ger inte rätt till avdrag."),
+          p("Du betalar fakturan med Swish eller banköverföring och måste själv vara den som betalar. Vi tar inte betalt med kort eller online. Är ni flera köpare betalar var och en sin andel. Kontant betalning ger inte rätt till avdrag."),
           p("Betala senast på förfallodagen som står på fakturan. Betalar du för sent kan vi ta ut dröjsmålsränta enligt räntelagen och påminnelseavgift enligt lag."),
           p("För ROT-jobb betalar du till partnerföretaget enligt dess faktura."),
         ],
@@ -305,6 +305,7 @@ export function privacyPolicy({
             "Om du bokar åt någon annan: namn och, om du lämnar det, mobilnummer till den som bor i bostaden.",
             "Bilder från jobbet (fotorapport) som företaget tar av det utförda arbetet. Bilderna visar bostaden, inte personer.",
             "Om du ber om det: datumet då vi ska påminna dig om att det är dags för samma jobb igen.",
+            "Om du lämnar ett omdöme: betyget, texten och det namn du väljer att visa, till exempel ”Anna, Eskilstuna”.",
             "Kontakt med oss: mejl, sms och anteckningar från telefonsamtal.",
             "Tekniska uppgifter: IP-adress och tidpunkt i våra serverloggar, som behövs för att skydda webbplatsen.",
           ),
@@ -342,6 +343,10 @@ export function privacyPolicy({
               {
                 term: "Påminnelse när det är dags för samma jobb igen",
                 detail: "Rättslig grund: samtycke. Du kryssar själv i att du vill ha påminnelsen och kan ta tillbaka samtycket när du vill.",
+              },
+              {
+                term: "Visa ditt omdöme på webbplatsen",
+                detail: "Rättslig grund: samtycke. Du skriver omdömet och väljer själv vilket namn som visas. Vill du att vi tar bort det gör vi det.",
               },
               {
                 term: "Bokföring",

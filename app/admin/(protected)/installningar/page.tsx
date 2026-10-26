@@ -89,7 +89,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/admin/i
             label="Spara personnummer, år efter beslut från Skatteverket"
             name="pnr_retention_years"
             value={settings.pnrRetentionYears}
-            hint="TODO: bekräfta med revisor (bokföringslagen, normalt 7 år)."
+            hint="Bekräftat: 7 år (bokföringslagen)."
           />
           <NumField
             label="Spara personnummer, dagar för jobb utan eget avdrag"

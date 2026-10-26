@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
         source: "/offert/:path*",
         headers: [{ key: "Referrer-Policy", value: "no-referrer" }, noIndex],
       },
+      {
+        // Review links carry a secret token too.
+        source: "/omdome/:path*",
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }, noIndex],
+      },
       { source: "/admin/:path*", headers: [noIndex] },
     ];
   },

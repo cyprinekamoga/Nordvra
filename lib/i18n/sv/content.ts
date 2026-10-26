@@ -259,8 +259,6 @@ const content = {
           body: "Ring {phone}, så hjälper vi dig med bokningen och svarar på dina frågor.",
         },
       ],
-      reviewsTitle: "Omdömen",
-      reviewsBody: "Omdömen kommer snart.",
     },
     faq: {
       title: "Vanliga frågor",
@@ -427,7 +425,8 @@ const content = {
     },
     reviews: {
       title: "Omdömen",
-      body: "Omdömen kommer snart.",
+      body: "Vi visar bara omdömen från riktiga kunder efter utfört jobb, och vi publicerar dem som de är skrivna.",
+      link: "Läs vad våra kunder säger",
     },
   },
 

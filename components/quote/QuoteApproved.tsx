@@ -14,6 +14,8 @@ import { QuoteGuarantees } from "./QuoteGuarantees";
 import { QuotePhotos } from "./QuotePhotos";
 import { QuotePriceCard } from "./QuotePriceCard";
 import { RedoPanel } from "./RedoPanel";
+import { ReviewForm } from "@/components/reviews/ReviewForm";
+import type { ReviewFormState } from "@/lib/reviews/actions";
 
 const a = t.quote.states.approved;
 
@@ -28,6 +30,7 @@ export function QuoteApproved({
   today,
   redoAction,
   homeLog,
+  review = null,
 }: {
   quote: QuoteData;
   breakdown: PriceBreakdown;
@@ -35,6 +38,11 @@ export function QuoteApproved({
   today: string;
   redoAction: QuoteAction;
   homeLog: HomeLogEntry[];
+  /** Set when the job is done and the customer hasn't reviewed it yet. */
+  review?: {
+    action: (prev: ReviewFormState, formData: FormData) => Promise<ReviewFormState>;
+    suggestedName: string;
+  } | null;
 }) {
   const statusLabel = quote.status === "godkand" ? undefined : t.common.status[quote.status];
   const redo = redoState(quote, today);
@@ -60,6 +68,10 @@ export function QuoteApproved({
       />
 
       <QuotePriceCard quote={quote} breakdown={breakdown} ratePct={ratePct} headingId="offert-pris-rubrik" />
+
+      {review ? (
+        <ReviewForm action={review.action} serviceName={quote.serviceName} suggestedName={review.suggestedName} />
+      ) : null}
 
       <QuotePhotos photos={quote.photos} />
 

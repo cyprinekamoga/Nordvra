@@ -5,7 +5,6 @@
 
 export const company = {
   brandName: "Nordvra",
-  // TODO(före lansering): bolagets registrerade namn, t.ex. "Nordvra AB".
   legalName: "Nordvra",
   phoneDisplay: "072-222 88 00",
   phoneHref: "tel:+46722228800",

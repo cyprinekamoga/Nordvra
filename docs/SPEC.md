@@ -60,7 +60,7 @@ deduction shown up front, eligibility check built in, we choose and vet the comp
 
 ```
 brandName: "Nordvra"
-legalName: "Nordvra"  (TODO: registered company name, e.g. "Nordvra AB")
+legalName: "Nordvra"  (the registered name; confirmed October 2026)
 phoneDisplay: "072-222 88 00", phoneHref: "tel:+46722228800"
 email: "info@nordvra.se"
 insurance: "If Skadeförsäkring"  (copy: "Försäkrade hos If")
@@ -174,8 +174,8 @@ URL (`/boka?steg=3`) so the browser back button works. Personnummer is NOT colle
 3. **ROT är 30 %**: never write "halva priset" for ROT. For RUT write "50 % på arbetskostnaden", not
    "halva priset" without qualification.
 4. **Tak**: "Max 75 000 kr per person och år för RUT och ROT tillsammans, varav max 50 000 kr för ROT."
-5. **Betalning**: "Du måste betala elektroniskt (kort, Swish eller överföring) och själv vara den som
-   betalar."
+5. **Betalning**: "Du betalar fakturan med Swish eller banköverföring och måste själv vara den som
+   betalar." (No card or online payment: invoice or Swish only.)
 6. **Ångerrätt** (distansavtalslagen): "Du har 14 dagars ångerrätt." If the scheduled job is within
    14 days: required checkbox "Jag vill att arbetet påbörjas inom ångerfristen och förstår att jag
    betalar för utfört arbete om jag ångrar mig."
@@ -264,12 +264,13 @@ Environment (`.env.local` exists locally, `.env.example` documents): `NEXT_PUBLI
   `/admin/login`. Every admin server action calls `requireAdmin()` first.
 * `lib/email/index.ts` – `EmailProvider` interface `{send({to, subject, text, html})}`;
   `ConsoleEmailProvider` (logs only recipient domain + subject, never bodies), `ResendEmailProvider`
-  stub with TODO; `getEmailProvider()`. Templates in `lib/email/templates.ts`: `requestReceived`,
+  (live since October 2026, see docs/EMAIL.md); `getEmailProvider()`. Templates in `lib/email/templates.ts`: `requestReceived`,
   `ownerNewRequest`, `quoteSent(link)`, `bookingConfirmed`, `ownerQuoteAnswered`. **Never include
   personnummer.**
 * `lib/sms/index.ts` – same pattern (`ConsoleSmsProvider`, `FortySixElksSmsProvider` stub).
 * `lib/payments/index.ts` – `PaymentProvider` interface (`createPaymentRequest`, `getStatus`),
-  `ManualPaymentProvider` placeholder (admin marks paid), TODO Swish Handel / card.
+  `ManualPaymentProvider` (admin marks paid). By decision there is no card or online payment:
+  the customer pays the invoice with Swish or a bank transfer.
 * `proxy.ts` – refreshes Supabase auth cookies for `/admin/:path*`.
 * `next.config.ts` – keep `cacheComponents`/`partialPrefetching`; add security headers (X-Frame-Options
   DENY, nosniff, Referrer-Policy strict-origin-when-cross-origin; `/offert/:path*` gets
@@ -344,7 +345,7 @@ description and error), `InfoBox` (tone info/warning/legal, title, children), `W
 /vad-ger-inte-avdrag#id), `DeductionBadge` (type rut|rot → "RUT 50 %"/"ROT 30 %" from
 `CURRENT_RULES`), `ProgressBar` (step, total), `Card`, `PriceLine`, `Icon` (maps category icon keys
 → lucide-react icons). Layout: `Header` (logo, nav: Så fungerar det, Vanliga frågor, Kontakt; phone
-button always visible on mobile), `Footer` (all page links, company info, F-skatt, If, org.nr TODO),
+button always visible on mobile), `Footer` (all page links, company info, F-skatt, If; no org.nr shown),
 `PhoneCard` ("Hellre ringa? Ring oss…"), `CookieBanner` (only necessary cookies; acknowledges in
 localStorage with try/catch), `SkipLink`.
 
@@ -395,7 +396,7 @@ Routes: `/`, `/boka`, `/boka/klart`, `/offert/[token]`, `/sa-fungerar-rut-och-ro
 * **Services & prices**: edit service fields (active, model, rot kind, name, description, warnings)
   and price ranges per size band (labour/material/travel min–max in kr; show computed after-deduction
   preview), add-ons. Invalidate `catalog` cache tag after save.
-* **Settings**: quote validity hours, retention years/days (with TODO note "Bekräfta med revisor"),
+* **Settings**: quote validity hours, retention years/days (7 years / 90 days, confirmed October 2026),
   default commission, surcharges, notification email, tax-rule overrides per year (show
   `lib/taxRules.ts` values and warn when overridden), admin users (add/remove email).
 * **Export**: CSV of completed **seller-model** jobs (status utford/betald/rut_rot_begard/avslutad,
@@ -454,7 +455,7 @@ interactive parts in `components/story`):
 Personnummer collected only on quote approval; encrypted in the app (AES-256-GCM) before it reaches
 the DB; masked in lists; full value only on booking detail and in the CSV export; never in emails,
 URLs, logs, analytics or browser storage. RLS: customers can't read data. Retention: anonymise
-automatically (cron) 7 years after claim settled (editable; TODO confirm with accountant);
+automatically (cron) 7 years after claim settled (editable; confirmed October 2026);
 cancelled/declined/agent jobs after 90 days. Cookie banner: only necessary cookies.
 
 ---------------------------------------------------------------------------------------------------
@@ -501,3 +502,24 @@ that grow and move-out cleanings that fail the inspection). Migration
 * Terms and privacy policy updated (version 2026-10-21): guarantees, booking for someone else,
   photo reports, reminders (consent). **These new sections must be reviewed by the lawyer before
   real customers use them.**
+
+---------------------------------------------------------------------------------------------------
+## 15. Customer reviews (October 2026)
+
+Migration `20261026100000_reviews.sql`. Only real customers can review: a booking with status
+utförd or later, one review per booking, through the booking link (`/offert/[token]`, the form
+appears when the job is done) or a review link (`/omdome/[token]`) that the owner emails with
+"Be kunden om ett omdöme" on the booking page (`bookings.review_token_hash`, hash only). The
+review is saved as `ny`; the owner publishes or hides it at `/admin/omdomen`, and gets an email
+for each new one. The homepage shows the 12 newest published reviews with the average
+(`get_published_reviews`, cached with tag `reviews`); until there are any it says so honestly.
+Shown with the name the customer chose ("Anna, Eskilstuna"), never email, phone or address.
+Never write or publish reviews that aren't from a real customer.
+
+## 16. Security review (October 2026)
+
+OWASP review of the code. Fixed (`20261026090000_security_fixes.sql`, `lib/admin/csv.ts`):
+`get_home_log` only answers for an approved booking and matches email + phone + address (before,
+a request with someone else's email and address but your own phone could read their job
+history); CSV export neutralises formula cells and buyer names may not start with = + - @;
+`submit_request` also has a global cap of 50 requests per 10 minutes.

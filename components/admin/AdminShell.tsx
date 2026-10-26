@@ -8,6 +8,7 @@ export const ADMIN_NAV = [
   { href: "/admin", label: "Översikt" },
   { href: "/admin/bokningar", label: "Bokningar" },
   { href: "/admin/partners", label: "Utförare" },
+  { href: "/admin/omdomen", label: "Omdömen" },
   { href: "/admin/tjanster", label: "Tjänster & priser" },
   { href: "/admin/installningar", label: "Inställningar" },
   { href: "/admin/export", label: "Export" },

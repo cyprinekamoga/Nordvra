@@ -93,8 +93,9 @@ async function Hero() {
   return (
     <section aria-labelledby="hero-rubrik" className="px-3 pt-3 sm:px-4 sm:pt-4 lg:px-5 lg:pt-5">
       <div className="mx-auto grid max-w-[110rem] overflow-hidden rounded-[2rem] bg-surface-muted lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        {/* Collage of the work we book: cleaning (tall), moving and painting. */}
-        <div className="grid h-52 grid-cols-3 gap-2 p-2 sm:h-72 sm:gap-3 sm:p-3 lg:order-last lg:h-auto lg:min-h-[42rem] lg:grid-cols-2 lg:grid-rows-2">
+        {/* Collage of the work we book: cleaning (tall), moving and painting. Right of the text on
+            computers, under it on phones so the search is visible without scrolling. */}
+        <div className="order-last grid h-52 grid-cols-3 gap-2 p-2 pt-0 sm:h-72 sm:gap-3 sm:p-3 lg:h-auto lg:pt-3 lg:grid-cols-2 lg:grid-rows-2">
           {HERO_COLLAGE.map((key, i) => {
             const photo = photos[key];
             return (
@@ -115,17 +116,17 @@ async function Hero() {
           })}
         </div>
 
-        <div className="px-5 py-10 sm:px-10 sm:py-14 lg:py-20 lg:pr-12 lg:pl-[max(2.5rem,calc((100vw-81rem)/2))]">
-          <div className="max-w-[44rem] space-y-8">
-            <div className="space-y-5">
-              <h1 id="hero-rubrik" className="text-[2.75rem] leading-[1.05] font-extrabold text-ink sm:text-6xl lg:text-7xl">
+        <div className="px-5 py-8 sm:px-10 sm:py-10 lg:py-10 lg:pr-12 xl:py-12 lg:pl-[max(2.5rem,calc((100vw-81rem)/2))]">
+          <div className="max-w-[44rem] space-y-6">
+            <div className="space-y-4">
+              <h1 id="hero-rubrik" className="text-[2.5rem] leading-[1.05] font-extrabold text-ink sm:text-5xl xl:text-6xl">
                 {c.hero.titleStart}
                 <span className="relative inline-block whitespace-nowrap">
                   {c.hero.titleMark}
                   <Underline />
                 </span>
               </h1>
-              <p className="text-xl text-ink">
+              <p className="text-lg text-ink">
                 {leadBefore}
                 <strong>{c.hero.leadStrong}</strong>
                 {leadAfter}
@@ -138,10 +139,10 @@ async function Hero() {
                   <li key={tile.label}>
                     <Link
                       href={tile.href}
-                      className="flex h-full min-h-32 flex-col items-center justify-center gap-3 rounded-2xl border-2 border-transparent bg-canvas px-2 py-5 text-center no-underline transition-colors hover:border-brand hover:bg-surface"
+                      className="flex h-full min-h-20 flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-transparent bg-canvas px-2 py-2 text-center sm:min-h-24 sm:gap-2 sm:py-3 no-underline transition-colors hover:border-brand hover:bg-surface"
                     >
-                      <Icon name={tile.icon} size={34} className="text-brand" />
-                      <span className="text-lg font-semibold text-ink">{tile.label}</span>
+                      <Icon name={tile.icon} size={28} className="text-brand" />
+                      <span className="leading-tight font-semibold text-ink">{tile.label}</span>
                     </Link>
                   </li>
                 ))}

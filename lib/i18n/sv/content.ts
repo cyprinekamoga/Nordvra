@@ -86,7 +86,7 @@ const content = {
         { label: "Trädgård & snö", icon: "tree", href: "/boka?kategori=tradgard" },
       ],
       searchLabel: "Vad ska göras?",
-      searchPlaceholder: "T.ex. målning eller flyttstäd",
+      searchPlaceholder: "T.ex. målning",
       searchNoResults: "Vi hittade inget som matchar. Bläddra bland alla tjänster i stället.",
       searchAll: "Se alla tjänster",
       searchCount: "{count} tjänster hittades",

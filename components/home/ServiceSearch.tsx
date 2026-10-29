@@ -69,7 +69,7 @@ export function ServiceSearch({ services }: { services: readonly SearchableServi
           placeholder={h.searchPlaceholder}
           autoComplete="off"
           aria-describedby={statusId}
-          className="min-h-14 w-full min-w-0 bg-transparent text-lg text-ink placeholder:text-muted focus-visible:shadow-none focus-visible:outline-none"
+          className="min-h-13 w-full min-w-0 bg-transparent text-lg text-ink placeholder:text-muted focus-visible:shadow-none focus-visible:outline-none"
         />
       </div>
       <p id={statusId} aria-live="polite" className="sr-only">

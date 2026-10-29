@@ -42,6 +42,34 @@ export const photos = {
     photographer: "Tima Miroshnichenko",
     sourceUrl: "https://www.pexels.com/photo/women-in-orange-uniform-cleaning-the-floor-6195277/",
   },
+  // Hero collage (Pexels; sharp, upright originals of 6000 px).
+  heroCleaner: {
+    src: "/bilder/stadare-dammsuger.jpg",
+    width: 2560,
+    height: 3840,
+    alt: "En städare i arbetskläder dammsuger ett ljust rum",
+    focus: "50% 40%",
+    photographer: "Tima Miroshnichenko",
+    sourceUrl: "https://www.pexels.com/photo/photo-of-a-woman-using-a-vacuum-cleaner-6196694/",
+  },
+  heroMover: {
+    src: "/bilder/flyttare-kartonger.jpg",
+    width: 2560,
+    height: 3840,
+    alt: "En flyttare bär flyttkartonger i en ljus, tom bostad",
+    focus: "45% 40%",
+    photographer: "RDNE Stock project",
+    sourceUrl: "https://www.pexels.com/photo/light-man-couple-people-7464682/",
+  },
+  heroPainter: {
+    src: "/bilder/malare-vagg.jpg",
+    width: 2560,
+    height: 3840,
+    alt: "En målare rollar en vit innervägg",
+    focus: "55% 35%",
+    photographer: "Tima Miroshnichenko",
+    sourceUrl: "https://www.pexels.com/photo/a-man-in-white-shirt-painting-a-house-6474135/",
+  },
   // Cleaning (RUT).
   kitchenWipe: {
     src: "/bilder/stadning-kok.jpg",

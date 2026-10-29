@@ -53,3 +53,13 @@ export function filtersToQuery(f: BookingFilters, override: Partial<BookingFilte
   const s = q.toString();
   return s ? `?${s}` : "";
 }
+
+/** Statuses where nothing was agreed with the customer, so the request may be deleted. */
+export const DELETABLE_STATUSES = [
+  "ny_forfragan",
+  "soker_utforare",
+  "offert_skickad",
+  "nekad",
+  "avbokad",
+  "offert_utgangen",
+] as const;

@@ -13,7 +13,7 @@ import { sendEmailSafe } from "@/lib/email";
 import { bookingConfirmed, quoteSent } from "@/lib/email/templates";
 import { sendSmsSafe } from "@/lib/sms";
 import { bookingConfirmedSms, quoteSentSms, residentSms } from "@/lib/sms/templates";
-import { BOOKING_STATUSES } from "@/lib/admin/filters";
+import { BOOKING_STATUSES, DELETABLE_STATUSES } from "@/lib/admin/filters";
 import { Constants } from "@/lib/supabase/database.types";
 
 export interface QuoteFormState {
@@ -252,4 +252,26 @@ export async function sendConfirmationAction(formData: FormData): Promise<void> 
     message: "Bekräftelse skickad till kunden",
   });
   return backTo(bookingId, "ok=skickad");
+}
+
+/**
+ * "Ta bort förfrågan": deletes a request that never became a booking, with its notes, history
+ * and photos. Approved jobs are kept (invoices and RUT/ROT claims must be saved by law).
+ */
+export async function deleteBookingAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const bookingId = id.parse(formData.get("bookingId"));
+  if (formData.get("confirm") !== "on") return backTo(bookingId, "fel=bekrafta");
+  const supabase = await createServerSupabase();
+  const { data: b } = await supabase.from("bookings").select("status").eq("id", bookingId).maybeSingle();
+  if (!b) redirect("/admin/bokningar");
+  if (!(DELETABLE_STATUSES as readonly string[]).includes(b.status)) return backTo(bookingId, "fel=ejborttagbar");
+
+  const { data: photos } = await supabase.from("booking_photos").select("path").eq("booking_id", bookingId);
+  if (photos && photos.length > 0) {
+    await supabase.storage.from("fotorapporter").remove(photos.map((p) => p.path));
+  }
+  const { error } = await supabase.from("bookings").delete().eq("id", bookingId);
+  if (error) return backTo(bookingId, "fel=fel");
+  redirect("/admin/bokningar?ok=borttagen");
 }

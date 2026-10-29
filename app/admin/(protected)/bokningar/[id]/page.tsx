@@ -4,7 +4,7 @@ import { createServerSupabase } from "@/lib/supabase/server";
 import { decryptPII } from "@/lib/crypto/pii";
 import { getCatalog } from "@/lib/catalog/load";
 import { rankPartners } from "@/lib/admin/partners";
-import { BOOKING_STATUSES } from "@/lib/admin/filters";
+import { BOOKING_STATUSES, DELETABLE_STATUSES } from "@/lib/admin/filters";
 import { calculatePrice } from "@/lib/pricing/calculate";
 import { getTaxRules, taxYearForDate, type TaxRuleOverride } from "@/lib/taxRules";
 import { formatDateLong, formatDateShort, formatDateTime, formatKr, formatKrRange, formatPostcode } from "@/lib/format";
@@ -13,7 +13,13 @@ import { Card } from "@/components/ui";
 import { Flash, ModelBadge, PageHeader, StatusBadge, selectClasses, tableClasses, tdClasses, thClasses } from "@/components/admin/bits";
 import { QuoteEditor } from "@/components/admin/QuoteEditor";
 import { PhotoUploader } from "@/components/admin/PhotoUploader";
-import { addNoteAction, saveClaimAction, sendConfirmationAction, setStatusAction } from "@/lib/admin/booking-actions";
+import {
+  addNoteAction,
+  deleteBookingAction,
+  saveClaimAction,
+  sendConfirmationAction,
+  setStatusAction,
+} from "@/lib/admin/booking-actions";
 import { cancelReminderAction, deletePhotoAction, sendReminderAction } from "@/lib/admin/trust-actions";
 import { requestReviewAction } from "@/lib/admin/review-actions";
 import { photoUrl } from "@/lib/quote/photoUrl";
@@ -543,6 +549,28 @@ export default async function BookingDetailPage({ params, searchParams }: PagePr
           </ol>
         </Card>
       </div>
+
+      {(DELETABLE_STATUSES as readonly string[]).includes(b.status) && (
+        <Card as="section" aria-labelledby="ta-bort" className="mt-6 border-2 border-danger">
+          <h2 id="ta-bort" className="mb-2 text-xl font-bold text-danger">Ta bort förfrågan</h2>
+          <p className="mb-4">
+            Tar bort förfrågan för gott, med anteckningar, historik och bilder. Det går inte att ångra.
+          </p>
+          <form action={deleteBookingAction} className="space-y-4">
+            <input type="hidden" name="bookingId" value={b.id} />
+            <label className="flex min-h-12 items-center gap-3">
+              <input type="checkbox" name="confirm" required className="size-6 accent-danger" />
+              <span>Ja, ta bort {b.booking_number}</span>
+            </label>
+            <button
+              type="submit"
+              className="min-h-12 rounded-control border-2 border-danger bg-danger px-5 font-semibold text-white"
+            >
+              Ta bort förfrågan
+            </button>
+          </form>
+        </Card>
+      )}
     </>
   );
 }

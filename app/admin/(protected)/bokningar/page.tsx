@@ -4,12 +4,13 @@ import { BOOKING_STATUSES, PAGE_SIZE, filtersToQuery, parseBookingFilters } from
 import { formatDateShort, formatPostcode } from "@/lib/format";
 import { t } from "@/lib/i18n";
 import { LinkButton } from "@/components/ui";
-import { ModelBadge, PageHeader, StatusBadge, selectClasses, tableClasses, tdClasses, thClasses } from "@/components/admin/bits";
+import { Flash, ModelBadge, PageHeader, StatusBadge, selectClasses, tableClasses, tdClasses, thClasses } from "@/components/admin/bits";
 
 export const metadata = { title: "Bokningar" };
 
 export default async function BookingsPage({ searchParams }: PageProps<"/admin/bokningar">) {
-  const filters = parseBookingFilters(await searchParams);
+  const sp = await searchParams;
+  const filters = parseBookingFilters(sp);
   const supabase = await createServerSupabase();
 
   let query = supabase
@@ -38,6 +39,7 @@ export default async function BookingsPage({ searchParams }: PageProps<"/admin/b
       <PageHeader title="Bokningar">
         <p className="mt-1 text-muted">{total} träffar</p>
       </PageHeader>
+      <Flash params={sp} />
 
       <form method="get" className="mb-6 grid grid-cols-1 gap-3 rounded-card border border-border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-5">
         <label className="block">

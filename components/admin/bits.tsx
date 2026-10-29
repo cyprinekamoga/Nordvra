@@ -63,6 +63,11 @@ const FLASH: Record<string, { tone: "success" | "danger"; text: string }> = {
   testmejlfel: { tone: "danger", text: "Testmejlet kunde inte skickas. Kontrollera nyckeln och att domänen är verifierad i Resend." },
   fskatt: { tone: "danger", text: "Utföraren har inte verifierad F-skatt och kan inte tilldelas." },
   ogiltig: { tone: "danger", text: "Uppgifterna är ogiltiga. Kontrollera fälten." },
+  bekrafta: { tone: "danger", text: "Kryssa i rutan för att bekräfta att förfrågan ska tas bort." },
+  ejborttagbar: {
+    tone: "danger",
+    text: "Godkända och utförda jobb kan inte tas bort, eftersom fakturor och avdrag måste sparas. Sätt status till Avbokad i stället.",
+  },
   sista: { tone: "danger", text: "Du kan inte ta bort dig själv eller den sista administratören." },
 };
 

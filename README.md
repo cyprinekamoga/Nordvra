@@ -133,10 +133,9 @@ names and number plates.
 
 | File | Shows | Photographer |
 | --- | --- | --- |
-| stadare-dammsuger.jpg | Hero collage: cleaner in work clothes vacuuming (Pexels) | Tima Miroshnichenko |
 | flyttare-kartonger.jpg | Hero collage: mover carrying boxes (Pexels) | RDNE Stock project |
 | malare-vagg.jpg | Hero collage: painter rolling an interior wall (Pexels) | Tima Miroshnichenko |
-| stadteam.jpg | Two cleaners in a bright living room (Pexels, not used on the homepage now) | Tima Miroshnichenko |
+| stadteam.jpg | Hero collage: cleaners in a bright living room (Pexels) | Tima Miroshnichenko |
 | stadning-kok.jpg | Wiping a kitchen sink | everdrop GmbH |
 | stadning.jpg | Vacuuming | Giorgio Trovato |
 | angtvatt.jpg | Steam-cleaning bathroom tiles | Aurum Gebäudereinigung Kassel |

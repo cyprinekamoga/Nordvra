@@ -66,3 +66,18 @@ export async function getSettings(client: TypedSupabaseClient): Promise<AppSetti
     return { ...DEFAULT_SETTINGS };
   }
 }
+
+/**
+ * The owner's notification address for alerts sent from customer actions (no admin session):
+ * read through the `owner_notification_email` RPC, so the address set under Inställningar is
+ * used. Falls back to the default on any error.
+ */
+export async function getNotificationEmail(client: TypedSupabaseClient): Promise<string> {
+  try {
+    const { data, error } = await client.rpc("owner_notification_email");
+    if (error || typeof data !== "string" || !data.includes("@")) return DEFAULT_SETTINGS.notificationEmail;
+    return data.trim();
+  } catch {
+    return DEFAULT_SETTINGS.notificationEmail;
+  }
+}

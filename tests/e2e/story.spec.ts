@@ -7,10 +7,7 @@ test("homepage tells the three steps with photos", async ({ page }) => {
   for (const title of ["Välj tjänst", "Välj tid", "Vi fixar resten"]) {
     await expect(page.getByRole("heading", { level: 3, name: new RegExp(title) })).toBeVisible();
   }
-  // The hero's tiles open the booking flow on the right category; the search finds services.
-  const tiles = page.getByRole("navigation", { name: "Populära tjänster" });
-  await expect(tiles.getByRole("link", { name: "Städ & fönster" })).toHaveAttribute("href", "/boka?kategori=stadning");
-  await expect(tiles.getByRole("link", { name: "Flytt & bärhjälp" })).toHaveAttribute("href", "/boka?kategori=flytt");
+  // The hero's search finds services and links straight to them in the booking flow.
   await page.getByRole("searchbox", { name: "Vad ska göras?" }).fill("fönsterputs");
   await expect(page.getByRole("link", { name: /Fönsterputs/ }).first()).toHaveAttribute("href", "/boka?tjanst=fonsterputs");
   await page.getByRole("searchbox", { name: "Vad ska göras?" }).fill("");

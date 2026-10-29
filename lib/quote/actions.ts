@@ -8,7 +8,7 @@ import { encryptPII, hashToken, isEncryptionConfigured } from "@/lib/crypto/pii"
 import { sendEmailSafe } from "@/lib/email";
 import { ownerQuoteAnswered, ownerRedoRequested } from "@/lib/email/templates";
 import { fmt, t } from "@/lib/i18n";
-import { getSettings } from "@/lib/settings";
+import { getNotificationEmail } from "@/lib/settings";
 import { siteUrl } from "@/lib/site";
 import { createAnonClient } from "@/lib/supabase/anon";
 import type { Json } from "@/lib/supabase/database.types";
@@ -59,8 +59,8 @@ function errorName(error: unknown): string {
 async function notifyOwner(bookingNumber: string, accepted: boolean): Promise<void> {
   try {
     // The settings row is admin-only under RLS; with the anon client this returns the defaults.
-    const settings = await getSettings(createAnonClient());
-    const to = settings.notificationEmail || company.email;
+    const notificationEmail = await getNotificationEmail(createAnonClient());
+    const to = notificationEmail || company.email;
     const email = ownerQuoteAnswered({ bookingNumber, accepted, adminUrl: siteUrl("/admin/bokningar") });
     await sendEmailSafe({ to, ...email });
   } catch (error) {
@@ -188,8 +188,8 @@ export async function declineQuote(
 /** Owner notification for a re-clean request. Never throws. */
 async function notifyOwnerRedo(bookingNumber: string): Promise<void> {
   try {
-    const settings = await getSettings(createAnonClient());
-    const to = settings.notificationEmail || company.email;
+    const notificationEmail = await getNotificationEmail(createAnonClient());
+    const to = notificationEmail || company.email;
     await sendEmailSafe({ to, ...ownerRedoRequested({ bookingNumber, adminUrl: siteUrl("/admin/bokningar") }) });
   } catch (error) {
     console.warn(`[quote] redo notification failed: ${errorName(error)}`);

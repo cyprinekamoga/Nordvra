@@ -78,13 +78,6 @@ const content = {
       titleMark: "utan krångel.",
       lead: "Klicka i vad du behöver, se priset {strong} på en gång och låt oss hitta ett kontrollerat företag. Det kostar inget att fråga.",
       leadStrong: "före och efter RUT- och ROT-avdrag",
-      tilesLabel: "Populära tjänster",
-      tiles: [
-        { label: "Städ & fönster", icon: "sparkles", href: "/boka?kategori=stadning" },
-        { label: "Flytt & bärhjälp", icon: "truck", href: "/boka?kategori=flytt" },
-        { label: "Bygg & renovering", icon: "hammer", href: "/boka" },
-        { label: "Trädgård & snö", icon: "tree", href: "/boka?kategori=tradgard" },
-      ],
       searchLabel: "Vad ska göras?",
       searchPlaceholder: "T.ex. målning",
       searchNoResults: "Vi hittade inget som matchar. Bläddra bland alla tjänster i stället.",

@@ -6,7 +6,7 @@ import { hashToken } from "@/lib/crypto/pii";
 import { sendEmailSafe } from "@/lib/email";
 import { ownerNewReview } from "@/lib/email/templates";
 import { fmt, t } from "@/lib/i18n";
-import { getSettings } from "@/lib/settings";
+import { getNotificationEmail } from "@/lib/settings";
 import { siteUrl } from "@/lib/site";
 import { createAnonClient } from "@/lib/supabase/anon";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
@@ -60,9 +60,9 @@ export async function submitReview(token: string, _prev: ReviewFormState, formDa
     const number = bookingNumber;
     const rating = result.data.rating;
     after(async () => {
-      const settings = await getSettings(createAnonClient());
+      const notificationEmail = await getNotificationEmail(createAnonClient());
       await sendEmailSafe({
-        to: settings.notificationEmail || company.email,
+        to: notificationEmail || company.email,
         ...ownerNewReview({ bookingNumber: number, rating, adminUrl: siteUrl("/admin/omdomen") }),
       });
     });

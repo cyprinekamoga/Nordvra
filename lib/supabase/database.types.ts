@@ -839,6 +839,7 @@ export type Database = {
       get_quote: { Args: { p_token_hash: string }; Returns: Json }
       get_review_state: { Args: { p_token_hash: string }; Returns: Json }
       is_admin: { Args: never; Returns: boolean }
+      owner_notification_email: { Args: never; Returns: string }
       public_config: { Args: never; Returns: Json }
       request_redo: {
         Args: { p_message: string; p_token_hash: string }

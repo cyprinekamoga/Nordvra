@@ -32,26 +32,18 @@ export interface Photo {
 }
 
 export const photos = {
-  // Hero: a professional cleaning team at work (Pexels; sharp studio-quality original, 5851 px).
+  // Hero collage: professional cleaners at work (Pexels; sharp studio-quality original, 5851 px).
+  // The tall collage tile shows the cleaner with the vacuum on the left.
   cleaningTeam: {
     src: "/bilder/stadteam.jpg",
     width: 3840,
     height: 2560,
     alt: "Två städare i arbetskläder dammsuger och moppar ett ljust vardagsrum",
-    focus: "32% 50%",
+    focus: "27% 50%",
     photographer: "Tima Miroshnichenko",
     sourceUrl: "https://www.pexels.com/photo/women-in-orange-uniform-cleaning-the-floor-6195277/",
   },
-  // Hero collage (Pexels; sharp, upright originals of 6000 px).
-  heroCleaner: {
-    src: "/bilder/stadare-dammsuger.jpg",
-    width: 2560,
-    height: 3840,
-    alt: "En städare i arbetskläder dammsuger ett ljust rum",
-    focus: "50% 40%",
-    photographer: "Tima Miroshnichenko",
-    sourceUrl: "https://www.pexels.com/photo/photo-of-a-woman-using-a-vacuum-cleaner-6196694/",
-  },
+  // Hero collage, moving and painting (Pexels; sharp, upright originals of 6000 px).
   heroMover: {
     src: "/bilder/flyttare-kartonger.jpg",
     width: 2560,

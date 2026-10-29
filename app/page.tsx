@@ -57,7 +57,7 @@ function OnDarkContact({ className }: { className?: string }) {
 }
 
 /** The hero collage: cleaning (tall on computers), moving and painting. */
-const HERO_COLLAGE = ["heroCleaner", "heroMover", "heroPainter"] as const satisfies readonly PhotoKey[];
+const HERO_COLLAGE = ["cleaningTeam", "heroMover", "heroPainter"] as const satisfies readonly PhotoKey[];
 
 /** A hand-drawn underline under the highlighted words of the headline. */
 function Underline() {
@@ -74,7 +74,7 @@ function Underline() {
 }
 
 /**
- * Light card with a big headline, four category tiles, a service search and a collage of
+ * Light card with a big headline, a service search and a collage of
  * professionals at work (cleaning, moving, painting). Tiles and search results open the booking flow on the right step.
  */
 async function Hero() {
@@ -133,23 +133,13 @@ async function Hero() {
               </p>
             </div>
 
-            <nav aria-label={c.hero.tilesLabel}>
-              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {c.hero.tiles.map((tile) => (
-                  <li key={tile.label}>
-                    <Link
-                      href={tile.href}
-                      className="flex h-full min-h-20 flex-col items-center justify-center gap-1.5 rounded-2xl border-2 border-transparent bg-canvas px-2 py-2 text-center sm:min-h-24 sm:gap-2 sm:py-3 no-underline transition-colors hover:border-brand hover:bg-surface"
-                    >
-                      <Icon name={tile.icon} size={28} className="text-brand" />
-                      <span className="leading-tight font-semibold text-ink">{tile.label}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
 
-            <ServiceSearch services={services} />
+            <div className="space-y-3">
+              <ServiceSearch services={services} />
+              <LinkButton href="/boka" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
+                {t.common.actions.bookInTwoMinutes}
+              </LinkButton>
+            </div>
 
             <ul className="flex flex-wrap gap-x-6 gap-y-2 text-ink">
               {c.hero.trust.map((item) => (

@@ -8,7 +8,7 @@ import { company } from "@/lib/company";
 import { sendEmailSafe } from "@/lib/email";
 import { ownerNewRequest, requestReceived } from "@/lib/email/templates";
 import { fmt, t } from "@/lib/i18n";
-import { getSettings } from "@/lib/settings";
+import { getNotificationEmail } from "@/lib/settings";
 import { siteUrl } from "@/lib/site";
 import { sendSmsSafe } from "@/lib/sms";
 import { requestReceivedSms } from "@/lib/sms/templates";
@@ -64,7 +64,7 @@ async function notify(payload: SubmitRequestPayload, bookingNumber: string, serv
   await sendSmsSafe({ to: payload.contact_phone, text: requestReceivedSms({ bookingNumber }) });
 
   // The settings row is admin-only under RLS; with the anon client this returns the defaults.
-  const settings = await getSettings(createAnonClient());
+  const notificationEmail = await getNotificationEmail(createAnonClient());
   const owner = ownerNewRequest({
     bookingNumber,
     serviceName,
@@ -72,7 +72,7 @@ async function notify(payload: SubmitRequestPayload, bookingNumber: string, serv
     preferredDate: payload.preferred_date,
     adminUrl: siteUrl("/admin/bokningar"),
   });
-  await sendEmailSafe({ to: settings.notificationEmail, ...owner });
+  await sendEmailSafe({ to: notificationEmail, ...owner });
 }
 
 /**

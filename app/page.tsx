@@ -57,7 +57,7 @@ function OnDarkContact({ className }: { className?: string }) {
 }
 
 /** The hero collage: cleaning (tall on computers), moving and painting. */
-const HERO_COLLAGE = ["cleaningTeam", "heroMover", "heroPainter"] as const satisfies readonly PhotoKey[];
+const HERO_COLLAGE = ["heroCleaner", "heroMover", "heroPainter"] as const satisfies readonly PhotoKey[];
 
 /** A hand-drawn underline under the highlighted words of the headline. */
 function Underline() {

@@ -433,7 +433,7 @@ interactive parts in `components/story`):
   rounded card with the headline "Hjälp hemma, utan krångel." (hand-drawn underline), a short
   lead, a service search that links to `/boka?tjanst=…`
   (`applyDeepLink` in lib/booking/state.ts), trust ticks and the phone number; beside it a collage of three sharp Pexels photos
-  (cleaning team, mover, painter; on phones a row of three on top). The six benefits sit in a band
+  (cleaner, mover, painter; on phones a row of three on top). The six benefits sit in a band
   under the hero.
 * Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
   linking to /boka.

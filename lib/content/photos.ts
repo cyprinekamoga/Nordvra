@@ -43,7 +43,16 @@ export const photos = {
     photographer: "Tima Miroshnichenko",
     sourceUrl: "https://www.pexels.com/photo/women-in-orange-uniform-cleaning-the-floor-6195277/",
   },
-  // Hero collage, moving and painting (Pexels; sharp, upright originals of 6000 px).
+  // Hero collage (Pexels; sharp, upright originals of 6000 px).
+  heroCleaner: {
+    src: "/bilder/stadare-dammsuger.jpg",
+    width: 2560,
+    height: 3840,
+    alt: "En städare i arbetskläder dammsuger ett ljust rum",
+    focus: "50% 40%",
+    photographer: "Tima Miroshnichenko",
+    sourceUrl: "https://www.pexels.com/photo/photo-of-a-woman-using-a-vacuum-cleaner-6196694/",
+  },
   heroMover: {
     src: "/bilder/flyttare-kartonger.jpg",
     width: 2560,

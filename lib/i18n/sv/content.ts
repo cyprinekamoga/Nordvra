@@ -73,14 +73,26 @@ const content = {
 
   home: {
     hero: {
-      title: "Vi bokar städning och hantverkare åt dig, med RUT- och ROT-avdrag",
-      body: "Du ser priset före och efter avdrag direkt. Förfrågan är gratis och inte bindande.",
-      ctaHint: "Inga konton, inga lösenord. Bara några klick.",
+      /** Big headline; the part in `titleMark` gets the hand-drawn underline. */
+      titleStart: "Hjälp hemma, ",
+      titleMark: "utan krångel.",
+      lead: "Klicka i vad du behöver, se priset {strong} på en gång och låt oss hitta ett kontrollerat företag. Det kostar inget att fråga.",
+      leadStrong: "före och efter RUT- och ROT-avdrag",
+      tilesLabel: "Populära tjänster",
+      tiles: [
+        { label: "Städ & fönster", icon: "sparkles", href: "/boka?kategori=stadning" },
+        { label: "Flytt & bärhjälp", icon: "truck", href: "/boka?kategori=flytt" },
+        { label: "Bygg & renovering", icon: "hammer", href: "/boka" },
+        { label: "Trädgård & snö", icon: "tree", href: "/boka?kategori=tradgard" },
+      ],
+      searchLabel: "Vad ska göras?",
+      searchPlaceholder: "T.ex. målning eller flyttstäd",
+      searchNoResults: "Vi hittade inget som matchar. Bläddra bland alla tjänster i stället.",
+      searchAll: "Se alla tjänster",
+      searchCount: "{count} tjänster hittades",
+      searchCountOne: "1 tjänst hittades",
+      trust: ["Ingen bokningsavgift", "Pris inom 24 timmar", "Kontrollerade företag"],
       benefitsTitle: "Det här får du hos oss",
-      /** Price card in the hero; {price} is the flyttstäd example after RUT. */
-      photoPrice: "Du betalar {price}",
-      /** Second hero button: scrolls down to "Så enkelt är det". */
-      howCta: "Så går det till",
       benefits: [
         "Du klickar dig fram utan att skriva någon text",
         "Pris före och efter avdrag direkt",

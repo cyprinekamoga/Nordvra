@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { ServiceSearch, type SearchableService } from "@/components/home/ServiceSearch";
 import { Promises } from "@/components/content/Promises";
 import { ReviewsSection } from "@/components/reviews/ReviewsSection";
 import { FaqList, JsonLd, TextLink } from "@/components/content";
-import { PhotoChip, PhotoFrame, PhotoSplit } from "@/components/media";
+import { PhotoFrame, PhotoSplit } from "@/components/media";
 import { DeductionCalculator } from "@/components/story/DeductionCalculator";
 import { MovingDay } from "@/components/story/MovingDay";
 import { StepsStory } from "@/components/story/StepsStory";
@@ -11,7 +13,8 @@ import { Card, Container, DeductionBadge, Icon, LinkButton, cx } from "@/compone
 import { company } from "@/lib/company";
 import { flyttstadExample, taxFactVars } from "@/lib/content/facts";
 import { faqPreview } from "@/lib/content/faq";
-import type { PhotoKey } from "@/lib/content/photos";
+import { photos, type PhotoKey } from "@/lib/content/photos";
+import { getCatalog } from "@/lib/catalog/load";
 import { formatKr } from "@/lib/format";
 import { fmt, t } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
@@ -53,41 +56,117 @@ function OnDarkContact({ className }: { className?: string }) {
   );
 }
 
-/** Text on deep green beside a photo of a cleaner at work (on phones the photo is on top). */
-function Hero() {
-  const example = flyttstadExample();
-  const [before, price, after] = splitPrice(c.hero.photoPrice, example.breakdown.toPay);
+/** Torn-paper edge: a strip in the card colour over the photo's left side, ragged on the right. */
+const TORN_EDGE = "polygon(0 0, 37.9% 0.0%, 42.6% 2.78%, 58.7% 5.56%, 38.5% 8.33%, 40.3% 11.11%, 43.8% 13.89%, 26.1% 16.67%, 40.5% 19.44%, 45.7% 22.22%, 52.9% 25.0%, 22.1% 27.78%, 31.3% 30.56%, 22.0% 33.33%, 53.6% 36.11%, 48.5% 38.89%, 19.8% 41.67%, 61.2% 44.44%, 60.4% 47.22%, 46.8% 50.0%, 45.1% 52.78%, 24.9% 55.56%, 18.7% 58.33%, 41.2% 61.11%, 20.6% 63.89%, 26.4% 66.67%, 28.6% 69.44%, 19.3% 72.22%, 38.4% 75.0%, 37.4% 77.78%, 55.1% 80.56%, 40.8% 83.33%, 46.2% 86.11%, 40.0% 88.89%, 47.1% 91.67%, 38.1% 94.44%, 30.2% 97.22%, 61.9% 100.0%, 0 100%)";
+
+/** A hand-drawn underline under the highlighted words of the headline. */
+function Underline() {
   return (
-    <PhotoSplit photo="cleaningTeam" eager aria-labelledby="hero-rubrik">
-      <div className="space-y-6">
-        <div className="flex flex-wrap gap-2">
-          <DeductionBadge type="rut" />
-          <DeductionBadge type="rot" />
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 300 18"
+      preserveAspectRatio="none"
+      className="absolute -bottom-2 left-0 h-3 w-full text-accent sm:-bottom-3 sm:h-4"
+    >
+      <path d="M4 12 C 70 4, 170 3, 296 9" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/**
+ * Light card with a big headline, four category tiles, a service search and a photo of a
+ * professional team at work. Tiles and search results open the booking flow on the right step.
+ */
+async function Hero() {
+  const catalog = await getCatalog();
+  const categoryName = new Map(catalog.categories.map((cat) => [cat.id, cat.name]));
+  const services: SearchableService[] = catalog.services
+    .filter((service) => service.active)
+    .map((service) => ({
+      id: service.id,
+      name: service.name,
+      category: categoryName.get(service.categoryId) ?? "",
+      deductionType: service.deductionType,
+    }));
+  const photo = photos.cleaningTeam;
+  const [leadBefore, leadAfter = ""] = c.hero.lead.split("{strong}");
+
+  return (
+    <section aria-labelledby="hero-rubrik" className="px-3 pt-3 sm:px-4 sm:pt-4 lg:px-5 lg:pt-5">
+      <div className="mx-auto grid max-w-[110rem] overflow-hidden rounded-[2rem] bg-surface-muted lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <div className="relative h-56 sm:h-80 lg:order-last lg:h-auto lg:min-h-[42rem]">
+          <Image
+            src={photo.src}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 70vw, 100vw"
+            quality={80}
+            loading="eager"
+            fetchPriority="high"
+            className="object-cover"
+            style={{ objectPosition: photo.focus }}
+          />
+          {/* Torn-paper edge from lg: the card colour shows through on the left. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-y-0 -left-px hidden w-8 bg-surface-muted lg:block"
+            style={{ clipPath: TORN_EDGE }}
+          />
         </div>
-        <h1 id="hero-rubrik" className="text-4xl font-extrabold text-on-brand sm:text-5xl lg:text-[3rem]">
-          {c.hero.title}
-        </h1>
-        <p className="text-xl">{t.common.brand.tagline}</p>
-        <p className="text-lg text-forest-text">{c.hero.body}</p>
-        <div className="space-y-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <LinkButton href="/boka" variant="inverse" size="lg" iconEnd="arrow-right" className="w-full sm:w-auto">
-              {t.common.actions.bookInTwoMinutes}
-            </LinkButton>
-            <LinkButton href="#sa-gar-det-till" variant="inverseOutline" size="lg" className="w-full sm:w-auto">
-              {c.hero.howCta}
-            </LinkButton>
+
+        <div className="px-5 py-10 sm:px-10 sm:py-14 lg:py-20 lg:pr-12 lg:pl-[max(2.5rem,calc((100vw-81rem)/2))]">
+          <div className="max-w-[44rem] space-y-8">
+            <div className="space-y-5">
+              <h1 id="hero-rubrik" className="text-[2.75rem] leading-[1.05] font-extrabold text-ink sm:text-6xl lg:text-7xl">
+                {c.hero.titleStart}
+                <span className="relative inline-block whitespace-nowrap">
+                  {c.hero.titleMark}
+                  <Underline />
+                </span>
+              </h1>
+              <p className="text-xl text-ink">
+                {leadBefore}
+                <strong>{c.hero.leadStrong}</strong>
+                {leadAfter}
+              </p>
+            </div>
+
+            <nav aria-label={c.hero.tilesLabel}>
+              <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {c.hero.tiles.map((tile) => (
+                  <li key={tile.label}>
+                    <Link
+                      href={tile.href}
+                      className="flex h-full min-h-32 flex-col items-center justify-center gap-3 rounded-2xl border-2 border-transparent bg-canvas px-2 py-5 text-center no-underline transition-colors hover:border-brand hover:bg-surface"
+                    >
+                      <Icon name={tile.icon} size={34} className="text-brand" />
+                      <span className="text-lg font-semibold text-ink">{tile.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <ServiceSearch services={services} />
+
+            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-ink">
+              {c.hero.trust.map((item) => (
+                <li key={item} className="flex items-center gap-2 font-semibold">
+                  <Icon name="check-circle" className="text-success" />
+                  {item}
+                </li>
+              ))}
+              <li className="flex items-center gap-2">
+                <Icon name="phone" className="text-brand" />
+                <a href={company.phoneHref} className="link font-semibold">
+                  {company.phoneDisplay}
+                </a>
+              </li>
+            </ul>
           </div>
-          <p className="text-forest-text">{c.hero.ctaHint}</p>
         </div>
-        <OnDarkContact />
-        <PhotoChip label={example.label} className="inline-block">
-          {before}
-          <span className="price text-brand">{price}</span>
-          {after}
-        </PhotoChip>
       </div>
-    </PhotoSplit>
+    </section>
   );
 }
 

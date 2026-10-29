@@ -749,3 +749,28 @@ export function buildSubmitPayload(params: {
   if (!questions.inspection || service.formKind !== "flyttstad") payload.inspection_date = null;
   return { ok: true, payload, service, companion: { payload: companionPayload, service: companion } };
 }
+
+// ---------------------------------------------------------------------------------------------
+// Deep links from the homepage (`/boka?kategori=stadning`, `/boka?tjanst=flyttstadning`)
+
+/**
+ * Applies a deep link to the draft: a service selects its category and itself (step 3), a
+ * category selects itself (step 2, or 3 when it has a single service). Unknown ids are ignored.
+ */
+export function applyDeepLink(
+  draft: RequestDraft,
+  catalog: Catalog,
+  link: { kategori?: string | null; tjanst?: string | null },
+): { draft: RequestDraft; step: Step } | null {
+  const service = link.tjanst ? findService(catalog, link.tjanst) : null;
+  if (service) {
+    const withCategory = selectCategory(draft, service.categoryId, catalog);
+    return { draft: selectService(withCategory, service.id, catalog), step: STEP_HOME };
+  }
+  const category = link.kategori ? findCategory(catalog, link.kategori) : null;
+  if (category) {
+    const next = selectCategory(draft, category.id, catalog);
+    return { draft: next, step: servicesInCategory(catalog, category.id).length === 1 ? STEP_HOME : STEP_SERVICE };
+  }
+  return null;
+}

@@ -32,6 +32,7 @@ import {
   Plus,
   ReceiptText,
   Scale,
+  Search,
   ShieldCheck,
   Shovel,
   Sparkles,
@@ -96,6 +97,7 @@ const ICONS = {
   file: FileText,
   receipt: ReceiptText,
   scale: Scale,
+  search: Search,
   cookie: Cookie,
   browser: AppWindow,
 } satisfies Record<string, LucideIcon>;

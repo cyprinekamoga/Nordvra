@@ -153,3 +153,18 @@ describe("booking for a relative", () => {
     expect(no.ok && no.data.residentName).toBeNull();
   });
 });
+
+describe("homepage deep links", () => {
+  it("a service link selects its category and service and opens step 3", async () => {
+    const { applyDeepLink } = await import("@/lib/booking/state");
+    const result = applyDeepLink(emptyDraft(), catalog, { tjanst: "fonsterputs" });
+    expect(result?.step).toBe(3);
+    expect(result?.draft).toMatchObject({ categoryId: "fonsterputs", serviceId: "fonsterputs" });
+  });
+
+  it("a category link opens step 2, unknown ids are ignored", async () => {
+    const { applyDeepLink } = await import("@/lib/booking/state");
+    expect(applyDeepLink(emptyDraft(), catalog, { kategori: "flytt" })?.step).toBe(2);
+    expect(applyDeepLink(emptyDraft(), catalog, { kategori: "finns-inte" })).toBeNull();
+  });
+});

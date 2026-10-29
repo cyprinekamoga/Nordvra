@@ -429,10 +429,13 @@ interactive parts in `components/story`):
   people at work rather than posed faces; one colour grade (slightly cooler, softer warm tones,
   even brightness). No readable brand names or number plates. Only photos whose original is at
   least 4K (3840 × 2160).
-* Hero: split in two (`PhotoSplit`): white text on solid deep green (`forest` token) with "Boka på
-  2 minuter" and "Så går det till", the example price, no booking fee and phone; beside it, shown in
-  full, a sharp photo of two professional cleaners at work in a bright living room (Pexels) (on phones a strip above the text). The six benefits
-  sit in a band under the hero.
+* Hero (October 2026, in the style of the big Swedish service sites, in our own words): a light
+  rounded card with the headline "Hjälp hemma, utan krångel." (hand-drawn underline), a short
+  lead, four large tiles (Städ & fönster, Flytt & bärhjälp, Bygg & renovering, Trädgård & snö)
+  that open `/boka?kategori=…`, a service search that links to `/boka?tjanst=…`
+  (`applyDeepLink` in lib/booking/state.ts), trust ticks and the phone number; beside it the
+  cleaning-team photo with a torn-paper edge (on phones on top). The six benefits sit in a band
+  under the hero.
 * Services: four photo cards of the work (Städning, Flytthjälp, Måla & tapetsera, Snickeri)
   linking to /boka.
 * The 3 steps are scrollytelling on a deep-green band: on desktop the logo's zigzag stays in view

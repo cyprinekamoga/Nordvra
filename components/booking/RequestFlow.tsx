@@ -10,6 +10,7 @@ import {
   STEP_CONTACT,
   STEP_SERVICE,
   TOTAL_STEPS,
+  applyDeepLink,
   deriveRequest,
   nextStep,
   parseStep,
@@ -71,10 +72,24 @@ function Flow({ catalog, draft, today }: { catalog: Catalog; draft: RequestDraft
   const contentRef = useRef<HTMLDivElement>(null);
   const shownStep = useRef(step);
 
+  // A homepage tile or search result (`?kategori=` / `?tjanst=`) picks the category or service
+  // and jumps to the next step. Runs once, before the step correction below.
+  const linkHandled = useRef(false);
+  const kategori = searchParams.get("kategori");
+  const tjanst = searchParams.get("tjanst");
+  useEffect(() => {
+    if (linkHandled.current || (!kategori && !tjanst)) return;
+    linkHandled.current = true;
+    const result = applyDeepLink(draft, catalog, { kategori, tjanst });
+    if (result) updateDraft(() => result.draft);
+    router.replace(stepHref(result?.step ?? STEP_CATEGORY), { scroll: false });
+  }, [kategori, tjanst, draft, catalog, router]);
+
   // A deep link or an old bookmark can point past the first unanswered step: correct the URL.
   useEffect(() => {
+    if (kategori || tjanst) return;
     if (step !== requested) router.replace(stepHref(step), { scroll: false });
-  }, [step, requested, router]);
+  }, [step, requested, router, kategori, tjanst]);
 
   // Move focus to the new step's heading so screen readers start at the top of the step.
   useEffect(() => {

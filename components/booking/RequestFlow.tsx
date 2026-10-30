@@ -161,8 +161,8 @@ function Flow({ catalog, draft, today }: { catalog: Catalog; draft: RequestDraft
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-4">
+    <div className="space-y-5 sm:space-y-6">
+      <div className="space-y-3 sm:space-y-4">
         {step > STEP_CATEGORY ? (
           <Button
             variant="ghost"
@@ -177,10 +177,14 @@ function Flow({ catalog, draft, today }: { catalog: Catalog; draft: RequestDraft
       </div>
 
       <header className="space-y-2">
-        <h1 ref={headingRef} tabIndex={-1} className="text-3xl leading-tight font-bold text-ink focus:outline-none">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="text-[1.75rem] leading-tight font-bold text-ink focus:shadow-none focus:outline-none sm:text-3xl"
+        >
           {title}
         </h1>
-        <p className="text-lg text-muted">
+        <p className="text-muted sm:text-lg">
           {step === STEP_SERVICE ? fmt(steps.service.lead, { category: derived.category?.name ?? "" }) : lead}
         </p>
       </header>
@@ -197,9 +201,13 @@ function Flow({ catalog, draft, today }: { catalog: Catalog; draft: RequestDraft
         <form noValidate onSubmit={onContinue} className="space-y-8">
           <div ref={contentRef}>{content}</div>
           {showContinue ? (
-            <Button type="submit" size="lg" fullWidth iconEnd="arrow-right">
-              {t.booking.nav.continue}
-            </Button>
+            // Phones: the button sticks to the bottom of the screen while the step is in view,
+            // so "Fortsätt" is always under the thumb, however long the step.
+            <div className="sticky bottom-0 z-20 -mx-4 border-t border-border bg-canvas/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+              <Button type="submit" size="lg" fullWidth iconEnd="arrow-right">
+                {t.booking.nav.continue}
+              </Button>
+            </div>
           ) : null}
         </form>
       )}

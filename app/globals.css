@@ -101,7 +101,7 @@
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    scroll-padding-top: 1rem;
+    scroll-padding-top: 5rem; /* clears the sticky header */
   }
 
   body {
@@ -239,6 +239,35 @@
 }
 @utility fade-in {
   animation: fade-in 0.4s ease-out both;
+}
+
+/*
+ * Phones only (below sm): a row of cards you swipe sideways, each snapping into place, with the
+ * next card peeking in at the edge so it is clear there is more. Runs edge to edge (it cancels
+ * the container's 1rem gutter). From sm the element's own classes (grid etc.) lay the cards out.
+ * Children get swipe-card.
+ */
+@utility swipe-row {
+  @media (width < 40rem) {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1rem;
+    margin-inline: -1rem;
+    padding: 0.25rem 1rem 0.75rem;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+@utility swipe-card {
+  @media (width < 40rem) {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
 }
 
 /* Inline text link (body copy, footers, legal text). */

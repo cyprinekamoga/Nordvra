@@ -186,7 +186,7 @@ export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps) {
 
   return (
     <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
-      <ol className="relative space-y-10 before:absolute before:top-6 before:bottom-6 before:left-[1.4375rem] before:w-0.5 before:bg-white/25 lg:space-y-0 lg:before:hidden">
+      <ol className="relative space-y-8 sm:space-y-10 before:absolute before:top-6 before:bottom-6 before:left-[1.4375rem] before:w-0.5 before:bg-white/25 lg:space-y-0 lg:before:hidden">
         {steps.map((step, i) => (
           <li
             key={step.title}
@@ -214,11 +214,11 @@ export function StepsStory({ steps, stepLabel, visual }: StepsStoryProps) {
               <p aria-hidden="true" className="text-base font-bold tracking-[0.06em] text-forest-text uppercase">
                 {fmt(stepLabel, { n: i + 1 })}
               </p>
-              <h3 className="text-2xl text-on-brand sm:text-3xl">
+              <h3 className="text-xl text-on-brand sm:text-3xl">
                 <span className="sr-only">{fmt(stepLabel, { n: i + 1 })}: </span>
                 {step.title}
               </h3>
-              <p className="text-lg text-forest-text">{step.body}</p>
+              <p className="text-forest-text sm:text-lg">{step.body}</p>
               <div className="pt-3 lg:hidden" aria-hidden="true">
                 <StepCard index={i} visual={visual} />
               </div>

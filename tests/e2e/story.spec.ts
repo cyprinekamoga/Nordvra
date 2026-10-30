@@ -13,8 +13,9 @@ test("homepage tells the three steps with photos", async ({ page }) => {
   await page.getByRole("searchbox", { name: "Vad ska göras?" }).fill("");
   // The four service cards further down link to the booking flow.
   const services = page.getByRole("region", { name: "Hjälp i hemmet, från golv till tak" });
-  for (const name of ["Städning", "Flytthjälp", "Måla & tapetsera", "Snickeri"]) {
-    await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", "/boka");
+  const cards = { Städning: "stadning", Flytthjälp: "flytt", "Måla & tapetsera": "maleri", Snickeri: "snickeri" };
+  for (const [name, category] of Object.entries(cards)) {
+    await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", `/boka?kategori=${category}`);
   }
 });
 

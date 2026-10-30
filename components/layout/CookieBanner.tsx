@@ -47,19 +47,25 @@ function acknowledge() {
   listeners.forEach((listener) => listener());
 }
 
+/** Whether the visitor has closed the cookie notice (true on the server, so nothing waits on it). */
+export function useCookieNoticeAcknowledged(): boolean {
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
+
 /**
  * Notice about necessary cookies only (no consent needed, so no "decline"). Renders nothing on
  * the server; appears after hydration until the visitor clicks "Jag förstår". Does not move focus.
  */
 export function CookieBanner() {
-  const acknowledged = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const acknowledged = useCookieNoticeAcknowledged();
   if (acknowledged) return null;
   return (
     <section
       aria-label={t.common.cookies.label}
-      className="fixed inset-x-0 bottom-0 z-50 p-3 sm:p-4"
+      className="fixed inset-x-0 bottom-0 z-50 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] sm:p-4"
     >
-      <div className="mx-auto flex w-full max-w-page flex-col gap-3 rounded-card bg-ink p-4 text-on-brand shadow-raised sm:flex-row sm:items-center sm:justify-between sm:p-5">
+      {/* One short row, so it covers as little as possible of a phone screen. */}
+      <div className="mx-auto flex w-full max-w-page items-center justify-between gap-3 rounded-card bg-ink py-2 pr-2 pl-4 text-on-brand shadow-raised sm:p-4 sm:pl-5">
         <p>
           {t.common.cookies.text}{" "}
           <Link
@@ -72,7 +78,7 @@ export function CookieBanner() {
         <button
           type="button"
           onClick={acknowledge}
-          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-control border-2 border-on-brand bg-surface px-5 font-semibold text-ink hover:bg-brand-soft"
+          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-control border-2 border-on-brand bg-surface px-4 font-semibold text-ink hover:bg-brand-soft sm:px-5"
         >
           {t.common.cookies.accept}
         </button>

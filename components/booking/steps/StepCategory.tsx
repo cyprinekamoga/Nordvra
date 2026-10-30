@@ -22,7 +22,7 @@ export function StepCategory({
   return (
     <div className="space-y-4">
       {errors.categoryId ? <FieldError id={errorId}>{errors.categoryId}</FieldError> : null}
-      <ul aria-label={s.listLabel} className="grid gap-3 sm:grid-cols-2">
+      <ul aria-label={s.listLabel} className="grid gap-2 sm:grid-cols-2 sm:gap-3">
         {categories.map((category) => (
           <li key={category.id}>
             <Tile

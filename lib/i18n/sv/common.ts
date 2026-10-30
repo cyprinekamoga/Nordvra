@@ -68,6 +68,8 @@ const common = {
     cardTitle: "Hellre ringa?",
     /** "Ring oss på 072-222 88 00" – second half of the CTA (link text). */
     callUsOn: "Ring oss på {phone}",
+    /** Visible text of the header call button on phones (its accessible name has the number). */
+    callShort: "Ring",
     cardBody:
       "Du kan boka hela tjänsten per telefon. Vi svarar på dina frågor och fyller i förfrågan åt dig.",
     emailLead: "Du kan också mejla oss på",
@@ -444,8 +446,8 @@ const common = {
 
   cookies: {
     label: "Om cookies",
-    text: "Vi använder bara nödvändiga cookies, alltså de som behövs för att webbplatsen ska fungera.",
-    link: "Läs mer om cookies",
+    text: "Vi använder bara nödvändiga cookies.",
+    link: "Läs mer",
     accept: "Jag förstår",
   },
 

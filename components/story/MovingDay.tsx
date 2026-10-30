@@ -22,7 +22,8 @@ export interface MovingDayProps {
  * One example day told as scrollytelling. Desktop: the timeline (08:00 → 13:00 → 17:00) and the
  * chapter's photo stay in view while the chapters scroll past; the line fills and the photo
  * changes as each chapter reaches the middle of the screen, and the times link to their chapter.
- * Phones: the chapters follow each other, each with its own photo. All text is in
+ * Phones: a row of chapter cards to swipe through, each with its own photo; small tablets: the
+ * chapters follow each other. All text is in
  * the server HTML; with reduced motion nothing animates.
  */
 export function MovingDay({ label, chapters }: MovingDayProps) {
@@ -112,7 +113,8 @@ export function MovingDay({ label, chapters }: MovingDayProps) {
         </div>
       </div>
 
-      <ol className="space-y-12 md:space-y-0">
+      {/* Focusable so the swipe row can be scrolled with the keyboard too. */}
+      <ol tabIndex={0} aria-label={label} className="swipe-row sm:max-md:space-y-12">
         {chapters.map((c, i) => (
           <li
             key={c.time}
@@ -121,22 +123,28 @@ export function MovingDay({ label, chapters }: MovingDayProps) {
               items.current[i] = el;
             }}
             data-index={i}
-            className="relative scroll-mt-[30vh] md:flex md:min-h-[60vh] md:items-center"
+            className="swipe-card relative scroll-mt-[30vh] md:flex md:min-h-[60vh] md:items-center"
           >
+            <div className="pb-4 md:hidden">
+              <PhotoFrame
+                photo={c.photo}
+                shape="square"
+                aspect="aspect-[3/2]"
+                decorative
+                sizes="(min-width: 640px) 100vw, 82vw"
+              />
+            </div>
             <div
               className={cx(
-                "min-w-0 space-y-3 transition-colors duration-300 md:border-l-4 md:py-2 md:pl-8",
+                "min-w-0 space-y-2 transition-colors sm:space-y-3 duration-300 md:border-l-4 md:py-2 md:pl-8",
                 active === i ? "md:border-accent" : "md:border-border",
               )}
             >
-              <p className="relative z-10 inline-flex h-12 min-w-20 items-center justify-center rounded-full border-2 border-brand bg-brand px-3 text-lg font-extrabold text-on-brand tabular-nums md:h-auto md:min-w-0 md:justify-start md:border-0 md:bg-transparent md:px-0 md:text-brand">
+              <p className="relative z-10 inline-flex h-10 min-w-16 items-center justify-center rounded-full border-2 border-brand bg-brand px-3 font-extrabold text-on-brand tabular-nums sm:h-12 sm:min-w-20 sm:text-lg md:h-auto md:min-w-0 md:justify-start md:border-0 md:bg-transparent md:px-0 md:text-brand">
                 {c.time}
               </p>
-              <h3 className="text-2xl text-ink">{c.title}</h3>
-              <p className="text-lg">{c.body}</p>
-              <div className="pt-2 md:hidden">
-                <PhotoFrame photo={c.photo} shape="square" aspect="aspect-[4/3]" decorative sizes="100vw" />
-              </div>
+              <h3 className="text-xl text-ink sm:text-2xl">{c.title}</h3>
+              <p className="sm:text-lg">{c.body}</p>
             </div>
           </li>
         ))}

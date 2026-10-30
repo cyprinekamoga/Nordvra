@@ -127,7 +127,7 @@ function PhotoTile({
       {...rest}
     >
       {/* Text first in the DOM so the accessible name starts with the title; the photo is shown first. */}
-      <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 p-4">
+      <span className="flex min-w-0 flex-1 flex-col items-start justify-center gap-1.5 px-4 py-3 sm:gap-2 sm:p-4">
         <span className="text-lg leading-snug font-bold">{title}</span>
         {description ? <span className="text-base text-muted">{description}</span> : null}
         {deduction || badge ? (
@@ -137,13 +137,13 @@ function PhotoTile({
           </span>
         ) : null}
       </span>
-      <span className="relative order-first block w-[7.5rem] shrink-0 self-stretch overflow-hidden bg-surface-muted sm:aspect-[16/9] sm:w-full">
+      <span className="relative order-first block w-24 shrink-0 self-stretch overflow-hidden bg-surface-muted sm:aspect-[16/9] sm:w-full">
         <Image
           quality={85}
           src={p.src}
           alt=""
           fill
-          sizes="(min-width: 640px) 22rem, 8rem"
+          sizes="(min-width: 640px) 22rem, 6rem"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           style={"focus" in p ? { objectPosition: p.focus } : undefined}
         />

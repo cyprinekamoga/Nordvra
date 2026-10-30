@@ -46,6 +46,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: palette.brand,
   colorScheme: "light",
+  // Lets the bottom bars keep clear of the iPhone home indicator (env(safe-area-inset-bottom)).
+  viewportFit: "cover",
 };
 
 /**

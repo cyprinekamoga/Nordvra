@@ -69,8 +69,10 @@ No org.nr and no postal address are shown (Nordvra works online).
 hometown: "Stockholm", coverage: "Hela Sverige"
 termsVersion: "2026-10-21"
 ```
-"Hellre ringa? Ring oss på 072-222 88 00" must be visible on every customer page (header button +
-in-flow card).
+"Hellre ringa? Ring oss på 072-222 88 00" must be reachable on every customer page: the sticky
+header's call button ("Ring" on phones, the number from xl) and the in-flow card. Mobile first: the
+header is one short sticky row, the homepage has a bottom "Boka" bar on phones, and "Fortsätt" in
+the request flow sticks to the bottom of the screen.
 
 ---------------------------------------------------------------------------------------------------
 ## 2. Business models (modelled in data and UI)

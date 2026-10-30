@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ServiceSearch, type SearchableService } from "@/components/home/ServiceSearch";
+import { StickyBookBar } from "@/components/home/StickyBookBar";
 import { Promises } from "@/components/content/Promises";
 import { ReviewsSection } from "@/components/reviews/ReviewsSection";
 import { FaqList, JsonLd, TextLink } from "@/components/content";
@@ -91,11 +92,11 @@ async function Hero() {
   const [leadBefore, leadAfter = ""] = c.hero.lead.split("{strong}");
 
   return (
-    <section aria-labelledby="hero-rubrik" className="px-3 pt-3 sm:px-4 sm:pt-4 lg:px-5 lg:pt-5">
-      <div className="mx-auto grid max-w-[110rem] overflow-hidden rounded-[2rem] bg-surface-muted lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+    <section data-book-cta aria-labelledby="hero-rubrik" className="px-2 pt-2 sm:px-4 sm:pt-4 lg:px-5 lg:pt-5">
+      <div className="mx-auto grid max-w-[110rem] overflow-hidden rounded-[1.5rem] bg-surface-muted sm:rounded-[2rem] lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         {/* Collage of the work we book: cleaning (tall), moving and painting. Right of the text on
             computers, under it on phones so the search is visible without scrolling. */}
-        <div className="order-last grid h-52 grid-cols-3 gap-2 p-2 pt-0 sm:h-72 sm:gap-3 sm:p-3 lg:h-auto lg:pt-3 lg:grid-cols-2 lg:grid-rows-2">
+        <div className="order-last grid h-44 grid-cols-3 gap-2 p-2 pt-0 sm:h-72 sm:gap-3 sm:p-3 lg:h-auto lg:pt-3 lg:grid-cols-2 lg:grid-rows-2">
           {HERO_COLLAGE.map((key, i) => {
             const photo = photos[key];
             return (
@@ -116,17 +117,17 @@ async function Hero() {
           })}
         </div>
 
-        <div className="px-5 py-8 sm:px-10 sm:py-10 lg:py-10 lg:pr-12 xl:py-12 lg:pl-[max(2.5rem,calc((100vw-81rem)/2))]">
-          <div className="max-w-[44rem] space-y-6">
-            <div className="space-y-4">
-              <h1 id="hero-rubrik" className="text-[2.5rem] leading-[1.05] font-extrabold text-ink sm:text-5xl xl:text-6xl">
+        <div className="px-4 py-6 sm:px-10 sm:py-10 lg:py-10 lg:pr-12 xl:py-12 lg:pl-[max(2.5rem,calc((100vw-81rem)/2))]">
+          <div className="max-w-[44rem] space-y-5 sm:space-y-6">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 id="hero-rubrik" className="text-[2.25rem] leading-[1.05] font-extrabold text-ink sm:text-5xl xl:text-6xl">
                 {c.hero.titleStart}
                 <span className="relative inline-block whitespace-nowrap">
                   {c.hero.titleMark}
                   <Underline />
                 </span>
               </h1>
-              <p className="text-lg text-ink">
+              <p className="text-ink sm:text-lg">
                 {leadBefore}
                 <strong>{c.hero.leadStrong}</strong>
                 {leadAfter}
@@ -141,7 +142,7 @@ async function Hero() {
               </LinkButton>
             </div>
 
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-ink">
+            <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-ink sm:gap-x-6 sm:gap-y-2">
               {c.hero.trust.map((item) => (
                 <li key={item} className="flex items-center gap-2 font-semibold">
                   <Icon name="check-circle" className="text-success" />
@@ -165,14 +166,14 @@ async function Hero() {
 /** The six benefits, as a band right under the hero. */
 function Benefits() {
   return (
-    <section aria-labelledby="fordelar-rubrik" className="border-b border-border bg-brand-soft py-8 sm:py-10">
-      <Container className="space-y-5">
+    <section aria-labelledby="fordelar-rubrik" className="border-b border-border bg-brand-soft py-7 sm:py-10">
+      <Container className="space-y-4 sm:space-y-5">
         <h2 id="fordelar-rubrik" className="text-xl text-ink sm:text-2xl">
           {c.hero.benefitsTitle}
         </h2>
-        <ul className="grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 sm:gap-y-3 lg:grid-cols-3">
           {c.hero.benefits.map((item) => (
-            <li key={item} className="flex items-start gap-3 text-lg">
+            <li key={item} className="flex items-start gap-3 sm:text-lg">
               <Icon name="check-circle" size={24} className="mt-0.5 shrink-0 text-brand" />
               <span>{item}</span>
             </li>
@@ -184,48 +185,51 @@ function Benefits() {
 }
 
 /** Photo and deduction type for each service card, in the order of `c.services.items`. */
-const SERVICE_CARDS: readonly { photo: PhotoKey; type: DeductionType }[] = [
-  { photo: "kitchenWipe", type: "rut" },
-  { photo: "packing", type: "rut" },
-  { photo: "paintRoller", type: "rot" },
-  { photo: "carpenter", type: "rot" },
+const SERVICE_CARDS: readonly { photo: PhotoKey; type: DeductionType; category: string }[] = [
+  { photo: "kitchenWipe", type: "rut", category: "stadning" },
+  { photo: "packing", type: "rut", category: "flytt" },
+  { photo: "paintRoller", type: "rot", category: "maleri" },
+  { photo: "carpenter", type: "rot", category: "snickeri" },
 ];
 
-/** Four services as photo cards of the work itself; the whole card links to the booking flow. */
+/**
+ * Four services as photo cards of the work itself, two side by side on phones; the whole card
+ * opens the booking flow on that category.
+ */
 function Services() {
   const k = c.services;
   return (
-    <section aria-labelledby="tjanster-rubrik" className="py-12 sm:py-16">
-      <Container className="space-y-8">
+    <section aria-labelledby="tjanster-rubrik" className="py-10 sm:py-16">
+      <Container className="space-y-6 sm:space-y-8">
         <div className="space-y-2">
           <p className="label-caps text-brand">{k.eyebrow}</p>
           <h2 id="tjanster-rubrik" className="text-2xl text-ink sm:text-3xl">
             {k.title}
           </h2>
         </div>
-        <ul className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
           {k.items.map((item, i) => (
-            <li key={item.title} className="group focus-ring-within relative space-y-3 rounded-control">
+            <li key={item.title} className="group focus-ring-within relative space-y-2 rounded-control sm:space-y-3">
               <PhotoFrame
                 photo={SERVICE_CARDS[i].photo}
                 shape="square"
-                aspect="aspect-[4/5]"
+                aspect="aspect-square sm:aspect-[4/5]"
                 decorative
                 reveal
-                sizes="(min-width: 1024px) 18rem, (min-width: 640px) 50vw, 100vw"
+                sizes="(min-width: 1024px) 18rem, 50vw"
                 imageClassName="transition-transform duration-500 group-hover:scale-[1.03]"
               />
               <DeductionBadge type={SERVICE_CARDS[i].type} size="sm" />
-              <h3 className="text-xl text-ink">
+              <h3 className="text-lg text-ink sm:text-xl">
                 <Link
-                  href="/boka"
+                  href={`/boka?kategori=${SERVICE_CARDS[i].category}`}
                   className="after:absolute after:inset-0 focus-visible:shadow-none focus-visible:outline-none"
                 >
                   {item.title}
                 </Link>
               </h3>
-              <p className="text-muted">{item.body}</p>
-              <span aria-hidden="true" className="inline-flex items-center gap-1.5 font-semibold text-brand">
+              <p className="text-muted max-sm:text-base">{item.body}</p>
+              <span aria-hidden="true" className="hidden items-center gap-1.5 font-semibold text-brand sm:inline-flex">
                 {k.cardCta}
                 <Icon name="arrow-right" className="transition-transform duration-200 group-hover:translate-x-1" />
               </span>
@@ -278,8 +282,8 @@ const DAY_PHOTOS: readonly PhotoKey[] = ["movers", "steamClean", "wiping"];
 function MovingDaySection() {
   const k = c.movingDay;
   return (
-    <section aria-labelledby="flyttdag-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
-      <Container className="space-y-8">
+    <section aria-labelledby="flyttdag-rubrik" className="border-b border-border bg-surface py-10 sm:py-16">
+      <Container className="space-y-6 sm:space-y-8">
         <div className="max-w-text space-y-3">
           <h2 id="flyttdag-rubrik" className="text-2xl text-ink sm:text-3xl">
             {k.title}
@@ -303,12 +307,12 @@ function MovingDaySection() {
 function About() {
   const k = c.about;
   return (
-    <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-12 sm:py-16">
-      <Container className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
+    <section aria-labelledby="om-rubrik" className="border-b border-border bg-surface py-10 sm:py-16">
+      <Container className="grid items-center gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
         <PhotoFrame
           photo="windowCleaner"
           shape="square"
-          aspect="aspect-[3/2]"
+          aspect="aspect-[16/9] sm:aspect-[3/2]"
           reveal
           sizes="(min-width: 1296px) 40rem, (min-width: 1024px) 52vw, 100vw"
         />
@@ -329,7 +333,7 @@ function About() {
 function FinalCta() {
   return (
     // -mb-16 cancels the footer's top margin so the section meets the footer.
-    <PhotoSplit photo="paintKit" side="start" aria-labelledby="redo-rubrik" className="-mb-16">
+    <PhotoSplit data-book-cta photo="paintKit" side="start" aria-labelledby="redo-rubrik" className="-mb-16">
       <div className="space-y-5">
         <h2 id="redo-rubrik" className="text-3xl font-extrabold text-on-brand sm:text-5xl">
           {c.final.title}
@@ -349,21 +353,21 @@ function DidYouKnow() {
   const example = flyttstadExample();
   const d = c.didYouKnow;
   return (
-    <section aria-labelledby="visste-du-rubrik" className="bg-surface-muted py-12 sm:py-16">
-      <Container className="space-y-8">
+    <section aria-labelledby="visste-du-rubrik" className="bg-surface-muted py-10 sm:py-16">
+      <Container className="space-y-6 sm:space-y-8">
         <div className="max-w-text space-y-3">
           <h2 id="visste-du-rubrik" className="text-2xl text-ink sm:text-3xl">
             {d.title}
           </h2>
           <p className="text-lg">{d.lead}</p>
         </div>
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-          <Card padding="lg" className="space-y-3">
+        <div className="grid gap-3 sm:gap-6 lg:grid-cols-2">
+          <Card padding="md" className="space-y-2 sm:space-y-3">
             <DeductionBadge type="rut" />
             <h3 className="text-xl text-ink">{fmt(d.rutTitle, vars)}</h3>
             <p>{d.rutBody}</p>
           </Card>
-          <Card padding="lg" className="space-y-3">
+          <Card padding="md" className="space-y-2 sm:space-y-3">
             <DeductionBadge type="rot" />
             <h3 className="text-xl text-ink">{fmt(d.rotTitle, vars)}</h3>
             <p>{d.rotBody}</p>
@@ -383,11 +387,16 @@ function DidYouKnow() {
   );
 }
 
+/** A tick (or a cross) and the answer. On phones only the mark shows; the words are for screen readers. */
 function YesNoCell({ yes, text }: { yes: boolean; text: string }) {
   return (
     <span className="inline-flex items-start gap-2">
-      {yes ? <Icon name="check-circle" size={24} className="mt-0.5 shrink-0 text-success" /> : null}
-      <span className={yes ? "font-bold" : undefined}>{text}</span>
+      <Icon
+        name={yes ? "check-circle" : "close"}
+        size={24}
+        className={cx("mt-0.5 shrink-0", yes ? "text-success" : "text-muted")}
+      />
+      <span className={cx("max-sm:sr-only", yes && "font-bold")}>{text}</span>
     </span>
   );
 }
@@ -395,8 +404,8 @@ function YesNoCell({ yes, text }: { yes: boolean; text: string }) {
 function Comparison() {
   const k = c.compare;
   return (
-    <section aria-labelledby="jamforelse-rubrik" className="py-12 sm:py-16">
-      <Container className="space-y-8">
+    <section aria-labelledby="jamforelse-rubrik" className="py-10 sm:py-16">
+      <Container className="space-y-6 sm:space-y-8">
         <div className="max-w-text space-y-3">
           <h2 id="jamforelse-rubrik" className="text-2xl text-ink sm:text-3xl">
             {k.title}
@@ -404,37 +413,19 @@ function Comparison() {
           <p className="text-lg">{k.lead}</p>
         </div>
 
-        {/* Mobile: one card per row. Hidden with display:none from sm, so it is never read twice. */}
-        <ul className="space-y-3 sm:hidden">
-          {k.rows.map((row) => (
-            <Card as="li" key={row.feature} padding="md" className="space-y-3">
-              <p className="font-bold">{row.feature}</p>
-              <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2">
-                <dt className="font-semibold">{k.colUs}:</dt>
-                <dd>
-                  <YesNoCell yes text={row.us} />
-                </dd>
-                <dt className="font-semibold text-muted">{k.colThem}:</dt>
-                <dd>
-                  <YesNoCell yes={row.themYes} text={row.them} />
-                </dd>
-              </dl>
-            </Card>
-          ))}
-        </ul>
-
-        <div className="hidden overflow-hidden rounded-card border border-border bg-surface shadow-card sm:block">
+        {/* One table on every screen; on phones the answer columns are narrow and show only ✓ / ✗. */}
+        <div className="overflow-hidden rounded-card border border-border bg-surface shadow-card">
           <table className="w-full table-fixed border-collapse text-left">
             <caption className="sr-only">{k.caption}</caption>
             <thead className="bg-surface-muted">
               <tr>
-                <th scope="col" className="w-2/5 p-4 font-bold">
+                <th scope="col" className="p-3 font-bold sm:w-2/5 sm:p-4">
                   {k.colFeature}
                 </th>
-                <th scope="col" className="p-4 font-bold text-brand">
+                <th scope="col" className="w-[5rem] px-2 py-3 text-center text-sm font-bold text-brand sm:w-auto sm:p-4 sm:text-left sm:text-base">
                   {k.colUs}
                 </th>
-                <th scope="col" className="p-4 font-bold">
+                <th scope="col" className="w-[6.5rem] px-2 py-3 text-center text-sm font-bold sm:w-auto sm:p-4 sm:text-left sm:text-base">
                   {k.colThem}
                 </th>
               </tr>
@@ -442,13 +433,13 @@ function Comparison() {
             <tbody className="divide-y divide-border">
               {k.rows.map((row) => (
                 <tr key={row.feature}>
-                  <th scope="row" className="p-4 align-top font-semibold">
+                  <th scope="row" className="p-3 align-top font-semibold max-sm:text-base sm:p-4">
                     {row.feature}
                   </th>
-                  <td className="bg-brand-soft/50 p-4 align-top">
+                  <td className="bg-brand-soft/50 px-2 py-3 text-center align-top sm:p-4 sm:text-left">
                     <YesNoCell yes text={row.us} />
                   </td>
-                  <td className="p-4 align-top">
+                  <td className="px-2 py-3 text-center align-top sm:p-4 sm:text-left">
                     <YesNoCell yes={row.themYes} text={row.them} />
                   </td>
                 </tr>
@@ -464,14 +455,15 @@ function Comparison() {
 function Trust() {
   const k = c.trust;
   return (
-    <section aria-labelledby="trygghet-rubrik" className="bg-surface-muted py-12 sm:py-16">
-      <Container className="space-y-8">
+    <section aria-labelledby="trygghet-rubrik" className="bg-surface-muted py-10 sm:py-16">
+      <Container className="space-y-6 sm:space-y-8">
         <h2 id="trygghet-rubrik" className="text-2xl text-ink sm:text-3xl">
           {k.title}
         </h2>
-        <ul className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        {/* Phones: swipe sideways through the cards. */}
+        <ul tabIndex={0} aria-labelledby="trygghet-rubrik" className="swipe-row sm:grid sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {k.items.map((item) => (
-            <Card as="li" key={item.title} padding="md" className="flex items-start gap-4">
+            <Card as="li" key={item.title} padding="md" className="swipe-card flex items-start gap-4">
               <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
                 <Icon name={item.icon} size={26} />
               </span>
@@ -489,7 +481,7 @@ function Trust() {
 
 function PromisesSection() {
   return (
-    <section className="py-12 sm:py-16">
+    <section className="py-10 sm:py-16">
       <Container>
         <Promises />
       </Container>
@@ -499,7 +491,7 @@ function PromisesSection() {
 
 function FaqPreview() {
   return (
-    <section aria-labelledby="fragor-rubrik" className="py-12 sm:py-16">
+    <section aria-labelledby="fragor-rubrik" className="py-10 sm:py-16">
       <Container width="text" className="space-y-6">
         <h2 id="fragor-rubrik" className="text-2xl text-ink sm:text-3xl">
           {c.faq.title}
@@ -544,6 +536,7 @@ export default function HomePage() {
       <PromisesSection />
       <FaqPreview />
       <FinalCta />
+      <StickyBookBar />
     </>
   );
 }

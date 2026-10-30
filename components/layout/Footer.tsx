@@ -12,7 +12,7 @@ function LinkColumn({ heading, items }: { heading: string; items: readonly NavIt
       <ul>
         {items.map((item) => (
           <li key={item.href}>
-            <Link href={item.href} className="link inline-flex min-h-12 items-center">
+            <Link href={item.href} className="link inline-flex min-h-12 items-center leading-snug">
               {item.label}
             </Link>
           </li>
@@ -27,7 +27,7 @@ export function Footer() {
   const f = t.common.footer;
   return (
     <footer className="mt-16 border-t border-border bg-surface-muted text-ink">
-      <div className="mx-auto grid w-full max-w-page gap-10 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
+      <div className="mx-auto grid w-full max-w-page gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 sm:px-6 lg:grid-cols-4">
         <div className="space-y-4 sm:col-span-2 lg:col-span-1">
           <Logo size="footer" />
           <p className="text-muted">
@@ -39,7 +39,7 @@ export function Footer() {
           </p>
         </div>
 
-        <nav aria-label={f.navLabel} className="grid gap-10 sm:col-span-2 sm:grid-cols-2">
+        <nav aria-label={f.navLabel} className="grid grid-cols-2 gap-x-4 gap-y-8 sm:col-span-2 sm:gap-10">
           <LinkColumn heading={f.servicesHeading} items={footerPages} />
           <LinkColumn heading={f.legalHeading} items={footerLegal} />
         </nav>

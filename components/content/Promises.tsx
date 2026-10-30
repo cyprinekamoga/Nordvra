@@ -36,12 +36,18 @@ export function Promises({ headingLevel = 2, compact = false, onDark = false, cl
         </Heading>
         <p className={onDark ? "text-on-brand" : "text-muted"}>{pr.lead}</p>
       </div>
-      <ul className={cx("grid gap-4", !compact && "sm:grid-cols-2 lg:grid-cols-3")}>
+      {/* Full width: on phones the promises are a row of cards you swipe through. */}
+      <ul
+        tabIndex={compact ? undefined : 0}
+        aria-labelledby={compact ? undefined : "vara-loften"}
+        className={cx(compact ? "grid gap-4" : "swipe-row sm:grid sm:grid-cols-2 sm:gap-4 lg:grid-cols-3")}
+      >
         {ORDER.map((key) => (
           <li
             key={key}
             className={cx(
               "flex gap-3 rounded-card border p-4",
+              !compact && "swipe-card",
               onDark ? "border-on-brand/30 bg-on-brand/10" : "border-border bg-surface",
             )}
           >

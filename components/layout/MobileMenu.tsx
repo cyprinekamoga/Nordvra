@@ -43,7 +43,7 @@ export function MobileMenu({ className }: { className?: string }) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-brand bg-surface px-3 font-semibold text-brand hover:bg-brand-soft aria-expanded:bg-brand-soft"
+        className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-brand bg-brand px-3 font-semibold text-on-brand hover:bg-brand-strong aria-expanded:bg-brand-strong"
       >
         <Icon name={open ? "close" : "menu"} size={22} />
         <span>{t.common.nav.menu}</span>
@@ -51,7 +51,7 @@ export function MobileMenu({ className }: { className?: string }) {
       <div
         id={panelId}
         hidden={!open}
-        className="absolute inset-x-0 top-full z-40 border-b-2 border-brand bg-surface shadow-raised"
+        className="absolute inset-x-0 top-full z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-b-2 border-brand bg-surface shadow-raised"
       >
         <nav aria-label={t.common.nav.label} className="mx-auto w-full max-w-page px-4 pt-2 pb-5 sm:px-6">
           <Suspense fallback={<NavList items={mainNav} variant="mobile" onNavigate={close} />}>

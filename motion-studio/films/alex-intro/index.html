@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Alex's Luganda Journey – intro</title>
+<style>
+  @font-face { font-family: Fredoka; src: url(assets/fonts/Fredoka-latin.woff2) format('woff2'); font-weight: 300 700; }
+  @font-face { font-family: Fredoka; src: url(assets/fonts/Fredoka-latin-ext.woff2) format('woff2'); font-weight: 300 700; unicode-range: U+0100-02BA, U+1E00-1E9F, U+2020, U+20A0-20AB, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+  html, body { margin: 0; background: #FCEB3B; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+<canvas id="c"></canvas>
+<script type="module">
+// "Meet Alex" – 20 s introduction ad for Alex's Luganda Journey, 120 BPM. See docs/shotlist.md.
+// Every frame is a pure function of t. Query: ?lang=en|sv
+import { clamp, spring } from '../../lib/motion.js';
+
+// The shop page's palette (yellow masthead, navy text, colour bands).
+const C = {
+  yellow: '#FCEB3B', navy: '#1B1A55', blue: '#0E6FB8', purple: '#57207A', red: '#DB1E3B',
+  green: '#2D8A3E', grey: '#F2F2F4', white: '#FFFFFF', paper: '#FFFDF4',
+};
+const LANG = new URLSearchParams(location.search).get('lang') === 'sv' ? 'sv' : 'en';
+
+// Luganda is spelled exactly as in the book (pages 6, 25 and the chapter 7 worksheet).
+const T = {
+  en: {
+    meet: 'Meet Alex.',
+    meetSub: ['He’s flying from Sweden to Uganda,', 'and learning Luganda on the way.'],
+    phrases: [
+      { head: 'Greeting Jjaja', lg: 'Oli otya?', tr: 'How are you?' },
+      { head: 'At the market', lg: 'Mmeka zino?', tr: 'How much are these?' },
+      { head: 'Saying thank you', lg: 'Weebale nnyo!', tr: 'Thank you very much!' },
+    ],
+    learn: 'Learn with Alex.',
+    pages: ['Dialogues', 'Words & phrases', 'Culture & stories', 'Exercises'],
+    tag: ['Learn.', 'Speak.', 'Discover.'],
+    cta: 'Follow Alex’s journey',
+    note: 'A children’s book for learning Luganda',
+  },
+  sv: {
+    meet: 'Det här är Alex.',
+    meetSub: ['Han flyger från Sverige till Uganda', 'och lär sig luganda på vägen.'],
+    phrases: [
+      { head: 'Hälsa på Jjaja', lg: 'Oli otya?', tr: 'Hur mår du?' },
+      { head: 'På marknaden', lg: 'Mmeka zino?', tr: 'Vad kostar de här?' },
+      { head: 'Säga tack', lg: 'Weebale nnyo!', tr: 'Tack så mycket!' },
+    ],
+    learn: 'Lär dig med Alex.',
+    pages: ['Dialoger', 'Ord & fraser', 'Kultur & berättelser', 'Övningar'],
+    tag: ['Lär dig.', 'Prata.', 'Upptäck.'],
+    cta: 'Följ med Alex på resan',
+    note: 'En barnbok där du lär dig luganda',
+  },
+}[LANG];
+
+const c = document.getElementById('c'), g = c.getContext('2d');
+c.width = innerWidth; c.height = innerHeight;
+const W = c.width, H = c.height, S = W / 1080;
+const vertical = H / W > 1.5;
+// Reels covers the top 14 % and bottom 35 % of a 9:16 frame; the 4:5 feed has no overlay.
+const TOP = vertical ? 0.14 * H : 0.06 * H, BOTTOM = vertical ? 0.65 * H : 0.94 * H, X = 72 * S, CW = W - 2 * X;
+
+const sUI = (t) => spring(t, 260, 22), sType = (t) => spring(t, 170, 26), sWipe = (t) => spring(t, 180, 27);
+const lerp = (a, b, k) => a + (b - a) * k;
+const font = (w, px) => `${w} ${px * S}px Fredoka`;
+
+// ── assets ───────────────────────────────────────────────────────────
+const load = (src) => { const i = new Image(); i.src = src; return i.decode().then(() => i); };
+const ART = Object.fromEntries(await Promise.all(['cover', 'window', 'porch', 'market', 'kwanjula']
+  .map(async (k) => [k, await load(`assets/art/${k}.jpg`)])));
+const PAGES = await Promise.all(['pages/p06.jpg', 'pages/body.png', 'pages/p31.jpg', 'pages/market-worksheet.png']
+  .map((p) => load(`assets/${p}`)));
+await Promise.all(['700', '600', '500'].map((w) => document.fonts.load(`${w} 40px Fredoka`, 'åäö’')));
+
+// ── drawing helpers ──────────────────────────────────────────────────
+function rrect(x, y, w, h, r, fill) { g.beginPath(); g.roundRect(x, y, w, h, r); g.fillStyle = fill; g.fill(); }
+
+function wrap(text, maxW) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line) { lines.push(line); line = w; } else line = test;
+  }
+  return [...lines, line];
+}
+
+// Largest size up to `px` at which `text` fits in `maxW` on one line.
+function fit(text, weight, px, maxW) {
+  g.font = font(weight, px);
+  const w = g.measureText(text).width;
+  return w > maxW ? px * maxW / w : px;
+}
+
+// Text lines slide up out of a mask and leave the same way.
+function lines(t, list, tIn, tOut, y, px, color, weight = 700, lh = 1.08) {
+  g.font = font(weight, px); g.fillStyle = color; g.textBaseline = 'top';
+  const h = px * S * lh;
+  list.forEach((line, i) => {
+    const e = sType(t - (tIn + i * 0.07)), x = tOut == null ? 0 : sType(t - (tOut + i * 0.04));
+    if (e <= 0 || x >= 1) return;
+    const top = y + i * h;
+    g.save(); g.beginPath(); g.rect(0, top - h * 0.1, W, h * 1.3); g.clip();
+    g.fillText(line, X, top + (1 - e) * h * 1.4 - x * h * 1.4);
+    g.restore();
+  });
+  return y + list.length * h;
+}
+
+// A book illustration in a white border, like a print on the table. Springs in, then pushes in slowly.
+function print(img, rect, k, rot, push, srcCrop = null) {
+  if (k <= 0) return;
+  const { x, y, w, h } = rect, b = 14 * S;
+  g.save();
+  g.translate(x + w / 2, y + h / 2 + (1 - k) * 260 * S);
+  g.rotate((rot + (1 - k) * 8) * Math.PI / 180);
+  g.scale(lerp(0.85, 1, k), lerp(0.85, 1, k));
+  g.shadowColor = 'rgba(27,26,85,0.28)'; g.shadowBlur = 40 * S; g.shadowOffsetY = 16 * S;
+  rrect(-w / 2, -h / 2, w, h, 10 * S, C.white);
+  g.shadowColor = 'transparent';
+  g.beginPath(); g.roundRect(-w / 2 + b, -h / 2 + b, w - 2 * b, h - 2 * b, 4 * S); g.clip();
+  const [sx, sy, sw, sh] = srcCrop || [0, 0, img.width, img.height];
+  const iw = w - 2 * b, ih = h - 2 * b;
+  const s = Math.max(iw / sw, ih / sh) * push;
+  g.drawImage(img, sx, sy, sw, sh, -sw * s / 2, -sh * s / 2, sw * s, sh * s);
+  g.restore();
+}
+
+// Flags drawn as simple shapes (as on the cover).
+function flagSE(x, y, w, h) {
+  rrect(x, y, w, h, 6 * S, '#006AA7');
+  g.fillStyle = '#FECC02';
+  g.fillRect(x + w * 0.31, y, h * 0.2, h); g.fillRect(x, y + h * 0.4, w, h * 0.2);
+}
+function flagUG(x, y, w, h) {
+  g.save(); g.beginPath(); g.roundRect(x, y, w, h, 6 * S); g.clip();
+  ['#000000', '#FCDC04', '#D90000', '#000000', '#FCDC04', '#D90000'].forEach((col, i) => {
+    g.fillStyle = col; g.fillRect(x, y + i * h / 6, w, h / 6 + 1);
+  });
+  g.beginPath(); g.arc(x + w / 2, y + h / 2, h * 0.22, 0, Math.PI * 2); g.fillStyle = '#FFFFFF'; g.fill();
+  g.restore();
+}
+
+// The plane symbol from the shop page, pointing right.
+const PLANE = new Path2D('M-14 -2.5 L4 -2.5 L11 -11 L16 -11 L11 -2.5 L19 -2.5 Q24 0 19 2.5 L11 2.5 L16 11 L11 11 L4 2.5 L-14 2.5 L-18 7 L-21 7 L-19 0 L-21 -7 L-18 -7 Z');
+
+function arrow(x, y, size, color) {
+  g.strokeStyle = color; g.lineWidth = size * 0.14; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(x, y); g.lineTo(x + size, y);
+  g.moveTo(x + size * 0.6, y - size * 0.4); g.lineTo(x + size, y); g.lineTo(x + size * 0.6, y + size * 0.4); g.stroke();
+}
+
+// ── scenes ───────────────────────────────────────────────────────────
+// Each scene owns a colour band that rises from the bottom over the one before.
+const SCENES = [
+  { start: 0.0, bg: C.yellow, draw: meet },
+  { start: 3.0, bg: C.purple, draw: (t) => phrase(t, 0, 3.0, ART.porch, -2) },
+  { start: 5.5, bg: C.blue, draw: (t) => phrase(t, 1, 5.5, ART.market, 1.8) },
+  { start: 8.0, bg: C.red, draw: (t) => phrase(t, 2, 8.0, ART.kwanjula, -1.5) },
+  { start: 10.5, bg: C.grey, draw: pages },
+  { start: 15.0, bg: C.yellow, draw: cover },
+];
+const LEAD = 0.3; // a band starts rising this long before its scene starts
+
+function meet(t) {
+  let y = lines(t, [T.meet], -0.35, null, TOP, vertical ? 120 : 112, C.navy);
+  y = lines(t, T.meetSub, 0.25, null, y + 14 * S, 42, C.navy, 500, 1.2);
+  // Flight row: Sweden → Uganda, the plane flies the dotted arc.
+  const fy = y + 40 * S, fw = 96 * S, fh = 64 * S, x0 = X, x1 = X + CW - fw;
+  const k = sUI(t - 0.15);
+  if (k > 0) {
+    g.save(); g.globalAlpha = clamp(k * 2);
+    flagSE(x0, fy + (1 - k) * 40 * S, fw, fh); flagUG(x1, fy + (1 - k) * 40 * S, fw, fh);
+    g.restore();
+    const ax = x0 + fw + 24 * S, bx = x1 - 76 * S, cy = fy + fh / 2, lift = 60 * S; // the plane stops beside the flag
+    const pt = (u) => [lerp(ax, bx, u), cy - Math.sin(Math.PI * u) * lift];
+    const p = clamp(spring(t - 0.45, 40, 12.6)); // slow, no overshoot: about 1.8 s across
+    g.setLineDash([2 * S, 16 * S]); g.lineCap = 'round'; g.lineWidth = 7 * S; g.strokeStyle = C.navy;
+    g.beginPath();
+    for (let i = 0; i <= 60; i++) { const u = (i / 60) * p; const [px, py] = pt(u); i ? g.lineTo(px, py) : g.moveTo(px, py); }
+    g.stroke(); g.setLineDash([]);
+    if (p > 0.001) {
+      const [px, py] = pt(p), [qx, qy] = pt(Math.min(1, p + 0.01));
+      g.save(); g.translate(px, py); g.rotate(Math.atan2(qy - py, qx - px)); g.scale(2.4 * S, 2.4 * S);
+      g.fillStyle = C.red; g.fill(PLANE); g.restore();
+    }
+  }
+  // Alex at the plane window.
+  const top = fy + fh + 48 * S, h = Math.min(BOTTOM - top, CW * 0.6);
+  print(ART.window, { x: X, y: top, w: CW, h }, sUI(t + 0.05), -1.2, 1 + 0.05 * clamp(t / 3));
+}
+
+function phrase(t, i, s, img, rot) {
+  const p = T.phrases[i];
+  const y = lines(t, [p.head], s + 0.05, null, TOP, 64, C.white, 600);
+  // Step dots: 1 of 3, 2 of 3, 3 of 3.
+  for (let j = 0; j < 3; j++) {
+    g.beginPath(); g.arc(X + CW - (2 - j) * 34 * S - 10 * S, TOP + 34 * S, 10 * S, 0, Math.PI * 2);
+    g.fillStyle = j <= i ? C.white : 'rgba(255,255,255,0.35)'; g.fill();
+  }
+  const bubbleH = 300 * S, gap = 56 * S;
+  const top = y + 30 * S, h = Math.min(BOTTOM - top - bubbleH - gap, CW * 0.56);
+  print(img, { x: X, y: top, w: CW, h }, sUI(t - (s + 0.1)), rot, 1.04 + 0.06 * clamp((t - s) / 2.5));
+  // Speech bubble with the Luganda phrase and its meaning.
+  const k = sUI(t - (s + 0.4));
+  if (k <= 0) return;
+  const by = top + h + gap, bw = CW, bx = X;
+  g.save();
+  g.translate(bx + 120 * S, by); g.scale(k, k); g.translate(-(bx + 120 * S), -by);
+  g.beginPath(); g.roundRect(bx, by, bw, bubbleH, 36 * S);
+  g.moveTo(bx + 96 * S, by); g.lineTo(bx + 132 * S, by - 40 * S); g.lineTo(bx + 172 * S, by);
+  g.fillStyle = C.white; g.fill();
+  const lgPx = fit(p.lg, 700, 124, bw - 96 * S);
+  g.save(); g.beginPath(); g.rect(bx, by, bw, bubbleH); g.clip();
+  const e = sType(t - (s + 0.5));
+  g.font = font(700, lgPx); g.fillStyle = C.navy; g.textBaseline = 'alphabetic';
+  g.fillText(p.lg, bx + 48 * S, by + 50 * S + lgPx * S * 0.92 + (1 - e) * 140 * S);
+  // The meaning arrives a beat later, under a short rule in the scene colour.
+  const m = sType(t - (s + 1.0));
+  if (m > 0) {
+    const ty = by + bubbleH - 54 * S;
+    g.fillStyle = SCENES[i + 1].bg;
+    g.font = font(600, fit(p.tr, 600, 54, bw - 96 * S)); g.textBaseline = 'alphabetic';
+    g.fillText(p.tr, bx + 48 * S, ty + (1 - m) * 80 * S);
+    g.fillRect(bx + 48 * S, ty + 18 * S, g.measureText(p.tr).width * sUI(t - (s + 1.15)), 7 * S);
+  }
+  g.restore();
+  g.restore();
+}
+
+function pages(t) {
+  const s = 10.5;
+  const y = lines(t, [T.learn], s + 0.05, null, TOP, fit(T.learn, 700, 104, CW) / 1, C.navy);
+  const labelH = 96 * S;
+  const top = y + 36 * S, ph = Math.min(BOTTOM - top - labelH - 40 * S, 640 * S);
+  // Dealt like cards: each page slides in from the right on its beat and lands on the stack.
+  const ROT = [-4, 3, -2, 1.5];
+  PAGES.forEach((img, i) => {
+    const k = sUI(t - (s + 0.4 + i));
+    if (k <= 0) return;
+    const pw = ph * img.width / img.height;
+    const cx = W / 2 + (1 - k) * W * 0.9, cy = top + ph / 2;
+    g.save(); g.translate(cx, cy); g.rotate((ROT[i] + (1 - k) * 18) * Math.PI / 180);
+    g.shadowColor = 'rgba(27,26,85,0.22)'; g.shadowBlur = 36 * S; g.shadowOffsetY = 12 * S;
+    rrect(-pw / 2, -ph / 2, pw, ph, 6 * S, C.white);
+    g.shadowColor = 'transparent';
+    g.drawImage(img, -pw / 2, -ph / 2, pw, ph);
+    g.restore();
+  });
+  // The label under the stack names what the front page shows.
+  const ly = top + ph + 40 * S;
+  T.pages.forEach((label, i) => {
+    const tIn = s + 0.5 + i, tOut = i < 3 ? s + 1.38 + i : null;
+    const px = fit(label, 700, 72, CW - 60 * S);
+    g.font = font(700, px);
+    const w = g.measureText(label).width;
+    g.save(); g.beginPath(); g.rect(0, ly - 8 * S, W, labelH + 16 * S); g.clip();
+    const e = sType(t - tIn), x = tOut == null ? 0 : sType(t - tOut);
+    if (e > 0 && x < 1) {
+      const dy = (1 - e) * labelH * 1.3 - x * labelH * 1.3, lx = (W - w) / 2;
+      g.fillStyle = C.purple; g.textBaseline = 'middle';
+      g.fillText(label, lx, ly + labelH / 2 + dy);
+    }
+    g.restore();
+  });
+}
+
+function cover(t) {
+  const s = 15.0;
+  const img = ART.cover;
+  const avail = BOTTOM - TOP - 200 * S;
+  const ch = Math.min(avail, 720 * S), cw = ch * img.width / img.height;
+  const k = sUI(t - (s + 0.15));
+  if (k > 0) {
+    g.save();
+    g.translate(X + cw / 2, TOP + ch / 2 + (1 - k) * 300 * S);
+    g.rotate((-2.5 + (1 - k) * 10) * Math.PI / 180);
+    g.shadowColor = 'rgba(27,26,85,0.3)'; g.shadowBlur = 48 * S; g.shadowOffsetY = 20 * S;
+    rrect(-cw / 2, -ch / 2, cw, ch, 8 * S, C.white);
+    g.shadowColor = 'transparent';
+    g.beginPath(); g.roundRect(-cw / 2, -ch / 2, cw, ch, 8 * S); g.clip();
+    g.drawImage(img, -cw / 2, -ch / 2, cw, ch);
+    g.restore();
+  }
+  // Learn. Speak. Discover. on the beats, beside the cover.
+  const colX = X + cw + 48 * S, colW = W - X - colX;
+  const DOT = [C.red, C.blue, C.green];
+  const px = Math.min(...T.tag.map((w) => fit(w, 700, 92, colW - 40 * S)));
+  T.tag.forEach((word, i) => {
+    const e = sType(t - (s + 0.6 + i * 0.5));
+    if (e <= 0) return;
+    const y = TOP + 60 * S + i * px * S * 1.5;
+    g.save(); g.beginPath(); g.rect(colX, y - px * S * 0.3, colW, px * S * 1.5); g.clip();
+    const dy = (1 - e) * px * S * 1.5;
+    g.beginPath(); g.arc(colX + 12 * S, y + px * S * 0.55 + dy, 12 * S, 0, Math.PI * 2); g.fillStyle = DOT[i]; g.fill();
+    g.font = font(700, px); g.fillStyle = C.navy; g.textBaseline = 'top';
+    g.fillText(word, colX + 40 * S, y + dy);
+    g.restore();
+  });
+  // Soft call to action: no price, this is an introduction.
+  const pill = { x: X, y: TOP + ch + 48 * S, w: CW, h: 124 * S };
+  const p = sUI(t - (s + 2.1));
+  if (p > 0) {
+    g.save(); g.translate(pill.x, pill.y + pill.h / 2); g.scale(p, p); g.translate(-pill.x, -(pill.y + pill.h / 2));
+    rrect(pill.x, pill.y, pill.w, pill.h, pill.h / 2, C.navy);
+    g.beginPath(); g.roundRect(pill.x, pill.y, pill.w, pill.h, pill.h / 2); g.clip();
+    const e = sType(t - (s + 2.35)), ty = pill.y + pill.h / 2 + (1 - e) * 90 * S;
+    const tp = fit(T.cta, 600, 50, pill.w - 200 * S);
+    g.font = font(600, tp); g.fillStyle = C.white; g.textBaseline = 'middle';
+    g.fillText(T.cta, pill.x + 52 * S, ty);
+    arrow(pill.x + pill.w - 110 * S, ty, 52 * S, C.yellow);
+    g.restore();
+  }
+  lines(t, [T.note], s + 2.7, null, pill.y + pill.h + 28 * S, fit(T.note, 500, 38, CW), C.navy, 500);
+}
+
+window.seek = (t) => {
+  g.fillStyle = SCENES[0].bg; g.fillRect(0, 0, W, H);
+  SCENES.forEach((sc, i) => {
+    const next = SCENES[i + 1];
+    if (t < sc.start - LEAD || (next && t > next.start + 0.6)) return; // hidden under the next band
+    const k = i === 0 ? 1 : sWipe(t - (sc.start - LEAD));
+    const top = H * (1 - k), r = 90 * S * (1 - k);
+    g.save();
+    g.beginPath(); g.roundRect(0, top, W, H - top + r, [r, r, 0, 0]); g.fillStyle = sc.bg; g.fill();
+    g.clip();
+    sc.draw(t);
+    g.restore();
+  });
+};
+window.seek(0);
+</script>
+</html>

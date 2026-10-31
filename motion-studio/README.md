@@ -33,6 +33,8 @@ One sentence: `/motion-reel for [URL], 20s, vertical, reference ./refs/frame.png
 | `mux.sh` | `./mux.sh out/silent.mp4 out/score_raw.wav out/final.mp4`: mix to −14 LUFS and add the sound |
 | `audio/score.py` | The current film's music and sound effects, synthesized in code |
 | `index.html`, `docs/` | The current film ("Alla fyra" RUT ad), its shot list, style guide and storyboards |
+| `films/<name>/` | One folder per further film: `index.html`, `score.py`, `shotlist.md`, `assets/`. Render with `--page films/<name>/index.html` |
+| `films/alex-intro/` | "Meet Alex", the introduction ad for *Alex's Luganda Journey* (English and Swedish: `?lang=sv`) |
 | `assets/` | Logo, Figtree (OFL), live UI captures and CC0 photos (`assets/photos/CREDITS.md`) |
 | `prompts/` | The guide's prompts: setup test, launch video, reference, state list, springs, sound, critique, director's brief |
 

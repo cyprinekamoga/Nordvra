@@ -1,0 +1,19 @@
+{
+  "_readme": "Replace every item with a REAL message a buyer sent you, word for word, and only with their OK. Keep the original screenshots as proof. Set placeholder to false when all items are real. Photos must be real customer photos (with permission) or the book's own art.",
+  "placeholder": true,
+  "title": "What families are saying",
+  "end": ["Weebale nnyo!", "Thank you for your support"],
+  "items": [
+    { "text": "[Real message from a parent: what their child learned first]", "time": "09:14" },
+    { "text": "[Short real message]", "time": "10:02" },
+    { "text": "[Real message: a longer one, for example about using the exercises together at home in the evenings]", "time": "12:47" },
+    { "text": "[Real message about the stories or pictures]", "time": "15:30" },
+    { "text": "[Real message: a grandparent or relative]", "time": "17:05" },
+    { "text": "[Short real message]", "time": "19:21" }
+  ],
+  "photos": [
+    "../alex-intro/assets/art/cover.jpg",
+    "../alex-intro/assets/art/market.jpg",
+    "../alex-intro/assets/art/porch.jpg"
+  ]
+}

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Real messages – template</title>
+<style>
+  @font-face { font-family: Figtree; src: url(../../assets/fonts/Figtree-latin.woff2) format('woff2'); font-weight: 300 900; }
+  @font-face { font-family: Figtree; src: url(../../assets/fonts/Figtree-latin-ext.woff2) format('woff2'); font-weight: 300 900; unicode-range: U+0100-024F, U+1E00-1EFF; }
+  @font-face { font-family: Fredoka; src: url(../alex-intro/assets/fonts/Fredoka-latin.woff2) format('woff2'); font-weight: 300 700; }
+  html, body { margin: 0; background: #EFE7DD; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Real customer messages as a chat-style collage in classic chat green. Content: messages.json.
+// Only real messages, word for word, with the sender's OK. While "placeholder" is true the
+// render is stamped PREVIEW so it cannot be posted by mistake. Every frame is a pure function of t.
+import { clamp, spring } from '../../lib/motion.js';
+
+const C = { bg: '#EFE7DD', bubble: '#DCF8C6', ink: '#111B21', meta: '#667781', tick: '#53BDEB',
+  sticker: '#FCEB3B', navy: '#1B1A55', pink: '#E04C8C', white: '#FFFFFF' };
+const DATA = await fetch('messages.json').then((r) => r.json());
+const c = document.getElementById('c'), g = c.getContext('2d');
+c.width = innerWidth; c.height = innerHeight;
+const W = c.width, H = c.height;
+const vertical = H / W > 1.5;
+// Stories cover about the top 12 % and bottom 18 %; the feed has no overlay.
+const TOP = vertical ? 0.12 * H : 0.05 * H, BOTTOM = vertical ? 0.82 * H : 0.95 * H;
+
+const sPop = (t) => spring(t, 300, 20), sSoft = (t) => spring(t, 170, 26);
+const load = (src) => { const i = new Image(); i.src = src; return i.decode().then(() => i); };
+const PHOTOS = await Promise.all(DATA.photos.map(load));
+await Promise.all(['700', '600'].map((w) => document.fonts.load(`${w} 40px Fredoka`)));
+await Promise.all(['500', '700'].map((w) => document.fonts.load(`${w} 40px Figtree`, 'åäö')));
+
+// Cue times, shared with score.py.
+const T_TITLE = 0.2, T0 = 0.8, STEP = 0.9;
+const tItem = (i) => T0 + i * STEP;
+const T_END = tItem(DATA.items.length) + 0.4;
+
+function wrap(text, maxW) {
+  const words = text.split(' '), lines = [];
+  let line = '';
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line) { lines.push(line); line = w; } else line = test;
+  }
+  return [...lines, line];
+}
+
+// ── layout: lay everything out at scale 1, then shrink to fit between TOP and BOTTOM ──
+function layout(S) {
+  const M = 56 * S, items = [];
+  let y = TOP;
+  const title = { y, h: 120 * S }; y += title.h + 34 * S;
+  g.font = `500 ${38 * S}px Figtree`;
+  const photos = [];
+  DATA.items.forEach((m, i) => {
+    const right = i % 2 === 0, maxW = W * 0.6 - 2 * 30 * S;
+    const lines = wrap(m.text, maxW);
+    const tw = Math.max(...lines.map((l) => g.measureText(l).width));
+    const w = Math.max(tw, 140 * S) + 2 * 30 * S, h = lines.length * 50 * S + 70 * S;
+    const x = right ? W - M - w : M;
+    // One photo in the free column beside every second message; the row grows to hold it.
+    const k = i / 2, withPhoto = right && k < PHOTOS.length;
+    const size = withPhoto ? Math.min(W - w - 3 * M, 300 * S) : 0;
+    const rowH = Math.max(h, size + 24 * S);
+    items.push({ ...m, lines, x, y: y + (rowH - h) / 2, w, h, right });
+    if (withPhoto) photos.push({ img: PHOTOS[k], size, x: M, y: y + (rowH - size) / 2, t: tItem(i) + 0.35, rot: k % 2 ? 6 : -5 });
+    y += rowH + 30 * S;
+  });
+  const end = { y: y + 10 * S, h: 190 * S };
+  return { S, title, items, photos, end, bottom: end.y + end.h };
+}
+let L = layout(1);
+for (let i = 0; i < 12 && L.bottom > BOTTOM; i++) L = layout(L.S * (BOTTOM - TOP) / (L.bottom - TOP));
+const S = L.S;
+const PH = L.photos;
+
+function heart(cx, cy, s) {
+  g.beginPath();
+  g.moveTo(cx, cy + s * 0.42);
+  g.bezierCurveTo(cx - s * 0.62, cy, cx - s * 0.5, cy - s * 0.5, cx, cy - s * 0.2);
+  g.bezierCurveTo(cx + s * 0.5, cy - s * 0.5, cx + s * 0.62, cy, cx, cy + s * 0.42);
+  g.closePath();
+}
+
+function ticks(x, y, s) {
+  g.strokeStyle = C.tick; g.lineWidth = 3.2 * s; g.lineCap = 'round'; g.lineJoin = 'round';
+  for (const dx of [0, 9 * s]) { g.beginPath(); g.moveTo(x + dx, y); g.lineTo(x + dx + 6 * s, y + 6 * s); g.lineTo(x + dx + 17 * s, y - 6 * s); g.stroke(); }
+}
+
+function bubble(it, k) {
+  if (k <= 0) return;
+  const ax = it.right ? it.x + it.w : it.x, ay = it.y;
+  g.save(); g.translate(ax, ay); g.scale(k, k); g.translate(-ax, -ay);
+  g.shadowColor = 'rgba(17,27,33,0.13)'; g.shadowBlur = 6 * S; g.shadowOffsetY = 2 * S;
+  g.beginPath(); g.roundRect(it.x, it.y, it.w, it.h, 22 * S);
+  if (it.right) { g.moveTo(it.x + it.w - 20 * S, it.y); g.lineTo(it.x + it.w + 18 * S, it.y); g.lineTo(it.x + it.w - 4 * S, it.y + 26 * S); }
+  else { g.moveTo(it.x + 20 * S, it.y); g.lineTo(it.x - 18 * S, it.y); g.lineTo(it.x + 4 * S, it.y + 26 * S); }
+  g.fillStyle = C.bubble; g.fill();
+  g.shadowColor = 'transparent';
+  g.font = `500 ${38 * S}px Figtree`; g.fillStyle = C.ink; g.textBaseline = 'top';
+  it.lines.forEach((l, j) => g.fillText(l, it.x + 30 * S, it.y + 22 * S + j * 50 * S));
+  g.font = `500 ${25 * S}px Figtree`; g.fillStyle = C.meta; g.textBaseline = 'alphabetic';
+  const mw = g.measureText(it.time).width, my = it.y + it.h - 18 * S;
+  g.fillText(it.time, it.x + it.w - 30 * S - 30 * S - mw, my);
+  ticks(it.x + it.w - 30 * S - 22 * S, my - 9 * S, S);
+  g.restore();
+}
+
+function sticker(lines, cx, cy, k, rot, fill, color, px) {
+  if (k <= 0) return;
+  g.save(); g.translate(cx, cy); g.rotate(rot * Math.PI / 180); g.scale(k, k);
+  g.font = `700 ${px * S}px Fredoka`;
+  const w = Math.max(...lines.map((l) => g.measureText(l).width)) + 64 * S, h = lines.length * px * S * 1.15 + 36 * S;
+  g.beginPath(); g.roundRect(-w / 2, -h / 2, w, h, 26 * S); g.fillStyle = fill; g.fill();
+  g.fillStyle = color; g.textBaseline = 'middle'; g.textAlign = 'center';
+  lines.forEach((l, j) => g.fillText(l, 0, -h / 2 + 18 * S + px * S * 1.15 * (j + 0.5)));
+  g.restore();
+}
+
+window.seek = (t) => {
+  g.fillStyle = C.bg; g.fillRect(0, 0, W, H);
+  // Faint dot grid, a nod to a chat wallpaper without copying one.
+  g.fillStyle = 'rgba(17,27,33,0.05)';
+  for (let y = 24 * S; y < H; y += 48 * S) for (let x = 24 * S; x < W; x += 48 * S) { g.beginPath(); g.arc(x, y, 2.4 * S, 0, Math.PI * 2); g.fill(); }
+  sticker([DATA.title], W / 2, L.title.y + L.title.h / 2, sPop(t - T_TITLE), -3, C.sticker, C.navy, 60);
+  PH.forEach((p) => {
+    const k = sPop(t - p.t);
+    if (k <= 0) return;
+    const cx = p.x + p.size / 2, cy = p.y + p.size / 2;
+    g.save(); g.translate(cx, cy); g.rotate(p.rot * Math.PI / 180); g.scale(k, k); g.translate(-cx, -cy);
+    heart(cx, cy + p.size * 0.04, p.size * 1.08); g.fillStyle = C.white; g.fill();
+    heart(cx, cy + p.size * 0.04, p.size * 0.98); g.save(); g.clip();
+    const s = Math.max(p.size / p.img.width, p.size / p.img.height) * (1.02 + 0.04 * clamp(t - p.t));
+    g.drawImage(p.img, cx - p.img.width * s / 2, cy - p.img.height * s / 2, p.img.width * s, p.img.height * s);
+    g.restore(); g.restore();
+  });
+  L.items.forEach((it, i) => bubble(it, sPop(t - tItem(i))));
+  sticker(DATA.end, W * 0.36, L.end.y + L.end.h / 2, sSoft(t - T_END), -4, C.pink, C.white, 52);
+  if (DATA.placeholder) {
+    g.save(); g.translate(W / 2, H / 2); g.rotate(-0.35);
+    g.font = `700 ${120 * S}px Figtree`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillStyle = 'rgba(219,30,59,0.22)'; g.fillText('PREVIEW', 0, 0);
+    g.font = `700 ${40 * S}px Figtree`; g.fillText('replace with real messages', 0, 100 * S);
+    g.restore();
+  }
+};
+window.DURATION = T_END + 3;
+window.seek(0);
+</script>
+</html>

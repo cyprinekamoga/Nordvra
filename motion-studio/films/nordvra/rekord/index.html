@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Rekordår för RUT</title>
+<style>html, body { margin: 0; background: #084536; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 7: record year. 12 s. Figures and wording from Almega, Rutindikatorn 2025 (28 Jan 2026):
+// "Under 2025 gjordes rut-avdrag för 8,87 miljarder kronor (avrundat)", "nådde ett nytt rekord 2025",
+// "Personer över 65 år står för 41,2 procent av alla rut köp 2025".
+import * as N from '../lib.js';
+const { C, g, S, W, X, CW, TOP, font, fit, lines, para, sUI, count } = N;
+const fmt = (v, d) => v.toFixed(d).replace('.', ',');
+
+function bigNumber(t, t0, dur, to, d, y, px, color, suffix, sufPx, sufColor) {
+  const k = sUI(t - t0 + 0.05);
+  if (k <= 0) return y;
+  const v = count(t, t0, dur, 0, to);
+  g.save(); g.beginPath(); g.rect(0, y, W, px * S * 1.12); g.clip();
+  g.font = font(900, px); g.fillStyle = color; g.textBaseline = 'top';
+  const txt = fmt(v, d), dy = (1 - k) * px * S;
+  g.fillText(txt, X - 8 * S, y + dy);
+  g.font = font(900, px); const w = g.measureText(fmt(to, d)).width;
+  g.font = font(800, sufPx); g.fillStyle = sufColor; g.textBaseline = 'alphabetic';
+  g.fillText(suffix, X + w + 18 * S, y + px * S * 0.86 + dy);
+  g.restore();
+  return y + px * S * 1.12;
+}
+
+function record(t) {
+  let y = lines(t, ['2025 gjordes', 'rut-avdrag för'], -0.35, null, TOP, 84, C.white);
+  y = bigNumber(t, 0.4, 1.8, 8.87, 2, y + 24 * S, 250, C.white, '', 0, C.white);
+  y = lines(t, ['miljarder kronor.'], 1.0, null, y, fit('miljarder kronor.', 800, 96, CW), C.brandSoft);
+  y = lines(t, ['Ett nytt rekord.'], 2.5, null, y + 40 * S, 84, C.white);
+  lines(t, ['Källa: Almega, Rutindikatorn 2025'], 3.0, null, y + 30 * S, 30, C.brandSoft, 600);
+}
+
+function seniors(t, s) {
+  let y = bigNumber(t, s + 0.3, 1.4, 41.2, 1, TOP, 230, C.brand, '%', 150, C.brand);
+  y = lines(t, ['av alla rut-köp 2025', 'gjordes av personer', 'över 65 år.'], s + 0.8, null, y + 30 * S, 76, C.ink, 800);
+  lines(t, ['Källa: Almega, Rutindikatorn 2025'], s + 1.6, null, y + 30 * S, 30, C.muted, 600);
+}
+
+const SCENES = [
+  { start: 0, bg: C.brandStrong, draw: record },
+  { start: 4.8, bg: C.canvas, draw: seniors },
+  { start: 8.6, bg: C.muted2, draw: (t, s) => N.endCard(t, s, {
+    head: ['Har du kollat vad', 'du kan få?'],
+    fine: ['RUT 50 % och ROT 30 % på arbetskostnaden.', 'Avdraget förutsätter att du har rätt till det.'] }) },
+];
+window.seek = (t) => N.bands(t, SCENES);
+window.seek(0);
+</script>
+</html>

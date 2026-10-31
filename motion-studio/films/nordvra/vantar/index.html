@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Du var nästan klar</title>
+<style>html, body { margin: 0; background: #FAF7F2; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 8: retargeting, only for people who started /boka without sending. 10 s.
+// "Steg 7 av 8" mirrors the site's progress bar; the promise lines are the site's own copy.
+import * as N from '../lib.js';
+const { C, g, S, X, CW, TOP, BOTTOM, font, fit, lines, para, rrect, sUI, count } = N;
+const CARD = await N.load('../assets/cards/flyttstad.png');
+
+function almost(t) {
+  let y = lines(t, ['Du var', 'nästan klar.'], -0.35, null, TOP, 132, C.ink);
+  // The site's progress bar, filling to step 7 of 8.
+  const k = sUI(t - 0.5);
+  if (k > 0) {
+    const step = Math.max(1, Math.round(count(t, 0.6, 1.2, 1, 7)));
+    y += 50 * S;
+    g.font = font(700, 40); g.fillStyle = C.muted; g.textBaseline = 'top';
+    g.fillText(`Steg ${step} av 8`, X, y);
+    const by = y + 64 * S, bh = 22 * S;
+    rrect(X, by, CW, bh, bh / 2, C.muted2);
+    rrect(X, by, CW * count(t, 0.6, 1.2, 1 / 8, 7 / 8) * k, bh, bh / 2, C.brand);
+    y = by + bh + 50 * S;
+  }
+  const avail = BOTTOM - y;
+  if (avail > 200 * S) N.card(CARD, X, y, Math.min(CW, avail * CARD.width / CARD.height), sUI(t - 1.6), -1);
+}
+
+function promise(t, s) {
+  const y = para(t, 'Förfrågan är gratis och inte bindande.', s + 0.1, null, TOP, 96, C.brandStrong, 800, CW);
+  para(t, 'Du får en offert som du godkänner innan något bokas.', s + 0.9, null, y + 44 * S, 60, C.ink, 600, CW, 1.15);
+}
+
+const SCENES = [
+  { start: 0, bg: C.canvas, draw: almost },
+  { start: 3.4, bg: C.brandSoft, draw: promise },
+  { start: 6.8, bg: C.muted2, draw: (t, s) => N.endCard(t, s, {
+    head: ['Fortsätt där', 'du slutade.'], cta: 'Skicka din förfrågan',
+    chips: ['Ingen bokningsavgift', 'Exakt pris inom 24 h'],
+    fine: ['Avdraget förutsätter att du har rätt till det.'] }) },
+];
+window.seek = (t) => N.bands(t, SCENES);
+window.seek(0);
+</script>
+</html>

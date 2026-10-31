@@ -36,6 +36,7 @@ One sentence: `/motion-reel for [URL], 20s, vertical, reference ./refs/frame.png
 | `films/<name>/` | One folder per further film: `index.html`, `score.py`, `shotlist.md`, `assets/`. Render with `--page films/<name>/index.html` |
 | `films/alex-intro/` | "Meet Alex", the introduction ad for *Alex's Luganda Journey* (English and Swedish: `?lang=sv`) |
 | `films/real-messages/` | Chat-green testimonial template for real customer messages (`messages.json`; stamped PREVIEW until filled in) |
+| `films/nordvra/` | Seven Nordvra ads (year-end, snow, Christmas, phone, myths, record year, retargeting) on a shared `lib.js` and `score.py`, plus a filming kit; see its README |
 | `assets/` | Logo, Figtree (OFL), live UI captures and CC0 photos (`assets/photos/CREDITS.md`) |
 | `prompts/` | The guide's prompts: setup test, launch video, reference, state list, springs, sound, critique, director's brief |
 

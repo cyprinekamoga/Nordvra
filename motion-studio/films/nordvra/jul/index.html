@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Städat före jul</title>
+<style>html, body { margin: 0; background: #084536; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 3: Christmas cleaning. 15 s. Price: live site, Storstädning 60–79 m². Add-ons and the
+// "vi hittar ett bra företag …" line are the site's own copy.
+import * as N from '../lib.js';
+const { C, g, S, X, CW, TOP, BOTTOM, font, fit, lines, para, rrect, sUI, check } = N;
+const CARD = await N.load('../assets/cards/storstad.png');
+
+function advent(t) {
+  let y = lines(t, ['Städat före jul?'], -0.35, null, TOP, fit('Städat före jul?', 800, 132, CW), C.white);
+  // 24 doors open one by one; the last one gets a check.
+  const cols = 6, gap = 14 * S, size = (CW - gap * (cols - 1)) / cols, top = y + 44 * S;
+  for (let i = 0; i < 24; i++) {
+    const k = sUI(t - (0.3 + i * 0.09));
+    const x = X + (i % cols) * (size + gap), ty = top + Math.floor(i / cols) * (size + gap);
+    const last = i === 23;
+    rrect(x, ty, size, size, 18 * S, k > 0 ? N.mix('#0F5B48', last ? C.danger : C.brandSoft, k) : '#0F5B48');
+    g.font = font(800, 44); g.textBaseline = 'middle'; g.textAlign = 'center';
+    g.fillStyle = k > 0.5 ? (last ? C.white : C.brandStrong) : 'rgba(255,255,255,0.35)';
+    if (!(last && t > 2.75)) g.fillText(String(i + 1), x + size / 2, ty + size / 2);
+    g.textAlign = 'left';
+    if (last) check(x + size * 0.18, ty + size * 0.18, size * 0.64, (t - 2.8) / 0.3, C.white, 3.4);
+  }
+  const gy = top + 4 * (size + gap) + 30 * S;
+  lines(t, ['Boka storstädningen i god tid.'], 2.9, null, gy, fit('Boka storstädningen i god tid.', 700, 56, CW), C.brandSoft, 700);
+}
+
+function price(t, s) {
+  const y = lines(t, ['Så brukar det kosta:'], s + 0.1, null, TOP, 76, C.ink);
+  const top = y + 30 * S, chipsH = 150 * S, avail = BOTTOM - top - chipsH;
+  const w = Math.min(CW, avail * CARD.width / CARD.height);
+  const h = N.card(CARD, X, top, w, sUI(t - (s + 0.35)), -1);
+  const cy = top + h + 40 * S;
+  lines(t, ['Lägg till:'], s + 1.5, null, cy, 36, C.muted, 600);
+  let cx = X;
+  ['+ Ugn', '+ Kyl och frys', '+ Fönsterputs'].forEach((txt, i) => {
+    cx += N.chip(txt, cx, cy + 52 * S, sUI(t - (s + 1.7 + i * 0.25))) + 14 * S;
+  });
+}
+
+function promise(t, s) {
+  let y = para(t, 'Vi hittar ett bra företag och skickar en offert inom 24 timmar.', s + 0.1, null, TOP, 84, C.brandStrong, 800, CW);
+  para(t, 'När du har godkänt den sköter vi resten – även avdraget.', s + 1.0, null, y + 40 * S, 56, C.ink, 600, CW, 1.15);
+}
+
+const SCENES = [
+  { start: 0, bg: C.brandStrong, draw: advent },
+  { start: 4.2, bg: C.canvas, draw: price },
+  { start: 9.0, bg: C.brandSoft, draw: promise },
+  { start: 12.0, bg: C.muted2, draw: (t, s) => N.endCard(t, s, {
+    head: ['Se ditt pris', 'efter avdrag.'],
+    fine: ['RUT 50 % på arbetskostnaden. Material och resor tillkommer vid behov.', 'Avdraget förutsätter att du har rätt till det.'] }) },
+];
+window.seek = (t) => N.bands(t, SCENES);
+window.seek(0);
+</script>
+</html>

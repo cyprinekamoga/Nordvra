@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Hellre ringa?</title>
+<style>html, body { margin: 0; background: #FAF7F2; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 4: phone first, for people 65+. 12 s. Calm: slower springs, large type, few moving parts.
+// "Vi svarar på dina frågor och fyller i förfrågan åt dig" is the site's own copy.
+import * as N from '../lib.js';
+const { C, g, S, W, X, CW, TOP, BOTTOM, font, fit, lines, para, rrect, sCalm, icon, LOGO, PHONE } = N;
+
+function question(t) {
+  const hp = fit('Krångligt med', 800, 136, CW);
+  const y = lines(t, ['Krångligt med', 'formulär?'], -0.4, null, TOP, hp, C.ink, 800, 1.06, X, sCalm);
+  lines(t, ['Du behöver inte klicka runt.'], 1.2, null, y + 40 * S, fit('Du behöver inte klicka runt.', 600, 62, CW), C.muted, 600, 1.06, X, sCalm);
+}
+
+function call(t, s) {
+  const y = lines(t, ['Ring oss.'], s + 0.1, null, TOP, 160, C.brandStrong, 800, 1.06, X, sCalm);
+  para(t, 'Vi svarar på dina frågor och fyller i förfrågan åt dig.', s + 1.0, null, y + 40 * S, 66, C.ink, 700, CW, 1.15, X, sCalm);
+}
+
+function number(t, s) {
+  // Logo on a white plate, then the phone with a gentle ring, then the number.
+  const pk = sCalm(t - (s + 0.1)), ph = 132 * S, pw = ph * LOGO.width / LOGO.height + 64 * S;
+  if (pk > 0) {
+    g.save(); g.globalAlpha = N.clamp(pk * 1.5);
+    rrect(X, TOP + (1 - pk) * 60 * S, pw, ph + 32 * S, 26 * S, C.white);
+    g.drawImage(LOGO, X + 32 * S, TOP + 16 * S + (1 - pk) * 60 * S, ph * LOGO.width / LOGO.height, ph);
+    g.restore();
+  }
+  const iy = TOP + ph + 90 * S, k = sCalm(t - (s + 0.5));
+  if (k > 0) {
+    const wob = Math.sin((t - s) * 22) * Math.exp(-Math.max(0, t - s - 0.6) * 2.2) * 10;
+    g.save(); g.translate(X + 60 * S, iy + 60 * S); g.rotate(wob * Math.PI / 180); g.scale(k, k);
+    icon('phone', -60 * S, -60 * S, 120 * S, C.white, 2);
+    g.restore();
+  }
+  const y = lines(t, [PHONE], s + 0.8, null, iy + 150 * S, fit(PHONE, 800, 150, CW), C.white, 800, 1.06, X, sCalm);
+  const y2 = lines(t, ['Nordvra – vi bokar städning och', 'hantverkare åt dig.'], s + 1.4, null, y + 30 * S, 48, C.brandSoft, 600, 1.2, X, sCalm);
+  let cx = X;
+  ['RUT 50 %', 'ROT 30 %', 'Ingen bokningsavgift'].forEach((txt, i) => {
+    cx += N.chip(txt, cx, Math.min(y2 + 36 * S, BOTTOM - 80 * S), sCalm(t - (s + 2.0 + i * 0.25)), C.white, C.brandStrong) + 14 * S;
+  });
+}
+
+const SCENES = [
+  { start: 0, bg: C.canvas, draw: question },
+  { start: 3.6, bg: C.brandSoft, draw: call },
+  { start: 7.4, bg: C.brand, draw: number },
+];
+window.seek = (t) => N.bands(t, SCENES, 0.4);
+window.seek(0);
+</script>
+</html>

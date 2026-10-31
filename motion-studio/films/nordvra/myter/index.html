@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Sant eller falskt?</title>
+<style>html, body { margin: 0; background: #FAF7F2; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 5: true or false. 21 s, four statements of 4.5 s and an end card.
+// Answers: Skatteverket ("Så fungerar rutavdraget", list of rutarbeten) and the site's own copy.
+import * as N from '../lib.js';
+const { C, g, S, W, X, CW, TOP, BOTTOM, font, fit, lines, para, rrect, sUI, sType, check, icon, mix } = N;
+
+const Q = [
+  { q: 'Du måste ansöka om RUT-avdraget själv.', a: false, why: 'Företaget gör avdraget direkt på fakturan.', src: 'Skatteverket' },
+  { q: 'RUT gäller bara städning.', a: false, why: 'Även snöskottning, trädgård, flytthjälp, IT-hjälp och mer.', src: 'Skatteverket' },
+  { q: 'Material och resor ger också avdrag.', a: false, why: 'Avdraget gäller bara arbetskostnaden.', src: 'Skatteverket' },
+  { q: 'Du kan få RUT för dina föräldrars hem.', a: true, why: 'Om det är du som betalar för tjänsten.', src: 'Skatteverket' },
+];
+const LEN = 4.5;
+
+function statement(t, s, i) {
+  const q = Q[i];
+  // Header and counter.
+  lines(t, ['Sant eller falskt?'], i === 0 ? -0.35 : s + 0.05, null, TOP, 76, C.brand, 800);
+  g.font = font(700, 40); g.fillStyle = C.muted; g.textAlign = 'right'; g.textBaseline = 'top';
+  g.fillText(`${i + 1}/4`, X + CW, TOP + 20 * S); g.textAlign = 'left';
+  // The statement on a white card.
+  const k = sUI(t - (s + 0.1)), top = TOP + 130 * S;
+  g.font = font(800, 86);
+  const ql = N.wrap(q.q, CW - 96 * S), ch = ql.length * 95 * S + 100 * S;
+  if (k > 0) {
+    g.save(); g.translate(0, (1 - k) * 160 * S);
+    g.shadowColor = 'rgba(26,36,32,0.14)'; g.shadowBlur = 32 * S; g.shadowOffsetY = 12 * S;
+    rrect(X, top, CW, ch, 32 * S, C.surface); g.shadowColor = 'transparent';
+    g.restore();
+    lines(t, ql, s + 0.25, null, top + 50 * S + (1 - k) * 160 * S, 86, C.ink, 800, 1.1, X + 48 * S);
+  }
+  // Two answers; the right one fills in, the other fades.
+  const by = top + ch + 40 * S, bw = (CW - 24 * S) / 2, bh = 160 * S, r = sUI(t - (s + 1.8));
+  ['Sant', 'Falskt'].forEach((label, j) => {
+    const kk = sUI(t - (s + 0.6 + j * 0.12));
+    if (kk <= 0) return;
+    const right = (j === 0) === q.a, x = X + j * (bw + 24 * S);
+    g.save(); g.translate(x + bw / 2, by + bh / 2); g.scale(kk, kk); g.translate(-(x + bw / 2), -(by + bh / 2));
+    if (!right) g.globalAlpha = 1 - 0.55 * r;
+    rrect(x, by, bw, bh, bh / 2, right ? mix(C.surface, C.brand, r) : C.surface, right ? mix('#6F7A74', C.brand, r) : '#6F7A74', 3 * S);
+    g.font = font(800, 64); g.textBaseline = 'middle'; g.fillStyle = right ? mix(C.ink, C.white, r) : C.ink;
+    const tw = g.measureText(label).width, ox = right && r > 0 ? 34 * S * r : 0;
+    g.fillText(label, x + bw / 2 - tw / 2 + ox, by + bh / 2);
+    if (right) check(x + bw / 2 - tw / 2 - 64 * S + ox, by + bh / 2 - 30 * S, 60 * S, (t - (s + 1.9)) / 0.25, C.white, 3.4);
+    g.restore();
+  });
+  // Why.
+  const y = para(t, q.why, s + 2.2, null, by + bh + 48 * S, 60, C.brandStrong, 700, CW, 1.12);
+  lines(t, [`Källa: ${q.src}`], s + 2.6, null, y + 18 * S, 30, C.muted, 600);
+}
+
+const SCENES = Q.map((_, i) => ({ start: i * LEN, bg: i % 2 ? C.brandSoft : C.canvas, draw: (t, s) => statement(t, s, i) }));
+SCENES.push({ start: 4 * LEN, bg: C.muted2, draw: (t, s) => N.endCard(t, s, {
+  head: ['Se ditt pris', 'efter avdrag.'],
+  fine: ['RUT 50 % och ROT 30 % på arbetskostnaden.', 'Avdraget förutsätter att du har rätt till det.'] }) });
+window.seek = (t) => N.bands(t, SCENES);
+window.seek(0);
+</script>
+</html>

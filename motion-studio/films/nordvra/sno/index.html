@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<title>Nordvra – Snön kommer</title>
+<style>html, body { margin: 0; background: #1A2420; overflow: hidden; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Idea 2: snow. 12 s. Run when snow is forecast; ?town=Sundsvall names the town (only when it is true).
+// Prices: live site, Snöskottning and Takskottning cards. Photo: CC0 (assets/photos/CREDITS.md).
+import * as N from '../lib.js';
+const { C, g, S, W, H, X, CW, TOP, BOTTOM, font, fit, lines, sUI, rand } = N;
+const TOWN = new URLSearchParams(location.search).get('town');
+const [SNOW, CARD_SNO, CARD_TAK] = await Promise.all(['../assets/snow.jpg', '../assets/cards/sno.png', '../assets/cards/takskott.png'].map(N.load));
+
+// Falling snow: each flake's position is a pure function of t.
+function snowfall(t, alpha) {
+  g.fillStyle = `rgba(255,255,255,${alpha})`;
+  for (let i = 0; i < 90; i++) {
+    const sp = 60 + rand(i) * 120, x0 = rand(i + 100) * W, r = (2 + rand(i + 200) * 5) * S;
+    const y = ((rand(i + 300) * H + sp * S * t) % (H + 20 * S)) - 10 * S;
+    const x = x0 + Math.sin(t * (0.6 + rand(i + 400)) + i) * 18 * S;
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+  }
+}
+
+function intro(t) {
+  snowfall(t, 0.7);
+  const head = TOWN ? ['Snön är på väg', `till ${TOWN}.`] : ['Snön kommer.'];
+  const hp = Math.min(...head.map((h) => fit(h, 800, 132, CW)));
+  let y = lines(t, head, -0.35, null, TOP, hp, C.white);
+  y = lines(t, ['Har du någon som skottar?'], 0.6, null, y + 24 * S, fit('Har du någon som skottar?', 700, 64, CW), C.brandSoft, 700);
+  const top = y + 48 * S;
+  N.photo(SNOW, { x: X, y: top, w: CW, h: Math.min(BOTTOM - top, CW * 0.72) }, sUI(t - 0.25), 1.03 + 0.05 * N.clamp(t / 4), 0.56, 0.6);
+}
+
+function prices(t, s) {
+  const sw = N.sType(t - (s + 2.6));               // the second card swaps in
+  lines(t, ['Snöskottning'], s + 0.1, s + 2.5, TOP, 76, C.ink);
+  lines(t, ['Takskottning'], s + 2.65, null, TOP, 76, C.ink);
+  const top = TOP + 110 * S, avail = BOTTOM - top;
+  const cw = (img) => Math.min(CW, avail * img.width / img.height);
+  g.save(); g.translate(-sw * W, 0);
+  N.card(CARD_SNO, X, top, cw(CARD_SNO), sUI(t - (s + 0.3)), -1);
+  g.restore();
+  if (sw > 0) { g.save(); g.translate((1 - sw) * W, 0); N.card(CARD_TAK, X, top, cw(CARD_TAK), 1, 1); g.restore(); }
+}
+
+const SCENES = [
+  { start: 0, bg: C.ink, draw: intro },
+  { start: 4.0, bg: C.canvas, draw: prices },
+  { start: 9.0, bg: C.muted2, draw: (t, s) => N.endCard(t, s, {
+    head: ['Boka innan', 'snön kommer.'], chips: ['RUT 50 %', 'Ingen bokningsavgift'],
+    fine: ['Priset är preliminärt. Exakt pris inom 24 timmar.', 'Avdraget förutsätter att du har rätt till det.'] }) },
+];
+window.seek = (t) => N.bands(t, SCENES);
+window.seek(0);
+</script>
+</html>

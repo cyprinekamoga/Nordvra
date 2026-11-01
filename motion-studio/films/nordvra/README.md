@@ -44,21 +44,8 @@ det", no "kryphål", no fake reviews.
 | Snöskottning 290–400 kr/h, takskottning 375–500 kr/h, storstädning 60–79 m² 2 300–3 300 kr, flyttstädning 60–79 m² 2 300–3 600 kr (after RUT) | Live site, 31 Oct 2026. Re-capture if prices change |
 | "Vi svarar på dina frågor och fyller i förfrågan åt dig", "Förfrågan är gratis och inte bindande", "Du får en offert som du godkänner innan något bokas", "Vi hittar ett bra företag …" | Site copy |
 
-## Captions (Ads Manager)
-
-**1 Tak** · Primärtext: "Har du RUT- eller ROT-avdrag kvar för 2026? Det är betaldatumet som avgör vilket år avdraget hamnar på. Kolla vad du har kvar på Skatteverkets Mina sidor – och få ditt pris från oss inom 24 timmar. Ingen bokningsavgift." · Rubrik: "Använd ditt avdrag för 2026" · Knapp: Få offert
-
-**2 Snö** · "Snön är på väg. Vi bokar snöskottning och takskottning åt dig – vanligtvis 290–400 kr/timme efter RUT-avdrag. Exakt pris inom 24 timmar." · Rubrik: "Boka snöskottning" · Knapp: Få offert
-
-**3 Jul** · "Städat hem till jul? Storstädning 60–79 m² kostar vanligtvis 2 300–3 300 kr efter RUT-avdrag. Vi hittar ett bra företag och skickar en offert inom 24 timmar." · Rubrik: "Boka julstädningen i tid" · Knapp: Få offert
-
-**4 Ring** · "Du behöver inte klicka runt. Ring oss på 072-222 88 00 – vi svarar på dina frågor och fyller i förfrågan åt dig. Städning och hantverkare med RUT- och ROT-avdrag i hela Sverige." · Rubrik: "Ring oss – vi fixar resten" · Knapp: Ring nu
-
-**5 Myter** · "Sant eller falskt? Fyra saker många tror om RUT-avdraget 👀 Hos Nordvra ser du priset efter avdrag direkt – och vi sköter avdraget på fakturan." · Rubrik: "Se ditt pris efter avdrag" · Knapp: Få offert
-
-**7 Rekord** · "2025 gjordes rut-avdrag för 8,87 miljarder kronor – ett nytt rekord (Almega). Har du kollat vad du kan få? Se ditt ungefärliga pris efter avdrag på två minuter." · Rubrik: "Se vad du kan få" · Knapp: Få offert
-
-**8 Väntar** · "Du var nästan klar! Förfrågan är gratis och inte bindande – du godkänner offerten innan något bokas." · Rubrik: "Fortsätt din förfrågan" · Knapp: Läs mer
+## Captions
+Ready-to-paste primary text, headline, description and button for each film: `captions.md`.
 
 ## 6 "Vi ringer runt – du slipper" (filming kit)
 

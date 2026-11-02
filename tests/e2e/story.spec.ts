@@ -15,7 +15,7 @@ test("homepage tells the three steps with photos", async ({ page }) => {
   const services = page.getByRole("region", { name: "Hjälp i hemmet, från golv till tak" });
   const cards = { Städning: "stadning", Flytthjälp: "flytt", "Måla & tapetsera": "maleri", Snickeri: "snickeri" };
   for (const [name, category] of Object.entries(cards)) {
-    await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", `/boka?kategori=${category}`);
+    await expect(services.getByRole("link", { name, exact: true })).toHaveAttribute("href", `/${category}`);
   }
 });
 

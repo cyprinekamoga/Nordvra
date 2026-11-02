@@ -19,6 +19,7 @@ const common = {
 
   nav: {
     label: "Huvudmeny",
+    services: "Tjänster",
     howItWorks: "Så fungerar det",
     faq: "Vanliga frågor",
     contact: "Kontakt",
@@ -29,11 +30,13 @@ const common = {
   footer: {
     navLabel: "Sidor på Nordvra",
     servicesHeading: "Boka och läs mer",
+    categoriesHeading: "Tjänster",
     legalHeading: "Villkor och integritet",
     companyHeading: "Företaget bakom Nordvra",
     contactHeading: "Kontakt",
     links: {
       home: "Startsidan",
+      services: "Alla tjänster",
       book: "Boka en tjänst",
       howItWorks: "Så fungerar RUT och ROT",
       notDeductible: "Vad ger inte avdrag?",

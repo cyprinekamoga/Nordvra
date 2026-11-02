@@ -29,6 +29,12 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      // Fönsterputs is the only service in its category, so its page is /fonsterputs.
+      { source: "/fonsterputs/fonsterputs", destination: "/fonsterputs", permanent: true },
+    ];
+  },
   async headers() {
     // When several rules set the same header for a path, the last matching rule wins,
     // so the route-specific rules come after the global one.

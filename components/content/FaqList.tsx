@@ -3,7 +3,7 @@ import type { FaqItem } from "@/lib/content/faq";
 import { TextLink } from "./TextLink";
 
 export interface FaqListProps {
-  items: readonly FaqItem[];
+  items: readonly Pick<FaqItem, "id" | "question" | "answer" | "links">[];
   /** Give each question an anchor id (`#${item.id}`). Only on the FAQ page itself. */
   withAnchors?: boolean;
   className?: string;

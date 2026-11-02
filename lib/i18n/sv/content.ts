@@ -462,6 +462,50 @@ const content = {
     questions: "Har du frågor om texten? Ring {phone} eller mejla {email}.",
   },
 
+  servicePages: {
+    breadcrumbLabel: "Du är här",
+    home: "Startsidan",
+    allServices: "Tjänster",
+    overview: {
+      title: "Alla tjänster",
+      lead: "Allt vi hjälper till med, med RUT- eller ROT-avdrag. Välj en tjänst för att se pris och vad som ingår.",
+      metaTitle: "Alla tjänster med RUT- och ROT-avdrag",
+      metaDescription:
+        "Städning, flytthjälp, fönsterputs, trädgård, målning, badrum, snickeri, el, VVS, tak och mark. Se priset före och efter avdrag och boka på två minuter.",
+    },
+    servicesIn: "Tjänster inom {category}",
+    seeAllIn: "Alla tjänster inom {category}",
+    otherServices: "Fler tjänster inom {category}",
+    includesTitle: "Det här ingår",
+    priceTitle: "Vad kostar det?",
+    priceFrom: "Från {price}",
+    priceAfter: "efter {type}-avdrag",
+    priceBefore: "{price} före avdrag",
+    perVisit: "per städtillfälle",
+    unit: { hour: "per timme", m2: "per m²", window: "per fönster" },
+    sizeCol: "Bostadens storlek",
+    beforeCol: "Före avdrag",
+    afterCol: "Du betalar",
+    tableCaption: "Ungefärligt pris för {service} efter bostadens storlek",
+    priceNote:
+      "Ungefärliga priser för en person med rätt till avdrag. Ditt exakta pris får du i offerten, och du godkänner det innan något bokas.",
+    quoteOnly: "Priset beror på jobbet. Du får ett fast pris i offerten inom 24 timmar, innan något bokas.",
+    book: "Boka {service}",
+    faqTitle: "Vanliga frågor om {service}",
+    genericLead: "{description} Du ser priset före och efter {type}-avdrag direkt när du bokar.",
+    genericMetaTitle: "{service} med {type}-avdrag",
+    genericMetaDescription:
+      "Boka {service} med {rate} {type}-avdrag. Se priset före och efter avdrag direkt. Kontrollerade företag och ingen bokningsavgift.",
+    deductionQuestion: "Får jag {type}-avdrag för {service}?",
+    deductionAnswer:
+      "Ja, för arbetskostnaden om du har rätt till avdraget. Du får {rate} av arbetskostnaden direkt på fakturan. Material och resor ger inget avdrag. När du bokar kollar vi att du har rätt till det.",
+    deductionAnswerRebuild:
+      "Ja, för arbetskostnaden om du har rätt till avdraget och huset är minst {years} år gammalt. Du får {rate} av arbetskostnaden direkt på fakturan. Material ger inget avdrag. När du bokar kollar vi att du har rätt till det.",
+    howQuestion: "Hur bokar jag {service}?",
+    howAnswer:
+      "Klicka på Boka och svara på några frågor, det tar ungefär två minuter. Vi hittar ett kontrollerat företag och skickar en offert inom 24 timmar. Du betalar först när jobbet är klart.",
+  },
+
   notFound: {
     title: "Sidan finns inte",
     body: "Vi hittar tyvärr inte sidan du letar efter. Den kan ha flyttats, eller så är adressen felstavad.",

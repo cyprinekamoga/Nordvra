@@ -33,7 +33,7 @@ describe("navigation", () => {
     ]) {
       expect(hrefs).toContain(path);
     }
-    expect(mainNav.map((i) => i.href)).toEqual(["/sa-fungerar-rut-och-rot", "/vanliga-fragor", "/kontakt"]);
+    expect(mainNav.map((i) => i.href)).toEqual(["/tjanster", "/sa-fungerar-rut-och-rot", "/vanliga-fragor", "/kontakt"]);
   });
 
   it("marks the current page", () => {

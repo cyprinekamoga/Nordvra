@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import { getCatalog } from "@/lib/catalog/load";
 import { company } from "@/lib/company";
+import { activeCategories, categoryHref } from "@/lib/services/pages";
 import { fmt, t } from "@/lib/i18n";
 import { Logo } from "./Logo";
 import { footerLegal, footerPages, type NavItem } from "./nav";
@@ -22,12 +24,13 @@ function LinkColumn({ heading, items }: { heading: string; items: readonly NavIt
   );
 }
 
-/** Site footer: all public pages, legal links, company facts and contact. Server component. */
-export function Footer() {
+/** Site footer: all public pages, every service category, legal links, company facts and contact. */
+export async function Footer() {
   const f = t.common.footer;
+  const categories = activeCategories(await getCatalog()).map((c) => ({ href: categoryHref(c), label: c.name }));
   return (
     <footer className="mt-16 border-t border-border bg-surface-muted text-ink">
-      <div className="mx-auto grid w-full max-w-page gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 sm:px-6 lg:grid-cols-4">
+      <div className="mx-auto grid w-full max-w-page gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:py-12 sm:px-6 lg:grid-cols-5">
         <div className="space-y-4 sm:col-span-2 lg:col-span-1">
           <Logo size="footer" />
           <p className="text-muted">
@@ -39,7 +42,8 @@ export function Footer() {
           </p>
         </div>
 
-        <nav aria-label={f.navLabel} className="grid grid-cols-2 gap-x-4 gap-y-8 sm:col-span-2 sm:gap-10">
+        <nav aria-label={f.navLabel} className="grid grid-cols-2 gap-x-4 gap-y-8 sm:col-span-2 sm:grid-cols-3 sm:gap-10 lg:col-span-3">
+          <LinkColumn heading={f.categoriesHeading} items={categories} />
           <LinkColumn heading={f.servicesHeading} items={footerPages} />
           <LinkColumn heading={f.legalHeading} items={footerLegal} />
         </nav>

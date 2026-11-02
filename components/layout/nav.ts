@@ -7,6 +7,7 @@ export interface NavItem {
 
 /** Main navigation (header). "Boka" is rendered separately as a button. */
 export const mainNav: readonly NavItem[] = [
+  { href: "/tjanster", label: t.common.nav.services },
   { href: "/sa-fungerar-rut-och-rot", label: t.common.nav.howItWorks },
   { href: "/vanliga-fragor", label: t.common.nav.faq },
   { href: "/kontakt", label: t.common.nav.contact },
@@ -15,6 +16,7 @@ export const mainNav: readonly NavItem[] = [
 /** Footer: every public page. */
 export const footerPages: readonly NavItem[] = [
   { href: "/", label: t.common.footer.links.home },
+  { href: "/tjanster", label: t.common.footer.links.services },
   { href: "/boka", label: t.common.footer.links.book },
   { href: "/sa-fungerar-rut-och-rot", label: t.common.footer.links.howItWorks },
   { href: "/vad-ger-inte-avdrag", label: t.common.footer.links.notDeductible },

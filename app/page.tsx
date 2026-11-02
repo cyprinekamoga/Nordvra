@@ -194,7 +194,7 @@ const SERVICE_CARDS: readonly { photo: PhotoKey; type: DeductionType; category: 
 
 /**
  * Four services as photo cards of the work itself, two side by side on phones; the whole card
- * opens the booking flow on that category.
+ * opens that category's page.
  */
 function Services() {
   const k = c.services;
@@ -222,7 +222,7 @@ function Services() {
               <DeductionBadge type={SERVICE_CARDS[i].type} size="sm" />
               <h3 className="text-lg text-ink sm:text-xl">
                 <Link
-                  href={`/boka?kategori=${SERVICE_CARDS[i].category}`}
+                  href={`/${SERVICE_CARDS[i].category}`}
                   className="after:absolute after:inset-0 focus-visible:shadow-none focus-visible:outline-none"
                 >
                   {item.title}
@@ -236,6 +236,9 @@ function Services() {
             </li>
           ))}
         </ul>
+        <LinkButton href="/tjanster" variant="secondary" iconEnd="arrow-right" className="w-full sm:w-auto">
+          {k.all}
+        </LinkButton>
       </Container>
     </section>
   );

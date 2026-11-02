@@ -527,3 +527,23 @@ OWASP review of the code. Fixed (`20261026090000_security_fixes.sql`, `lib/admin
 a request with someone else's email and address but your own phone could read their job
 history); CSV export neutralises formula cells and buyer names may not start with = + - @;
 `submit_request` also has a global cap of 50 requests per 10 minutes.
+
+---------------------------------------------------------------------------------------------------
+## 17. Service pages (one URL per service, one domain)
+
+So a search for a service lands on a page about exactly that service, every category and service
+has its own page on nordvra.se, built from the catalogue (`lib/services/pages.ts`):
+
+- `/tjanster`: every category with its services.
+- `/{kategori}` (`/stadning`): the category's services with "från"-prices, text and promises.
+- `/{kategori}/{tjanst}` (`/stadning/flyttstadning`): price before and after RUT/ROT (a table per
+  size of home when the price depends on it), what is included, FAQ, other services in the
+  category and "Boka {tjänst}" → `/boka?tjanst={id}`.
+- A category with a single service of its own (Fönsterputs) shows the service at the category URL;
+  `/fonsterputs/fonsterputs` redirects there.
+- Copy: `lib/content/servicePages.ts` (hand-written for the most searched services, generated from
+  the catalogue for the rest). Rates come from `taxFactVars()`.
+- Structured data: BreadcrumbList, Service and FAQPage. All pages are in `/sitemap.xml`.
+- Unknown URLs render the 404 page with `noindex` (Cache Components streams the shell first, so
+  the status code is 200).
+- A new service in admin gets its page automatically.

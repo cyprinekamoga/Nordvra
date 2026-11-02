@@ -13,6 +13,12 @@ const PUBLIC_ROUTES = [
   "/villkor",
   "/integritetspolicy",
   "/admin/login",
+  "/tjanster",
+  "/stadning",
+  "/stadning/flyttstadning",
+  "/fonsterputs",
+  "/maleri/malning-inomhus",
+  "/el/laddbox",
 ];
 
 async function expectNoHorizontalScroll(page: Page) {
@@ -72,4 +78,20 @@ test("unknown quote link shows a friendly message", async ({ page }) => {
   expect(res?.status()).toBeLessThan(500);
   await expect(page.locator("h1").first()).toBeVisible();
   await expect(page.getByText(/072-222 88 00/).filter({ visible: true }).first()).toBeVisible();
+});
+
+test("service pages have their own title, price and a booking link for the service", async ({ page }) => {
+  await page.goto("/stadning/flyttstadning");
+  await expect(page).toHaveTitle(/Flyttstädning/);
+  await expect(page.getByRole("heading", { level: 1, name: "Flyttstädning" })).toBeVisible();
+  await expect(page.getByText(/Från .*kr/).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Boka flyttstädning" })).toHaveAttribute("href", "/boka?tjanst=flyttstadning");
+  await page.goto("/stadning");
+  await page.getByRole("link", { name: "Hemstädning", exact: true }).click();
+  await expect(page).toHaveURL(/\/stadning\/hemstadning$/);
+});
+
+test("unknown service URLs are not indexed", async ({ page }) => {
+  await page.goto("/finns-inte-alls");
+  await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
 });

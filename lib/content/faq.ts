@@ -321,8 +321,8 @@ export function faqByGroup(items: FaqItem[]): { group: FaqGroup; items: FaqItem[
   })).filter((g) => g.items.length > 0);
 }
 
-/** schema.org FAQPage structured data for the FAQ page. */
-export function faqJsonLd(items: FaqItem[]) {
+/** schema.org FAQPage structured data (FAQ page and service pages). */
+export function faqJsonLd(items: readonly Pick<FaqItem, "question" | "answer">[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
